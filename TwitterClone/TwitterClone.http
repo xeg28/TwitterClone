@@ -1,0 +1,39 @@
+@TwitterClone_HostAddress = http://localhost:5237
+
+GET {{TwitterClone_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+GET {{TwitterClone_HostAddress}}/api/Posts/
+Accept: application/json
+
+###
+GET {{TwitterClone_HostAddress}}/api/Posts/2/
+Accept: application/json
+
+###
+POST {{TwitterClone_HostAddress}}/api/Posts/
+Content-Type: application/json
+{
+    "likes": 12,
+    "reposts": 2,
+    "text": "Tweet from post",
+    "ownerid": 1
+}
+
+###
+PUT {{TwitterClone_HostAddress}}/api/Posts/3/
+Content-Type: application/json
+{
+    "likes": 13,
+    "reposts": 3,
+    "text": "Tweet from post",
+    "ownerid": 1
+}
+
+###
+DELETE {{TwitterClone_HostAddress}}/api/Posts/4/
+
+###
+GET {{TwitterClone_HostAddress}}/api/Users/1/
+Accept: application/json
