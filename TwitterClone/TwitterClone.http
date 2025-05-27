@@ -32,8 +32,38 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{TwitterClone_HostAddress}}/api/Posts/4/
+DELETE {{TwitterClone_HostAddress}}/api/Posts/5/
 
 ###
 GET {{TwitterClone_HostAddress}}/api/Users/1/
 Accept: application/json
+
+### 
+GET {{TwitterClone_HostAddress}}/api/Users/by-email/eg2895@gmail.com
+
+###
+POST {{TwitterClone_HostAddress}}/api/emails/
+Content-Type: application/json
+{
+    "to": "eg2895@gmail.com", 
+    "subject": "Test Email",
+    "body": "This is a test email."
+}
+
+###
+POST {{TwitterClone_HostAddress}}/api/auth/register
+Content-Type: application/json
+{
+      "email": "eg2895@gmail.com",
+      "legalname": "Emmanuel Gonzalez",
+      "username": "xeg28",
+      "password": "pass123"
+}
+
+###
+POST {{TwitterClone_HostAddress}}/api/auth/verify-email
+Content-Type: application/json
+{
+    "email": "eg2895@gmail.com",
+    "code": "819108"
+}

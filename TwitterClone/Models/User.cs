@@ -6,6 +6,7 @@
         public required String LegalName { get; set; }
         public required String Username { get; set; }
         public required String Email { get; set; }
+        public Boolean IsVerified { get; set; } = false;
         public int Followers { get; set; }
         public int Following { get; set; }
         public String Biography { get; set; } = null!;

@@ -71,7 +71,6 @@ namespace TwitterClone.Controllers
                     post.Owner.Followers,
                     post.Owner.DateJoined,
                     post.Owner.Following
-                    // We do NOT include post.Owner.PasswordHash or post.Owner.PasswordSalt
                 }
             })  // Eagerly load the related User (Owner)
             .FirstOrDefaultAsync(p => p.Id == id);  // Find the post by I

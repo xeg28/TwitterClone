@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using TwitterClone.Data;
+using TwitterClone.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,8 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<TwitterCloneContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 var app = builder.Build();
 

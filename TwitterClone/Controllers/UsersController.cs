@@ -37,6 +37,18 @@ namespace TwitterClone.Controllers
             return Ok(user);
         }
 
+        [HttpGet("by-email/{email}")]
+        public async Task<ActionResult<User>> GetUserByEmail(string email)
+        {
+            var user = await _context.Users.Select(user => new
+            {
+                user.Email
+            }).FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null) return NotFound();
+
+            return Ok(user);
+        }
 
 
     }
