@@ -1,0 +1,36 @@
+
+.verify-input {
+  display: flex;
+  margin-top: .5rem;
+  gap: .5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.verify-input input {
+  max-width: calc(var(--fs-xlarge) + 15px);
+  height: calc(var(--fs-xlarge) + 15px);
+  border-radius: 5px;
+  border: 2px solid var(--primary-color);
+  background-color: transparent;
+  text-align: center;
+  font-size: var(--fs-xlarge);
+  color: var(--text-color);
+}
+
+@media (max-width: 500px) {
+  .verify-input input {
+    max-width: calc(var(--fs-xlarge) + 7px);
+    height: calc(var(--fs-xlarge) + 7px);
+  }
+}
+
+.code-form {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.resend-msg {
+  margin-top: .5rem;
+  text-align: center;
+}
