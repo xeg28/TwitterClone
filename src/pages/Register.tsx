@@ -3,10 +3,11 @@ import FormInput from '../components/FormInput/FormInput';
 import MessageCard from '../components/MessageCard/MessageCard';
 import {HOST} from '../config'
 import { useNavigate } from "react-router-dom";
+import {Message, addMessage} from '../types/Message';
 
 const Registration: React.FC = () => {
   document.title = "Register";
-  const [errors, setErrors] = useState<Set<string>>(new Set<string>());
+  const [messages, setMessages] = useState<Set<Message>>(new Set<Message>());
   const [inputErrors, setInputErrors] = useState<any>({});
   const [form, setForm] = useState<'email' | 'password'>('email');
   const [name, setName] = useState('');
@@ -49,12 +50,7 @@ const Registration: React.FC = () => {
  const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
     if(password !== confirmPassword){
-      setErrors((prevErrors: Set<string>) => {
-        const newErrors = new Set<string>(prevErrors);
-        const error = "Passwords do not match";
-        if(!newErrors.has(error)) newErrors.add(error);
-        return newErrors;
-    });
+      addMessage({type:"error", content:"Passwords do not match."}, setMessages);
       return;
     }
 
@@ -201,7 +197,7 @@ const Registration: React.FC = () => {
                 </button>
               </div>
             </form>
-            <MessageCard messages={errors} setMessages={setErrors} messageType='error'/>
+            <MessageCard messages={messages} setMessages={setMessages}/>
           </div>
         )}
     </div>

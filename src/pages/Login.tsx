@@ -1,18 +1,18 @@
 import MessageCard from '../components/MessageCard/MessageCard';
 import { useLocation, useNavigate, Location} from "react-router-dom";
 import {useState, useEffect} from 'react';
+import {Message, addMessage} from '../types/Message';
 const Login:React.FC = () => {
-  const [errors, setErrors] = useState<Set<string>>(new Set<string>());
-  const [successMessages, setSuccessMessages] = useState<Set<string>>(new Set<string>());
+  const [messages, setMessages] = useState<Set<Message>>(new Set<Message>());
   const navigate = useNavigate();
   const location = useLocation() as Location;
     useEffect(() => {
     if (location.state?.success) {
       // Use the success message
-      setSuccessMessages((prevMsgs:Set<string>) => {
-        const newMsg = new Set<string>(prevMsgs);
-        newMsg.add(location.state.success);
-        return newMsg;
+      setMessages((prevMsgs:Set<Message>) => {
+        const newMsgs = new Set<Message>(prevMsgs);
+        newMsgs.add({type: 'success', content: location.state.success});
+        return newMsgs;
       });
 
       // Remove only the success key, keep others
@@ -29,8 +29,9 @@ const Login:React.FC = () => {
   return (
     <div className="container">
       login
-      <MessageCard messages={errors} setMessages={setErrors} messageType='error'/>
-      <MessageCard messages={successMessages} setMessages={setSuccessMessages} messageType='success'/>
+      <button onClick={() => addMessage({type: "error", content: "this is an error"}, setMessages)}>Error</button>
+      <button onClick={() => addMessage({type: "success", content: "this is a success"}, setMessages)}>Success</button>
+      <MessageCard messages={messages} setMessages={setMessages} />
     </div>
   );
 }

@@ -11,10 +11,6 @@
   --warning-icon: url('/public/svg/warning.svg');
 }
 
-.error {
-  border-color: var(--error-color) !important;
-  background-color: var(--error-background) !important;
-}
 
 .error .message .icon {
   background-image: var(--error-icon);
@@ -28,14 +24,29 @@
   background-image: var(--warning-icon);
 }
 
+.error {
+  border-color: var(--error-color) !important;
+  background-color: var(--error-background) !important;
+}
+
+.error::after {
+  background-color: var(--error-color);
+}
+
 .success {
   border-color: var(--success-color) !important;
   background-color: var(--success-background) !important;
+}
+.success::after {
+  background-color: var(--success-color);
 }
 
 .warning {
   border-color: var(--warning-color) !important;
   background-color: var(--warning-background) !important;
+}
+.warning::after {
+  background-color: var(--warning-color);
 }
 
 .message-card {
@@ -44,6 +55,29 @@
   background-color: transparent;
   border-radius: .5vw;
   width: 100%;
+  padding: 5px 0px;
+  position: relative;
+  overflow: hidden;
+}
+
+.message-card::after {
+  content: " ";
+  display: inline-block;
+  width: 0;
+  height: 6px;
+  bottom: 0; 
+  left: 0;
+  position: absolute;
+  animation: messageBar 10s linear;
+}
+
+@keyframes messageBar {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
 }
 
 .icon {

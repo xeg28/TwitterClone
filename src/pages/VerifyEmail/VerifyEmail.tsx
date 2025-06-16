@@ -2,12 +2,13 @@ import {useEffect, useState} from "react";
 import { useLocation, useNavigate, Location} from "react-router-dom";
 import MessageCard from '../../components/MessageCard/MessageCard';
 import "./VerifyEmail.css";
+import {Message, addMessage} from '../../types/Message';
 
 
 const VerifyEmail: React.FC = () => {
   document.title = "Verify Email";
   const navigate = useNavigate();
-  const [errors, setErrors] = useState<Set<string>>(new Set<string>());
+  const [messages, setMessages] = useState<Set<Message>>(new Set<Message>());
   const apiURL = process.env.REACT_APP_API_URL as string;
   const location = useLocation() as Location & {
     state: { email?: string };
@@ -15,17 +16,11 @@ const VerifyEmail: React.FC = () => {
   
   const email = location.state?.email ?? "";
 
-  const [successMessage, setSuccessMessage] = useState<Set<string>>(new Set<string>());
-
 
   useEffect(() => {
     if (location.state?.success) {
       // Use the success message
-      setSuccessMessage((prevMsgs:Set<string>) => {
-        const newMsg = new Set<string>(prevMsgs);
-        newMsg.add(location.state.success);
-        return newMsg;
-      });
+      addMessage({type:'success', content:location.state.success}, setMessages);
 
       // Remove only the success key, keep others like email
       const { success, ...rest } = location.state;
@@ -65,11 +60,7 @@ const VerifyEmail: React.FC = () => {
       navigate("/", { state: {success}, replace: true });
     }
     else {
-      setErrors((prevErrors: Set<string>) => {
-        let newErrors = new Set<string>(prevErrors);
-        newErrors.add(result.message);
-        return newErrors;
-      });
+      addMessage({type:'error', content:result.message}, setMessages);
     }
   }
 
@@ -86,18 +77,10 @@ const VerifyEmail: React.FC = () => {
     const result = await response.json();
 
     if(result.status === 200) {
-      setSuccessMessage((prevMsg:Set<string>) => {
-        const newMsgs = new Set<string>(prevMsg);
-        newMsgs.add(result.message);
-        return newMsgs;
-      });
+      addMessage({type:'success', content: result.message}, setMessages);
     }
     else {
-      setErrors((prevErrors: Set<string>) => {
-        let newErrors = new Set<string>(prevErrors);
-        newErrors.add(result.message);
-        return newErrors;
-      });
+      addMessage({type:'error', content:result.message}, setMessages);
     }
 
   }
@@ -182,8 +165,7 @@ const VerifyEmail: React.FC = () => {
         </div>
         <button className="form-button" onClick={handleVerification}>Verify</button>
       </div>
-      <MessageCard messages={errors} setMessages={setErrors} messageType="error"/>
-      <MessageCard messages={successMessage} setMessages={setSuccessMessage} messageType="success"/>
+      <MessageCard messages={messages} setMessages={setMessages}/>
     </div>
   );
 }
