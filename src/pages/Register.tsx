@@ -1,20 +1,39 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import FormInput from '../components/FormInput/FormInput';
 import MessageCard from '../components/MessageCard/MessageCard';
 import {HOST} from '../config'
 import { useNavigate } from "react-router-dom";
 import {Message, addMessage} from '../types/Message';
 
+type RegistrationData = {
+  [name:string]: string;
+  email: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+}
+
+const addData = (dataTitle: string, value: string, setData: React.Dispatch<React.SetStateAction<RegistrationData>>) => {
+  setData((prev: RegistrationData) => {
+    const newData = {...prev} as RegistrationData;
+    newData[dataTitle] = value;
+    return newData;
+  });
+}
+
+
 const Registration: React.FC = () => {
   document.title = "Register";
   const [messages, setMessages] = useState<Set<Message>>(new Set<Message>());
-  const [inputErrors, setInputErrors] = useState<any>({});
+  const [inputErrors, setInputErrors] = useState<Map<string, string>>(new Map<string, string>());
   const [form, setForm] = useState<'email' | 'password'>('email');
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [data, setData] = useState<RegistrationData>({
+    name: "",
+    email: "",
+    username: "",
+    password: "",
+    confirmPassword: ""
+  });
   const [isLoading, setIsLoading] = useState<true | false>(false);
   const apiURL = process.env.REACT_APP_API_URL as string;
   const navigate = useNavigate();
@@ -28,84 +47,95 @@ const Registration: React.FC = () => {
       const emailInput = document.getElementById('email') as HTMLInputElement;
       const nameInput = document.getElementById("name") as HTMLInputElement;
       setIsLoading(true);
-      const response = await fetch(`${apiURL}/api/users/by-email/${email.trim()}`);
+      const response = await fetch(`${apiURL}/api/users/email-check/${data.email.trim()}`);
       const result = await response.json();
       setIsLoading(false);
 
-      if (result.emailTaken) {
-        setInputErrors((prevErrors: any) => ({
-          ...prevErrors,
-          emailTaken: true
-        }));
+      if (result.status === 409) {
+        setInputErrors((prevErrors: Map<string, string>)  => {
+          const newErrors = new Map(prevErrors);
+          newErrors.set("email", result.message);
+          return newErrors;
+        });
+      }
+      else if(result.status === 400) {
+        addMessage({type: "error", content: result.message}, setMessages);
       }
       else if(emailInput.checkValidity() && nameInput.checkValidity()) {
         setForm("password");
       }
 
     } catch (error) {
-      console.error('Error:', error);
+        setIsLoading(false);
+        addMessage({type: "error", content: "Connection Error, Try again."}, setMessages);
     }
   };
 
+  const handleBack = () => {
+    const form: HTMLElement | null = document.getElementById("password-form");
+    const passwordInputs: NodeListOf<HTMLInputElement> | undefined = form?.querySelectorAll("input[type='password'");
+    if(passwordInputs) {
+      passwordInputs.forEach((el) => {
+        el.value = "";
+      });
+    }
+    setForm("email");
+  }
+
  const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
-    if(password !== confirmPassword){
+    if(data.password !== data.confirmPassword){
       addMessage({type:"error", content:"Passwords do not match."}, setMessages);
       return;
     }
 
     var regsitration = {
-      legalname:name.trim(),
-      email:email.trim(),
-      username:username.trim(),
-      password:password
+      legalname:data.name.trim(),
+      email:data.email.trim(),
+      username:data.username.trim(),
+      password:data.password
     }
 
-    setIsLoading(true);
-    const response = await fetch(`${apiURL}/api/auth/register`, {
-      method: "POST", 
-      headers: {
-        "Content-Type": "application/json"
-      }, 
-      body: JSON.stringify(regsitration) 
-    });
+    try{
+      setIsLoading(true);
+      var response = await fetch(`${apiURL}/api/auth/username-check/${data.username}`)
+      var result = await response.json();
 
-    const result = await response.json();
-    setIsLoading(false);
-    if(result.status && result.status === 200) {
-      let success = new Set<string>();
-      success.add("Successfuly registered")
-      navigate("/verify-email", { state: { email, success }});
-    }
-    else if(result.emailTaken || result.usernameTaken) {
-      setInputErrors((prevErrors: any) => ({
-        ...prevErrors,
-        emailTaken: result.emailTaken, 
-        usernameTaken: result.usernameTaken
-      }));
+      if(result.status === 409) {
+        setInputErrors((prevErrors: Map<string, string>) => {
+          const newMap = new Map(prevErrors);
+          newMap.set("username", result.message);
+          return newMap;
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      response = await fetch(`${apiURL}/api/auth/register`, {
+        method: "POST", 
+        headers: {
+          "Content-Type": "application/json"
+        }, 
+        body: JSON.stringify(regsitration) 
+      });
+
+      result = await response.json();
+      setIsLoading(false);
+      if(result.status && result.status === 200) {
+        let success = new Set<string>();
+        let email = data.email;
+        success.add("Successfuly registered")
+        navigate("/verify-email", { state: {email , success }});
+      }
+      else if(result.status === 409) {
+        addMessage({type:"error", content: result.message}, setMessages);
+      }
+    } catch(error) {
+        setIsLoading(false);
+        addMessage({type: "error", content: "Connection Error, Try again."}, setMessages);
     }
   }
 
-
-  useEffect(() => {
-    const handleClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (target.classList.contains('input-text') || target.classList.contains('placeholder')) {
-        var input = (target.classList.contains('input-text')) ? target.querySelector('input') as HTMLInputElement 
-            : target.parentElement?.querySelector('input') as HTMLInputElement;
-        if (input) {
-          input.focus();
-        }
-      }
-    };
-
-    document.addEventListener('click', handleClick);
-
-    // Cleanup on unmount
-    return () => {
-      document.removeEventListener('click', handleClick);
-    };
-  }, []);
 
   return (
     <div className="wrapper">
@@ -113,28 +143,18 @@ const Registration: React.FC = () => {
         form === "email" && (
           <div className="form-wrapper">
             <h1 className="fs-xl">Create an account</h1>
-            <form onSubmit={handleEmail}>
+            <form onSubmit={handleEmail} id="email-form">
               <div className="w-100">
-                 <div className="input-group">
-                  <FormInput type="text" id="name" name="name" value={name}
-                    onChange={e => setName(e.target.value)} placeholder="Name" 
-                    isRequired={true} title="Name must be 2-50 letters only" 
-                    pattern="[A-Za-z ]{2,50}"/>
-                </div>
-                <div className="input-group">
-                  <FormInput type="email" name="email" id="email" value={email}
-                  onChange={e => setEmail(e.target.value)} placeholder="Email"
-                  isRequired={true} title="Enter a valid email address"
-                  pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
-                  onFocus={() => setInputErrors((prevErrors: any) =>
-                        prevErrors ? { ...prevErrors, emailTaken: false } : prevErrors
-                        )}/>
-                  {inputErrors && inputErrors.emailTaken && (
-                    <div className="input-error" id="email-error">
-                      This email is already taken.
-                    </div>
-                  )}
-                </div>
+                <FormInput type="text" id="name" name="name" value={data.name}
+                  onChange={e => addData("name", e.target.value, setData)} placeholder="Name" 
+                  isRequired={true} title="Name must be 2-50 letters only" 
+                  pattern="[A-Za-z ]{2,50}"/>
+                  
+                <FormInput type="email" name="email" id="email" value={data.email}
+                onChange={e => addData('email', e.target.value, setData)} placeholder="Email"
+                isRequired={true} title="Enter a valid email address"
+                pattern="[^@\s]+@[^@\s]+\.[^@\s]+" errors={inputErrors} setErrors={setInputErrors}/>
+                
                 <hr className='w-100' />
               </div>
               <div className="w-100">
@@ -149,9 +169,9 @@ const Registration: React.FC = () => {
           </div>  
         )}
         {form === "password" && (
-          <div className="form-wrapper">
+          <div className="form-wrapper" id="password-form">
             <div className='flex flex-row relative align-center' style={{marginBottom: "2rem"}}>
-              <button className = "button-reset fs-xl bolder" id="back-btn" title="back" type="button" onClick={() => setForm("email")}>
+              <button className = "button-reset fs-xl bolder" id="back-btn" title="back" type="button" onClick={handleBack}>
                 <svg  className="back-icon"
                   fill="currentColor"
                   width="1em"
@@ -166,30 +186,20 @@ const Registration: React.FC = () => {
             <form onSubmit={handleRegister}>
               {/* ...password fields... */}
               <div className="w-100">
-                <div className="input-group">
-                  <FormInput type="text" id="username" name="username" placeholder="Username"
-                  value={username} onChange={e => setUsername(e.target.value)}
-                  pattern=".{2,50}" isRequired={true} title="Must be between 2-50 characters"
-                  onFocus={() => setInputErrors((prevErrors: any) => 
-                    prevErrors ? {...prevErrors, usernameTaken: false} : prevErrors
-                  )} />
-                  {inputErrors && inputErrors.usernameTaken && (
-                    <div className="input-error" id="username-error">
-                      Username is already taken
-                    </div>
-                  )}
-                </div>
-                <div className="input-group">
-                  <FormInput type="password" id="password" name="password" placeholder="Password"
-                    onChange={e=> setPassword(e.target.value)} isRequired={true}
+                 <FormInput type="text" id="username" name="username" placeholder="Username"
+                  value={data.username} onChange={e => addData('username', e.target.value, setData)}
+                  pattern=".{2,50}" isRequired={true} title="Must be between 2-50 characters" 
+                  errors={inputErrors} setErrors={setInputErrors}/>
+
+                <FormInput type="password" id="password" name="password" placeholder="Password"
+                    onChange={e=> addData('password', e.target.value, setData)} isRequired={true}
                     pattern="^(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{5,50}$"
                     title="Must contain at least 5 characters, a number, and a special character" info={true}/>
-                </div>
-                <div className="input-group">
-                  <FormInput type="password" id="c-password" name="c-password" 
-                    placeholder="Confirm Password" onChange={e=>setConfirmPassword(e.target.value)}
+
+                <FormInput type="password" id="c-password" name="c-password" 
+                    placeholder="Confirm Password" onChange={e=>addData('confirmPassword', e.target.value, setData)}
                     pattern="^(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{5,50}$" isRequired={true}/>
-                </div>
+
                 <button className = "form-button" type="submit" >
                   { isLoading ? (<div className="spinner"></div>) :
                       (<span>Sign Up</span>)
@@ -197,9 +207,9 @@ const Registration: React.FC = () => {
                 </button>
               </div>
             </form>
-            <MessageCard messages={messages} setMessages={setMessages}/>
           </div>
         )}
+        <MessageCard messages={messages} setMessages={setMessages}/>
     </div>
 
   );

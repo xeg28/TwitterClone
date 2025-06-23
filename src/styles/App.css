@@ -2,6 +2,8 @@
   --background-color: black;
   --primary-color: #888;
   --secondary-color: #61dafb;
+  --link-color: #224dcf;
+  --link-visited-color: #9918c1;
   --text-color: white;
   --transparent-100: rgba(20,20,20,.95);
 
@@ -36,6 +38,11 @@ img {
 
 a {
   text-decoration: none;
+  color: var(--link-color);
+}
+
+a:visited {
+color: var(--link-visited-color);
 }
 
 .form-title {
@@ -64,7 +71,7 @@ a {
 
 .link {
   cursor: pointer;
-  color: rgb(23, 108, 255);
+  color: var(--link-color);
 }
 
 .bolder {
@@ -116,6 +123,10 @@ a {
 
 .justify-content-center {
   justify-content: center !important;
+}
+
+.space-between {
+  justify-content: space-between !important;
 }
 
 .align-center {
@@ -252,6 +263,9 @@ hr {
   .form-wrapper {
     width: 95%;
     padding: 1.5rem 1rem 3rem 1rem;
+  }
+  .d-none-500 {
+    display: none !important;
   }
 }
 

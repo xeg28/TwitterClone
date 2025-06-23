@@ -71,6 +71,11 @@
   padding: 10px;
 }
 
+@media (max-width: 700px){
+  .popover {
+    width: 200px;
+  }
+}
 
 .popover-content {
   display: inline-block;

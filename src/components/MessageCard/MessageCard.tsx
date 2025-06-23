@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import './MessageCard.css';
 import {motion} from 'framer-motion';
 import {Message, removeMessage} from '../../types/Message';
@@ -12,16 +12,6 @@ const ErrorCard: React.FC<MessageCardProps> = ({
   messages,
   setMessages,
 }) => {
-  // useEffect(() => {
-  //   if (messages && messages.size > 0) {
-  //     const timer = setTimeout(() => {
-  //       setMessages(new Set<Message>());
-  //     }, 10000); // 10 seconds
-
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [messages, setMessages]);
-
   return messages && messages.size > 0 ? (
     <div className="message-track">
       {Array.from(messages).map((message: Message, idx: number) => (

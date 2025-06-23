@@ -1,0 +1,30 @@
+#register-btn {
+  display:none;
+  margin-top: 1.5rem;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#or-line {
+  position: relative;
+}
+
+
+#or-line span {
+  position: absolute;
+  left:50%;
+  top: 0;
+  translate: -50% -55%;
+  padding: 5px;
+  background-color: var(--background-color);
+  z-index: 1;
+}
+
+@media (max-width: 500px) {
+  #register-btn {
+    display: flex;
+  }
+  .login-form {
+    gap: 0px !important;
+  }
+}

@@ -1,10 +1,10 @@
 :root {
   --error-color: red;
-  --error-background: rgb(255, 0, 0, .2);
+  --error-background: rgb(70, 0, 0, .8);
   --success-color: rgb(40, 167, 59);
-  --success-background: rgb(40, 167, 59, .2);
-  --warning-color: #ffc107;
-  --warning-background: rgb(255, 193, 7, .2);
+  --success-background: rgb(10, 41, 14, .8);
+  --warning-color: rgb(255, 193, 7);
+  --warning-background: rgb(63, 48, 2, .8);
   
   --error-icon: url('/public/svg/error.svg');
   --success-icon: url('/public/svg/success.svg');
@@ -64,7 +64,7 @@
   content: " ";
   display: inline-block;
   width: 0;
-  height: 6px;
+  height: 4px;
   bottom: 0; 
   left: 0;
   position: absolute;
@@ -94,7 +94,7 @@
 
 .message {
   position: relative;
-  padding: 6px 25px 12px 30px;
+  padding: 6px 25px 12px 40px;
   max-width: 400px;
 }
 
@@ -115,10 +115,17 @@
   position: fixed;
   display:flex;
   flex-direction: column;
+  box-sizing: border-box;
   top:0;
   right:0;
   height: 100svh;
-  width: 300px;
-  margin: 1rem;
+  width: 400px;
+  padding: 1rem;
   gap: 1rem;
+}
+
+@media (max-width: 500px) {
+  .message-track {
+    width: 100vw;
+  }
 }

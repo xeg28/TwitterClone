@@ -9,6 +9,7 @@ const VerifyEmail: React.FC = () => {
   document.title = "Verify Email";
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Set<Message>>(new Set<Message>());
+  const [isLoading, setIsLoading] = useState<true | false>(false);
   const apiURL = process.env.REACT_APP_API_URL as string;
   const location = useLocation() as Location & {
     state: { email?: string };
@@ -45,6 +46,7 @@ const VerifyEmail: React.FC = () => {
     });
 
     const request = {email:email, code:code};
+    setIsLoading(true);
     const response = await fetch(`${apiURL}/api/auth/verify-email`, {
       method: "POST", 
       headers: {
@@ -54,10 +56,10 @@ const VerifyEmail: React.FC = () => {
     });
 
     const result = await response.json();
-    
+    setIsLoading(false);
     if(result.status === 200) {
-      let success = result.message;
-      navigate("/", { state: {success}, replace: true });
+      let message = {type:"success", content: result.message};
+      navigate("/", { state: {message}, replace: true });
     }
     else {
       addMessage({type:'error', content:result.message}, setMessages);
@@ -163,7 +165,10 @@ const VerifyEmail: React.FC = () => {
           </div>
           <div className="resend-msg fs-m">Didn't receive a code? <span className="link" onClick={handleCodeResend}>Resend code</span></div>
         </div>
-        <button className="form-button" onClick={handleVerification}>Verify</button>
+        <button className="form-button" onClick={handleVerification}>
+          {isLoading ? (<div className="spinner"></div>) : 
+          (<span>Verfiy</span>)}
+        </button>
       </div>
       <MessageCard messages={messages} setMessages={setMessages}/>
     </div>
