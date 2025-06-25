@@ -54,16 +54,16 @@ Content-Type: application/json
 POST {{TwitterClone_HostAddress}}/api/auth/register
 Content-Type: application/json
 {
-      "email": "eg2895@gmail.com",
-      "legalname": "Emmanuel Gonzalez",
+      "email": "temp@gmail.com",
+      "legalname": "name",
       "username": "xeg28",
-      "password": "pass123"
+      "password": "123123"
 }
 
 ###
 POST {{TwitterClone_HostAddress}}/api/auth/verify-email
 Content-Type: application/json
 {
-    "email": "eg2895@gmail.com",
-    "code": "819108"
+    "email": "egonza100@calstatela.edu",
+    "code": "238890"
 }

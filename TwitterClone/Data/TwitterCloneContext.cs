@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TwitterClone.Models;
+using TwitterClone.Models.PasswordReset;
 
 namespace TwitterClone.Data
 {
@@ -17,5 +18,7 @@ namespace TwitterClone.Data
         public DbSet<User> Users { get; set; }
 
         public DbSet<EmailVerification> EmailVerifications { get; set; }
+
+        public DbSet<PasswordReset> PasswordResets { get; set; }
     }
 }

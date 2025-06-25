@@ -18,6 +18,7 @@ namespace TwitterClone.Controllers
             _context = context;
         }
 
+        // add [authorize] attribute to protect this endpoint 
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
@@ -37,17 +38,20 @@ namespace TwitterClone.Controllers
             return Ok(user);
         }
 
-        [HttpGet("by-email/{email}")]
-        public async Task<ActionResult<User>> GetUserByEmail(string email)
+        [HttpGet("email-check/{email}")]
+        public async Task<IActionResult> GetUserByEmail(string email)
         {
-            var user = await _context.Users.Select(user => new
+            if (string.IsNullOrWhiteSpace(email))
+                return BadRequest(new {status = 400,  message = "Email is required." });
+
+            bool emailTaken = await _context.Users.AnyAsync(u => u.Email == email);
+            
+            if(emailTaken)
             {
-                user.Email
-            }).FirstOrDefaultAsync(u => u.Email == email);
+                return Conflict(new { status = 409, message = "Email is already taken." });
+            }
 
-            if (user == null) return NotFound();
-
-            return Ok(user);
+            return Ok(new { status = 200, message = "Email is available" });
         }
 
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TwitterClone.Data;
 
@@ -11,9 +12,11 @@ using TwitterClone.Data;
 namespace TwitterClone.Migrations
 {
     [DbContext(typeof(TwitterCloneContext))]
-    partial class TwitterCloneContextModelSnapshot : ModelSnapshot
+    [Migration("20250620174755_AddPasswordReset")]
+    partial class AddPasswordReset
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

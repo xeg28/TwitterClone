@@ -12,5 +12,7 @@
         public String Biography { get; set; } = null!;
         public DateTime DateJoined { get; set; }
         public String? HashedPassword {  get; set; }
+        public String? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiry { get; set; }
     }
 }
