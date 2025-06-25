@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import { useLocation, useNavigate, Location} from "react-router-dom";
 import MessageCard from '../../components/MessageCard/MessageCard';
 import "./VerifyEmail.css";
@@ -11,15 +11,31 @@ const VerifyEmail: React.FC = () => {
   const [messages, setMessages] = useState<Set<Message>>(new Set<Message>());
   const [isLoading, setIsLoading] = useState<true | false>(false);
   const apiURL = process.env.REACT_APP_API_URL as string;
+  const didRun = useRef(false);
+  const didResend = useRef(false);
+
   const location = useLocation() as Location & {
     state: { email?: string };
   };
   
   const email = location.state?.email ?? "";
 
+  useEffect(() => {
+    if (!email) {
+      navigate("/", { replace: true });
+      return;
+    }
+    // Only call resendCode once, even in Strict Mode
+    if (!didResend.current) {
+      didResend.current = true;
+      resendCode();
+    }
+  }, [email, navigate]);
 
   useEffect(() => {
     if (location.state?.success) {
+      if (didRun.current) return;
+        didRun.current = true;
       // Use the success message
       addMessage({type:'success', content:location.state.success}, setMessages);
 
@@ -32,10 +48,7 @@ const VerifyEmail: React.FC = () => {
         state: rest,
       });
     }
-    if (!email) {
-      navigate("/", { replace: true });
-    }
-  }, [email, navigate, location]);
+  }, [navigate, location]);
 
   const handleVerification = async () => {
     const inputs = document.querySelectorAll(".verify-num") as NodeListOf<HTMLInputElement>;
@@ -52,14 +65,15 @@ const VerifyEmail: React.FC = () => {
       headers: {
         "Content-Type": "application/json"
       }, 
-      body: JSON.stringify(request) 
+      body: JSON.stringify(request), 
+      credentials: "include"
     });
 
     const result = await response.json();
     setIsLoading(false);
     if(result.status === 200) {
       let message = {type:"success", content: result.message};
-      navigate("/", { state: {message}, replace: true });
+      navigate("/login", { state: {message}, replace: true });
     }
     else {
       addMessage({type:'error', content:result.message}, setMessages);
@@ -67,7 +81,7 @@ const VerifyEmail: React.FC = () => {
   }
 
 
-  const handleCodeResend = async () => {
+  const resendCode = async () => {
     const request = {email:email, code:""};
     const response = await fetch(`${apiURL}/api/auth/resend-code`, {
       method: "POST", 
@@ -77,6 +91,12 @@ const VerifyEmail: React.FC = () => {
       body: JSON.stringify(request) 
     });
     const result = await response.json();
+    return result;
+  }
+
+
+  const handleCodeResend = async () => {
+    const result = await resendCode();
 
     if(result.status === 200) {
       addMessage({type:'success', content: result.message}, setMessages);

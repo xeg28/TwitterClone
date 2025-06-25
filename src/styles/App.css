@@ -196,6 +196,25 @@ hr {
   box-sizing: border-box;
 }
 
+.form-wrapper h1 {
+  text-align: start;
+}
+
+@media (max-width: 500px) {
+   .form-wrapper  h1 {
+      text-align: center;
+   }
+
+  .form-wrapper .relative h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: 100%;
+    padding-bottom: .1em;
+  }
+}
+
 .form-wrapper form {
   display: flex;
   gap: 1.25rem;
