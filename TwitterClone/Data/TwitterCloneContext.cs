@@ -11,14 +11,17 @@ namespace TwitterClone.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<User>()
+                .Property(u => u.RefreshToken)
+                .IsRequired(false);
         }
 
-        public DbSet<Post> Posts {  get; set; }
+        public DbSet<Post> Posts { get; set; } = null!;
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> Users { get; set; } = null!;
 
-        public DbSet<EmailVerification> EmailVerifications { get; set; }
+        public DbSet<EmailVerification> EmailVerifications { get; set; } = null!;
 
-        public DbSet<PasswordReset> PasswordResets { get; set; }
+        public DbSet<PasswordReset> PasswordResets { get; set; } = null!;
     }
 }

@@ -10,6 +10,6 @@
         public string? MediaPath { get; set; }
         public required int OwnerId { get; set; }
         public User? Owner { get; set; }
-        public DateTime DatePosted { get; set; }
+        public DateTime? DatePosted { get; set; }
     }
 }

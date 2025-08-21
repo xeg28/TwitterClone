@@ -30,7 +30,7 @@ builder.Services.AddCors(o =>
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<TwitterCloneContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+   options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddHostedService<EmailVerificationCleanupService>();
