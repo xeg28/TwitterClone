@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/TwitterClone/.gitignore
+/TwitterClone/appsettings.Development.json
