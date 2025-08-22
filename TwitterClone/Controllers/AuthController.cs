@@ -53,6 +53,7 @@ namespace TwitterClone.Controllers
             if (result is null)
                 return Unauthorized(new { status = 401, message = "Invalid credentials" });
 
+
             // Set the accessToken as a cookie
             Response.Cookies.Append(
                 "accessToken",
@@ -60,8 +61,9 @@ namespace TwitterClone.Controllers
                 new CookieOptions
                 {
                     HttpOnly = true, // Prevents JavaScript access (recommended for security)
-                    // Secure = true, in production, set this to true if using HTTPS
-                    SameSite = SameSiteMode.Strict, // Adjust as needed (Lax/Strict/None)
+                    Secure = true,
+                    //SameSite = SameSiteMode.Strict,
+                    SameSite = SameSiteMode.None, // Adjust as needed (Lax/Strict/None)
                     Expires = DateTimeOffset.UtcNow.AddSeconds(result.ExpiresIn)
                 }
             );
@@ -72,8 +74,9 @@ namespace TwitterClone.Controllers
                 new CookieOptions
                 {
                     HttpOnly = true, // Prevents JavaScript access (recommended for security)
-                    // Secure = true, in production, set this to true if using HTTPS
-                    SameSite = SameSiteMode.Strict // Adjust as needed (Lax/Strict/None)
+                    Secure = true,
+                    //SameSite = SameSiteMode.Strict,
+                    SameSite = SameSiteMode.None // Adjust as needed (Lax/Strict/None)
                 }
             );
 
@@ -83,8 +86,9 @@ namespace TwitterClone.Controllers
                 new CookieOptions
                 {
                     HttpOnly = true, // Prevents JavaScript access (recommended for security)
-                    // Secure = true, in production, set this to true if using HTTPS
-                    SameSite = SameSiteMode.Strict // Adjust as needed (Lax/Strict/None)
+                    Secure = true,
+                    //SameSite = SameSiteMode.Strict,
+                    SameSite = SameSiteMode.None // Adjust as needed (Lax/Strict/None)
                 }
             );
 
@@ -122,6 +126,7 @@ namespace TwitterClone.Controllers
             if (result is null || result.AccessToken is null || result.RefreshToken is null)
                 return Unauthorized(new { status = 401, message = "Invalid or expired refresh token." });
 
+
             // Set the accessToken as a cookie
             Response.Cookies.Append(
                 "accessToken",
@@ -129,8 +134,9 @@ namespace TwitterClone.Controllers
                 new CookieOptions
                 {
                     HttpOnly = true, // Prevents JavaScript access (recommended for security)
-                    // Secure = true, in production, set this to true if using HTTPS
-                    SameSite = SameSiteMode.Strict, // Adjust as needed (Lax/Strict/None)
+                    Secure = true,
+                    //SameSite = SameSiteMode.Strict,
+                    SameSite = SameSiteMode.None, // Adjust as needed (Lax/Strict/None)
                     Expires = DateTimeOffset.UtcNow.AddSeconds(result.ExpiresIn)
                 }
             );
@@ -141,8 +147,9 @@ namespace TwitterClone.Controllers
                 new CookieOptions
                 {
                     HttpOnly = true, // Prevents JavaScript access (recommended for security)
-                    // Secure = true, in production, set this to true if using HTTPS
-                    SameSite = SameSiteMode.Strict // Adjust as needed (Lax/Strict/None)
+                    Secure = true,
+                    //SameSite = SameSiteMode.Strict,
+                    SameSite = SameSiteMode.None // Adjust as needed (Lax/Strict/None)
                 }
             );
             return Ok(new { status = 200, response = result.User?.IsVerified });
@@ -297,7 +304,9 @@ namespace TwitterClone.Controllers
                     new CookieOptions
                     {
                         HttpOnly = true,
-                        SameSite = SameSiteMode.Strict,
+                        //SameSite = SameSiteMode.Strict,
+                        SameSite = SameSiteMode.None,
+                        Secure = true,
                         Expires = DateTimeOffset.UtcNow.AddMinutes(
                             _jwtService.TokenValidityMinutes // Use your config value
                         )
