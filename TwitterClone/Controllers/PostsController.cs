@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using TwitterClone.Data;
 using TwitterClone.Models;
 
-namespace TwitterClone.Controllers
+namespace TwitterClone.Controllers 
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -17,7 +17,7 @@ namespace TwitterClone.Controllers
         {
             _context = context;
         }
-        [HttpGet]
+        [HttpGet] // add authorize tag later
         public async Task<ActionResult<List<Post>>> GetPosts()
         {
             var posts = await _context.Posts
