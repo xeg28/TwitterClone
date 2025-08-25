@@ -37,16 +37,6 @@ namespace TwitterClone.Controllers
 
             var existingReset = await _context.PasswordResets.FirstOrDefaultAsync(r => r.Email == email);
 
-            if(existingReset != null)
-            {
-                if (existingReset.Expiry > DateTime.UtcNow)
-                {
-                    return Ok(new { status = 200, message = "Password reset link sent to your email." });
-                }
-                _context.PasswordResets.Remove(existingReset);
-                await _context.SaveChangesAsync();
-            }
-
             var token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
             var expiry = DateTime.UtcNow.AddMinutes(30);
             var passwordReset = new PasswordReset
@@ -55,8 +45,19 @@ namespace TwitterClone.Controllers
                 Token = token,
                 Expiry = expiry
             };
-            _context.PasswordResets.Add(passwordReset);
-            await _context.SaveChangesAsync();
+
+            if (existingReset != null)
+            {
+                existingReset.Expiry = expiry;
+                existingReset.Token = token;
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                _context.PasswordResets.Add(passwordReset);
+                await _context.SaveChangesAsync();
+            }
+
 
             var baseUrl = _configuration.GetValue<string>("Frontend:BaseUrl");
             var resetLink = $"{baseUrl}/reset-password?email={Uri.EscapeDataString(email)}&token={Uri.EscapeDataString(token)}";
