@@ -38,14 +38,11 @@ namespace TwitterClone.Controllers
             var res = await _jwtService.RevokeRefreshTokenAsync(userId);
 
             // Remove the access token cookie
-            //Response.Cookies.Delete("accessToken");
-            //Response.Cookies.Delete("refreshToken");
-            //Response.Cookies.Delete("userId");
             Response.Cookies.Delete("accessToken", new CookieOptions
             {
                 HttpOnly = true,
                 SameSite = SameSiteMode.None,
-                Secure = true // set to true if your site uses HTTPS (Render does)
+                Secure = true 
             });
 
             Response.Cookies.Delete("refreshToken", new CookieOptions

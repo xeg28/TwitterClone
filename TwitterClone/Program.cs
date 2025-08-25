@@ -18,7 +18,9 @@ builder.Services.AddCors(o =>
     {
         policy
           // explicitly allow your React dev server
-          .WithOrigins("http://localhost:3000")
+          .WithOrigins(
+            "http://localhost:3000",
+            "https://twittercloneapp-s03c.onrender.com")
           .AllowAnyMethod()
           .AllowCredentials()
           .AllowAnyHeader();
