@@ -3,6 +3,7 @@ import {useState} from 'react';
 import {Message, addMessage} from '../types/Message';
 import MessageCard from '../components/MessageCard/MessageCard'
 import { useNavigate } from 'react-router-dom';
+
 const AccountRecovery: React.FC = () => {
   document.title = "Recover Account";
   const navigate = useNavigate();
