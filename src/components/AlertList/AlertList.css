@@ -68,7 +68,7 @@
   bottom: 0; 
   left: 0;
   position: absolute;
-  animation: messageBar 10s linear;
+  animation: messageBar 7s linear;
 }
 
 @keyframes messageBar {

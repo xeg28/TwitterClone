@@ -1,14 +1,13 @@
 import {useState} from 'react';
 import FormInput from '../components/FormInput/FormInput';
-import {Message, addMessage} from '../types/Message';
-import MessageCard from '../components/MessageCard/MessageCard';
+import { useAlert } from '../components/AlertList/AlertContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 const ResetPassword: React.FC = () => {
   document.title = "Change Password";
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<true | false>(false);
-  const [messages, setMessages] = useState<Set<Message>>(new Set());
+  const { addAlert } = useAlert();
   const apiURL = process.env.REACT_APP_API_URL as string;
   const location = useLocation();
   const navigate = useNavigate();
@@ -17,7 +16,7 @@ const ResetPassword: React.FC = () => {
     event.preventDefault();
     try {
       if(password !== confirmPassword) {
-        addMessage({type:"error", content: "Passwords don't match"}, setMessages);
+        addAlert("Passwords don't match", "error");
         return;
       }
       const queryParams = new URLSearchParams(location.search);
@@ -25,7 +24,7 @@ const ResetPassword: React.FC = () => {
       const token = queryParams.get("token") as string;
 
       if(!email || !token) {
-        addMessage({type:"error", content: "Invalid Link"}, setMessages);
+        addAlert("Invalid Link", "error");
         return;
       }
 
@@ -56,7 +55,7 @@ const ResetPassword: React.FC = () => {
         navigate('/Login', {state: {message}});
       }
       else if(result.status === 409) {
-        addMessage({type:"error", content: result.message}, setMessages);
+        addAlert(result.message, "error"); 
       }
     }
     catch(e) {
@@ -89,7 +88,6 @@ const ResetPassword: React.FC = () => {
           </div>
         </form>
       </div>
-      <MessageCard messages={messages} setMessages={setMessages} />
     </div>
   )
 }

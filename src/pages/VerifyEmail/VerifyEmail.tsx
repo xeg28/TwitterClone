@@ -1,14 +1,13 @@
 import {useEffect, useState, useRef} from "react";
 import { useLocation, useNavigate, Location} from "react-router-dom";
-import MessageCard from '../../components/MessageCard/MessageCard';
+import { useAlert } from "../../components/AlertList/AlertContext";
 import "./VerifyEmail.css";
-import {Message, addMessage} from '../../types/Message';
 
 
 const VerifyEmail: React.FC = () => {
   document.title = "Verify Email";
   const navigate = useNavigate();
-  const [messages, setMessages] = useState<Set<Message>>(new Set<Message>());
+  const { addAlert } = useAlert();
   const [isLoading, setIsLoading] = useState<true | false>(false);
   const apiURL = process.env.REACT_APP_API_URL as string;
   const didRun = useRef(false);
@@ -36,19 +35,17 @@ const VerifyEmail: React.FC = () => {
     if (location.state?.success) {
       if (didRun.current) return;
         didRun.current = true;
-      // Use the success message
-      addMessage({type:'success', content:location.state.success}, setMessages);
+      
+      addAlert(location.state.success, 'success');
 
-      // Remove only the success key, keep others like email
       const { success, ...rest } = location.state;
 
-      // Replace the state without refreshing
       navigate(location.pathname, {
         replace: true,
         state: rest,
       });
     }
-  }, [navigate, location]);
+  }, [navigate, location, addAlert]);
 
   const handleVerification = async () => {
     const inputs = document.querySelectorAll(".verify-num") as NodeListOf<HTMLInputElement>;
@@ -76,7 +73,7 @@ const VerifyEmail: React.FC = () => {
       navigate("/login", { state: {message}, replace: true });
     }
     else {
-      addMessage({type:'error', content:result.message}, setMessages);
+      addAlert(result.message, 'error');
     }
   }
 
@@ -99,10 +96,10 @@ const VerifyEmail: React.FC = () => {
     const result = await resendCode();
 
     if(result.status === 200) {
-      addMessage({type:'success', content: result.message}, setMessages);
+      addAlert(result.message, 'success');
     }
     else {
-      addMessage({type:'error', content:result.message}, setMessages);
+      addAlert(result.message, 'error');
     }
 
   }
@@ -190,7 +187,6 @@ const VerifyEmail: React.FC = () => {
           (<span>Verfiy</span>)}
         </button>
       </div>
-      <MessageCard messages={messages} setMessages={setMessages}/>
     </div>
   );
 }

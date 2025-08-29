@@ -1,14 +1,13 @@
 import FormInput from '../components/FormInput/FormInput';
 import {useState} from 'react';
-import {Message, addMessage} from '../types/Message';
-import MessageCard from '../components/MessageCard/MessageCard'
+import { useAlert } from '../components/AlertList/AlertContext';
 import { useNavigate } from 'react-router-dom';
 
 const AccountRecovery: React.FC = () => {
   document.title = "Recover Account";
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
-  const [messages, setMessages] = useState<Set<Message>>(new Set());
+  const { addAlert } = useAlert();
   const [isLoading, setIsLoading] = useState<true | false>(false);
   const apiURL = process.env.REACT_APP_API_URL as string;
   const handleSubmit = async (event:React.FormEvent) => {
@@ -29,10 +28,10 @@ const AccountRecovery: React.FC = () => {
         navigate('/login', {state: {message}})
       }
       else {
-        addMessage({type:'error', content: result.message}, setMessages);
+        addAlert(result.message, 'error');
       }
     } catch(e) {
-
+      
     }
     finally {
       setIsLoading(false);
@@ -55,7 +54,6 @@ const AccountRecovery: React.FC = () => {
           </div>
         </form>
       </div>
-      <MessageCard messages={messages} setMessages={setMessages} />
     </div>
   );
 }

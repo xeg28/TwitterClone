@@ -1,7 +1,6 @@
-import MessageCard from '../../components/MessageCard/MessageCard';
 import { useLocation, useNavigate, Location} from "react-router-dom";
 import {useState, useEffect} from 'react';
-import {Message, addMessage} from '../../types/Message';
+import { useAlert } from '../../components/AlertList/AlertContext';
 import FormInput from '../../components/FormInput/FormInput';
 import {HOST} from '../../config'
 import './Login.css';
@@ -23,7 +22,7 @@ const Login:React.FC = () => {
 
   document.title = "Login";
   
-  const [messages, setMessages] = useState<Set<Message>>(new Set<Message>());
+  const { addAlert } = useAlert();
   const [isLoading, setIsLoading] = useState<true | false>(false);
   const [data, setData] = useState<LoginData>({
     user: "",
@@ -36,7 +35,7 @@ const Login:React.FC = () => {
     if (location.state?.message) {
       // Use the success message
       let msg = location.state.message;
-      addMessage({type: msg.type, content: msg.content}, setMessages);
+      addAlert(msg.content, msg.type);
 
       const { message, ...rest } = location.state;
       navigate(location.pathname, {
@@ -44,7 +43,7 @@ const Login:React.FC = () => {
         state: rest,
       });
     }
-  }, [location, navigate]);
+  }, [location, navigate, addAlert]);
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -62,17 +61,17 @@ const Login:React.FC = () => {
         credentials: 'include'
       });
       const result = await response.json();
-      setIsLoading(false);
       if(result.status === 401) {
-         addMessage({type: "error", content: result.message}, setMessages);
+         addAlert(result.message, "error");
       }
       else if(result.status === 200) {
         navigate('/');
       }
     } catch(e) {
-        console.log(e);
-        setIsLoading(false);
-        addMessage({type: "error", content: "Server error, try again."}, setMessages);
+        addAlert("Server error, try again", "error");
+    }
+    finally {
+      setIsLoading(false);
     }
 
   }
@@ -113,7 +112,6 @@ const Login:React.FC = () => {
                 <span className='w-100 text-center'>Forgot password? <a href={HOST+'/account-recovery'}>Reset</a></span>
               </div>
       </div>
-      <MessageCard messages={messages} setMessages={setMessages}/>
     </div>
   );
 }

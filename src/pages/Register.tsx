@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
 import FormInput from '../components/FormInput/FormInput';
-import MessageCard from '../components/MessageCard/MessageCard';
 import {HOST} from '../config'
 import { useNavigate } from "react-router-dom";
-import {Message, addMessage} from '../types/Message';
+import { useAlert } from '../components/AlertList/AlertContext';
 
 type RegistrationData = {
   [name:string]: string;
@@ -24,7 +23,7 @@ const addData = (dataTitle: string, value: string, setData: React.Dispatch<React
 
 const Registration: React.FC = () => {
   document.title = "Register";
-  const [messages, setMessages] = useState<Set<Message>>(new Set<Message>());
+  const { addAlert } = useAlert();
   const [inputErrors, setInputErrors] = useState<Map<string, string>>(new Map<string, string>());
   const [form, setForm] = useState<'email' | 'password'>('email');
   const [data, setData] = useState<RegistrationData>({
@@ -49,7 +48,6 @@ const Registration: React.FC = () => {
       setIsLoading(true);
       const response = await fetch(`${apiURL}/api/users/email-check/${data.email.trim()}`);
       const result = await response.json();
-      setIsLoading(false);
 
       if (result.status === 409) {
         setInputErrors((prevErrors: Map<string, string>)  => {
@@ -59,15 +57,17 @@ const Registration: React.FC = () => {
         });
       }
       else if(result.status === 400) {
-        addMessage({type: "error", content: result.message}, setMessages);
+        addAlert(result.message, "error")
       }
       else if(emailInput.checkValidity() && nameInput.checkValidity()) {
         setForm("password");
       }
 
     } catch (error) {
-        setIsLoading(false);
-        addMessage({type: "error", content: "Connection Error, Try again."}, setMessages);
+        addAlert("Connection Error, Try again.", "error");
+    }
+    finally {
+      setIsLoading(false);
     }
   };
 
@@ -85,7 +85,7 @@ const Registration: React.FC = () => {
  const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
     if(data.password !== data.confirmPassword){
-      addMessage({type:"error", content:"Passwords do not match."}, setMessages);
+      addAlert("Passwords do not match", "error");
       return;
     }
 
@@ -107,7 +107,6 @@ const Registration: React.FC = () => {
           newMap.set("username", result.message);
           return newMap;
         });
-        setIsLoading(false);
         return;
       }
 
@@ -120,7 +119,6 @@ const Registration: React.FC = () => {
       });
 
       result = await response.json();
-      setIsLoading(false);
       if(result.status && result.status === 200) {
         let success = new Set<string>();
         let email = data.email;
@@ -128,11 +126,13 @@ const Registration: React.FC = () => {
         navigate("/verify-email", { state: {email , success }});
       }
       else if(result.status === 409) {
-        addMessage({type:"error", content: result.message}, setMessages);
+        addAlert(result.message, "error")
       }
     } catch(error) {
-        setIsLoading(false);
-        addMessage({type: "error", content: "Connection Error, Try again."}, setMessages);
+        addAlert("Connection Error, Try again.");
+    }
+    finally {
+      setIsLoading(false);
     }
   }
 
@@ -209,7 +209,6 @@ const Registration: React.FC = () => {
             </form>
           </div>
         )}
-        <MessageCard messages={messages} setMessages={setMessages}/>
     </div>
 
   );

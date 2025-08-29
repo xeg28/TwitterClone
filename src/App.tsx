@@ -9,26 +9,31 @@ import AccountRecovery from './pages/AccountRecovery';
 import ProtectedRoutes from './utils/ProtectedRoutes';
 import PublicRouteProps from './utils/PublicRouteProps';
 import ResetPassword from './pages/ChangePassword';
-
+import { AlertProvider } from './components/AlertList/AlertContext';
+import AlertList from './components/AlertList/AlertList';
 
 function App() {
 
   return (
     <Router>
-      <Routes>
-        <Route element={<ProtectedRoutes redirect="/login" />}>
-          <Route path="/" element={<Home/>} />
-        </Route>
+      <AlertProvider>
+        <Routes>
+          <Route element={<ProtectedRoutes redirect="/login" />}>
+            <Route path="/" element={<Home />} />
+          </Route>
 
-        <Route element={<PublicRouteProps redirect="/" />}>
-          <Route path="/login"  element={<Login />}/>
-          <Route path="/register" element={<Register />} />
-        </Route>
+          <Route element={<PublicRouteProps redirect="/" />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
 
-        <Route path="/verify-email" element={<VerifyEmail/>}/>
-        <Route path="/account-recovery" element={<AccountRecovery />}/>
-        <Route path="reset-password" element={<ResetPassword/>} />
-      </Routes>
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/account-recovery" element={<AccountRecovery />} />
+          <Route path="reset-password" element={<ResetPassword />} />
+        </Routes>
+
+        <AlertList />
+      </AlertProvider>
     </Router>
   );
 }
