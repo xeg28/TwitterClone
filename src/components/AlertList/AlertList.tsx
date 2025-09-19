@@ -12,11 +12,11 @@ const AlertList: React.FC = () => {
         {alerts.map((alert, idx: number) => (
           <motion.div
             key={alert.type + alert.message + alert.id}
-            layout   // <-- 👈 this enables position animations
+            layout 
             initial={{ x: "105vw" }}
             animate={{ x: "0%" }}
             exit={{ x: "105vw" }}
-            transition={{ duration: 0.4 }}
+            transition={{ type: "spring", stiffness: 500, damping: 35}}
             className={"message-card " + alert.type}>
             <div className="message">
               <span className="icon"></span>

@@ -21,7 +21,7 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
   const addAlert = (message: string, type: "success" | "error" | "info" = "info") => {
     const existing = alerts.find((a) => a.type === type && a.message === message);
     if(existing) return;
-    const id = Date.now(); // unique id
+    const id = Date.now(); 
 
     const timeout = setTimeout(() => removeAlert({ id, type, message }), 7000);
 

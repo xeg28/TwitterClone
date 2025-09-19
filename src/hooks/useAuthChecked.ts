@@ -1,12 +1,12 @@
 import { useEffect, useState, useCallback, useRef} from "react";
-
+import { setUser } from "../types/User";
 const apiURL = process.env.REACT_APP_API_URL;
 
 export function useAuthChecked() {
   const [authChecked, setAuthChecked] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-  const [email , setEmail] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const didRun = useRef(false);
 
   const checkAuth = useCallback(async () => {
@@ -14,8 +14,9 @@ export function useAuthChecked() {
       const res = await fetch(`${apiURL}/api/auth/validate-token`, { credentials: "include" });
       const result = await res.json();
       if (result.status === 200) {
-        setIsVerified(result.isVerified);
-        setEmail(result.email);
+        setUser(result.user);
+        setIsVerified(result.user.isVerified);
+        setEmail(result.user.email);
         setIsLoggedIn(true);
       } else if (result.status === 401) {
         const response = await fetch(`${apiURL}/api/auth/refresh-token`, {
