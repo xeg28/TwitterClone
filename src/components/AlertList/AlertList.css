@@ -118,10 +118,14 @@
   box-sizing: border-box;
   top:0;
   right:0;
-  height: 100svh;
+  height: fit-content;
   width: 400px;
   padding: 1rem;
   gap: 1rem;
+}
+
+.message-track:empty {
+  display:none;
 }
 
 @media (max-width: 500px) {

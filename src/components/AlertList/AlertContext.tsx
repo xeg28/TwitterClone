@@ -19,13 +19,14 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
   const [alerts, setAlerts] = useState<Alert[]>([]);
 
   const addAlert = (message: string, type: "success" | "error" | "info" = "info") => {
-    const existing = alerts.find((a) => a.type === type && a.message === message);
-    if(existing) return;
-    const id = Date.now(); 
-
-    const timeout = setTimeout(() => removeAlert({ id, type, message }), 7000);
-
-    setAlerts((prev) => [...prev, { id, type, message, timeout }]);
+    setAlerts((prev) => {
+      if (prev.some((a) => a.type === type && a.message === message)) return prev;
+      const id = Date.now();
+      const timeout = setTimeout(() => {
+        setAlerts((cur) => cur.filter((a) => a.id !== id));
+      }, 7000);
+      return [...prev, { id, type, message, timeout }];
+    });
   };
 
   const removeAlert = (alert: Alert) => {

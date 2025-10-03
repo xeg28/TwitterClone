@@ -42,19 +42,16 @@ const CreatePost: React.FC = () => {
 
   const handleInput = () => {
     const textarea = textareaRef.current;
-    setPostText(textarea?.value);
-    const cont = containerRef.current;
-    const children = cont?.children as HTMLCollection;
-    let offset = 35;
-    Array.from(children).forEach((el) => {
-      if (el.id !== "post-form") {
-        offset += el.clientHeight;
-      }
-    })
-    if (textarea) {
-      textarea.style.height = "auto";
-      textarea.style.height = Math.min(textarea.scrollHeight, window.innerHeight * 0.9 - offset) + "px";
-    }
+    if(!textarea) return;
+    setPostText(textarea.value);
+  
+    const rect = textarea.getBoundingClientRect();
+    let offset = 107;
+    const available = Math.max(100, window.innerHeight - rect.top - offset);
+
+    textarea.style.maxHeight = `${available}px`;
+    textarea.style.height = "auto";
+    textarea.style.height = Math.min(textarea.scrollHeight, available) + "px";
   };
 
   return (
@@ -66,7 +63,7 @@ const CreatePost: React.FC = () => {
             <div>
               <form onSubmit={handleSubmit}>
                 <div className="form-post-wrapper" ref={containerRef}>
-                  <div>
+                  <div className="popup-header">
                     <button className="close-btn" onClick={() => setShowCreatePost(false)}>
                       <img src="/svg/close.svg" alt="close" />
                     </button>

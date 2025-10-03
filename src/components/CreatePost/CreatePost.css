@@ -10,9 +10,14 @@
 }
 
 .post-popup > div {
-  display: flex;
-  flex-direction: column;
   margin-top: 5dvh;
+  width: 100%;
+  padding: 10px;
+}
+
+form:has(.form-post-wrapper) {
+  max-inline-size: 500px;
+  margin-inline: auto;
 }
 
 .form-post-wrapper {
@@ -21,7 +26,8 @@
   gap: .5rem;
   max-height: 90dvh;
   background-color: var(--background-color);
-  width: 500px;
+  
+ 
   border-radius: 1rem;
   padding: .5rem 2rem 1rem 1rem;
 }

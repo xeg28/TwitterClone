@@ -120,10 +120,9 @@ const Registration: React.FC = () => {
 
       result = await response.json();
       if(result.status && result.status === 200) {
-        let success = new Set<string>();
+        let message = {content: "Successfully Registered", type:"success"};
         let email = data.email;
-        success.add("Successfuly registered")
-        navigate("/verify-email", { state: {email , success }});
+        navigate("/verify-email", { state: {email , message }});
       }
       else if(result.status === 409) {
         addAlert(result.message, "error")

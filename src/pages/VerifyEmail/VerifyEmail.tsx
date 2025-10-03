@@ -10,7 +10,6 @@ const VerifyEmail: React.FC = () => {
   const { addAlert } = useAlert();
   const [isLoading, setIsLoading] = useState<true | false>(false);
   const apiURL = process.env.REACT_APP_API_URL as string;
-  const didRun = useRef(false);
   const didResend = useRef(false);
 
   const location = useLocation() as Location & {
@@ -31,21 +30,6 @@ const VerifyEmail: React.FC = () => {
     }
   }, [email, navigate]);
 
-  useEffect(() => {
-    if (location.state?.success) {
-      if (didRun.current) return;
-        didRun.current = true;
-      
-      addAlert(location.state.success, 'success');
-
-      const { success, ...rest } = location.state;
-
-      navigate(location.pathname, {
-        replace: true,
-        state: rest,
-      });
-    }
-  }, [navigate, location, addAlert]);
 
   const handleVerification = async () => {
     const inputs = document.querySelectorAll(".verify-num") as NodeListOf<HTMLInputElement>;

@@ -1,0 +1,45 @@
+.home-layout {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.home-layout * {
+  border: 1px solid white;
+}
+
+.home-layout > * {
+  border: 1px solid red;
+}
+
+main {
+  margin-right: 2rem;
+}
+
+.main-content {
+  width: 600px;
+  max-inline-size: 600px;
+  min-width: 0px;
+}
+
+.alt-content {
+  width: 350px;
+}
+
+@media (max-width: 1080px) {
+  .alt-content {
+    display:none
+  }
+  main {
+    flex: 1;
+    max-width: 600px;
+    margin-right: 0px;
+  }
+
+  .main-content {
+    width: initial;
+    max-width: 600px;
+  }
+}
+

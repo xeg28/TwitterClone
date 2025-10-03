@@ -1,10 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import './AlertList.css';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useAlert } from "./AlertContext";
+import { useAlert} from "./AlertContext";
+import { useLocation, useNavigate, Location} from "react-router-dom";
 
 const AlertList: React.FC = () => {
-  const { alerts, removeAlert } = useAlert();
+  const { alerts, removeAlert, addAlert} = useAlert();
+  const location = useLocation();
+  const navigate = useNavigate();
+  useEffect(() => {
+      if (location.state?.message) {
+        // Use the success message
+        let msg = location.state.message;
+        addAlert(msg.content, msg.type);
+  
+        const { message, ...rest } = location.state;
+        navigate(location.pathname, {
+          replace: true,
+          state: rest,
+        });
+      }
+    }, [location, navigate, addAlert]);
+  
 
   return alerts ? (
     <div className="message-track">

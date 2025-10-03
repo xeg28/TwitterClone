@@ -4,7 +4,7 @@ import './styles/App.css';
 import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail/VerifyEmail';
 import Login from './pages/Login/Login';
-import Home from './pages/Home';
+import Home from './pages/Home/Home';
 import AccountRecovery from './pages/AccountRecovery';
 import ProtectedRoutes from './utils/ProtectedRoutes';
 import PublicRouteProps from './utils/PublicRouteProps';

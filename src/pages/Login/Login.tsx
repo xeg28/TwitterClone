@@ -29,21 +29,7 @@ const Login:React.FC = () => {
     password: ""
   });
   const navigate = useNavigate();
-  const location = useLocation() as Location;
   const apiURL = process.env.REACT_APP_API_URL as string;
-  useEffect(() => {
-    if (location.state?.message) {
-      // Use the success message
-      let msg = location.state.message;
-      addAlert(msg.content, msg.type);
-
-      const { message, ...rest } = location.state;
-      navigate(location.pathname, {
-        replace: true,
-        state: rest,
-      });
-    }
-  }, [location, navigate, addAlert]);
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();

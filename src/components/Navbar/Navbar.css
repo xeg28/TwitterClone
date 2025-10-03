@@ -1,0 +1,21 @@
+header {
+  display: flex;
+  flex-direction: row;
+  height: 100dvh;
+  justify-content: flex-end;
+  --header-width: 275px;
+}
+
+header > div {
+  width: var(--header-width);
+}
+
+.nav-content {
+  position: fixed;
+}
+
+@media (max-width: 1260px) {
+  header {
+    --header-width: 88px
+  }
+}
