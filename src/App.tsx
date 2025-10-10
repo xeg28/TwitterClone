@@ -13,7 +13,6 @@ import { AlertProvider } from './components/AlertList/AlertContext';
 import AlertList from './components/AlertList/AlertList';
 
 function App() {
-
   return (
     <Router>
       <AlertProvider>

@@ -9,7 +9,7 @@
   border-radius: 5px;
   border: solid 1px var(--primary-color);
   cursor: text;
-  box-sizing: content-box;
+  box-sizing: content-box !important;
 }
 
 .input-text input {
@@ -24,6 +24,7 @@
   border: none;
   background: transparent;
   color: var(--text-color);
+  box-sizing: content-box !important;
 }
 
 .input-text input:not(:placeholder-shown) {

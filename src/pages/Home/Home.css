@@ -5,14 +5,6 @@
   width: 100%;
 }
 
-.home-layout * {
-  border: 1px solid white;
-}
-
-.home-layout > * {
-  border: 1px solid red;
-}
-
 main {
   margin-right: 2rem;
 }

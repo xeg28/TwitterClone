@@ -14,6 +14,7 @@ export function useAuthChecked() {
       const res = await fetch(`${apiURL}/api/auth/validate-token`, { credentials: "include" });
       const result = await res.json();
       if (result.status === 200) {
+        console.log(result.user);
         setUser(result.user);
         setIsVerified(result.user.isVerified);
         setEmail(result.user.email);

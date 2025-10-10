@@ -1,37 +1,60 @@
 import './Navbar.css';
 import CreatePost from '../CreatePost/CreatePost';
-import { API_URL } from '../../config';
-import { useNavigate } from "react-router-dom";
+import Icon from '../Icon/Icon';
+import Profiles from './Profiles';
 
 
 const Navbar: React.FC = () => {
-  const navigate = useNavigate();
 
-  const logout = async () => {
-    try {
-      const response = await fetch(`${API_URL}/auth/logout`, {
-        method: 'POST',
-        credentials: 'include'
-      });
-      const result = await response.json();
-      if (result.status === 200) {
-        navigate('/login');
-      }
-      else {
-        console.log(result.message);
-      }
-
-    }
-    catch (e) {
-
-    }
-  }
   return (
     <header>
       <div></div>
       <div className="nav-content">
-        <CreatePost />
-        <button onClick={logout}>Logout</button>
+        <div className='flex flex-col gap-1 align-center'>
+          <div className='nav-btns'>
+            <button>
+              <div className="nav-icon">
+                <Icon name="home"/>
+              </div>
+              <span>Home</span>
+            </button>
+            <button>
+              <div className="nav-icon">
+                <Icon name="search"/>
+              </div>
+              <span>Explore</span>
+            </button>
+            <button>
+              <div className="nav-icon">
+                <Icon name="notification"/>
+              </div>
+              <span>Notifications</span>
+            </button>
+            <button>
+              <div className="nav-icon">
+                <Icon name="messages"/>
+              </div>
+              <span>Messages</span>
+            </button>
+            <button>
+              <div className="nav-icon">
+                <Icon name="profile"/>
+              </div>
+              <span>Profile</span>
+            </button>
+            <button>
+              <div className="nav-icon">
+                <Icon name="more"/>
+              </div>
+              <span>More</span>
+            </button>
+          </div>
+          <div className="post">
+            <CreatePost />
+          </div>
+        </div>
+
+        <Profiles/>
       </div>
     </header>
   )

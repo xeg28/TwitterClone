@@ -3,6 +3,7 @@ import './CreatePost.css';
 import { getUser } from "../../types/User";
 import { addPost } from "../../api/posts";
 import { useAlert } from "../AlertList/AlertContext";
+import Icon from "../Icon/Icon";
 const CreatePost: React.FC = () => {
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,9 +43,9 @@ const CreatePost: React.FC = () => {
 
   const handleInput = () => {
     const textarea = textareaRef.current;
-    if(!textarea) return;
+    if (!textarea) return;
     setPostText(textarea.value);
-  
+
     const rect = textarea.getBoundingClientRect();
     let offset = 107;
     const available = Math.max(100, window.innerHeight - rect.top - offset);
@@ -55,8 +56,11 @@ const CreatePost: React.FC = () => {
   };
 
   return (
-    <div>
-      <button onClick={() => setShowCreatePost(true)}>Post</button>
+    <div className="w-100 flex align-center justify-content-center">
+      <button className= "post-btn-lg" onClick={() => setShowCreatePost(true)}>
+        <Icon name="post"/>
+        <span>Post</span>
+      </button>
       {showCreatePost &&
         (
           <div className="post-popup">
@@ -65,7 +69,7 @@ const CreatePost: React.FC = () => {
                 <div className="form-post-wrapper" ref={containerRef}>
                   <div className="popup-header">
                     <button className="close-btn" onClick={() => setShowCreatePost(false)}>
-                      <img src="/svg/close.svg" alt="close" />
+                      <Icon name="close" className="close-icon" />
                     </button>
                   </div>
                   <div className="flex" id="post-form">

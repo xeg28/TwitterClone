@@ -1,3 +1,29 @@
+.post-btn-lg {
+  font-size: var(--fs-large);
+  padding: 12px;
+  background-color: var(--text-color);
+  color: var(--background-color);
+  border: none;
+  border-radius: 9999px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.post-btn-lg :hover {
+  background-color: color-mix(in srgb, var(--text-color) 90%, black 10%);
+}
+
+.post-btn-lg :focus-visible {
+  outline: 2px solid white;
+}
+
+.post-btn-lg svg {
+  filter: invert(0);
+  width: 100%;
+  object-fit: contain;
+  display:none;
+}
+
 .post-popup {
   position: fixed;
   display: flex;
@@ -76,3 +102,16 @@ form:has(.form-post-wrapper) {
   background-color: var(--text-color);
 }
 
+
+@media (max-width: 1260px) {
+  .post-btn-lg {
+    width: 66px;
+  }
+  .post-btn-lg span {
+    display:none;
+  }
+
+  .post-btn-lg svg {
+    display:block;
+  }
+}
