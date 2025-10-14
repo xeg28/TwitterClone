@@ -1,5 +1,6 @@
 :root {
   --background-color: black;
+  --border-color: rgb(47, 51, 54);
   --primary-color: #888;
   --secondary-color: #61dafb;
   --link-color: #224dcf;
@@ -79,6 +80,10 @@ color: var(--link-visited-color);
   display: inline-block !important;
 }
 
+.d-none {
+  display:none !important;
+}
+
 .link {
   cursor: pointer;
   color: var(--link-color);
@@ -135,12 +140,25 @@ color: var(--link-visited-color);
   justify-content: center !important;
 }
 
+@media (max-width: 1260px) {
+  .justify-content-center-m {
+    justify-content: center !important;
+  }
+}
+
 .space-between {
   justify-content: space-between !important;
 }
 
 .align-center {
   align-items: center !important;
+}
+
+@media (max-width: 1260px) {
+  .align-center-m {
+    align-items: center !important;
+  }
+  
 }
 
 .align-end {

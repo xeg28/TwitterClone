@@ -8,6 +8,7 @@ header {
 
 header > div {
   width: var(--header-width);
+  transition: width 200ms linear;
 }
 
 .nav-content {
@@ -87,6 +88,10 @@ header > div {
 
 .profiles-btn:hover {
   background-color: color-mix(in srgb, var(--background-color) 90%, var(--text-color) 10%);
+}
+
+.profiles-btn:active {
+  background-color: color-mix(in srgb, var(--background-color) 85%, var(--text-color) 15%);
 }
 
 .profiles-pic {

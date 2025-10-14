@@ -105,7 +105,7 @@ form:has(.form-post-wrapper) {
 
 @media (max-width: 1260px) {
   .post-btn-lg {
-    width: 66px;
+    width: 52px;
   }
   .post-btn-lg span {
     display:none;

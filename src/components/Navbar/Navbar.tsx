@@ -10,7 +10,7 @@ const Navbar: React.FC = () => {
     <header>
       <div></div>
       <div className="nav-content">
-        <div className='flex flex-col gap-1 align-center'>
+        <div className='flex flex-col gap-1 align-center-m'>
           <div className='nav-btns'>
             <button>
               <div className="nav-icon">
@@ -54,7 +54,9 @@ const Navbar: React.FC = () => {
           </div>
         </div>
 
-        <Profiles/>
+        <div className="relative">
+          <Profiles/>
+        </div>
       </div>
     </header>
   )
