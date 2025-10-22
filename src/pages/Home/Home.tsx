@@ -1,11 +1,12 @@
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { getUser } from "../../types/User";
+import {Outlet} from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import "./Home.css";
 
 const Home: React.FC = () => {
-  const user = useRef({});
+  const user = useRef<any>({});
 
   useEffect(() => {
     user.current = getUser();
@@ -17,7 +18,7 @@ const Home: React.FC = () => {
         <Navbar/>
         <main>
           <div className="main-content">
-            main
+            <Outlet/>
           </div>
         </main>
         <div className="alt-content">

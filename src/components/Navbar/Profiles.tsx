@@ -1,13 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { API_URL } from '../../config';
 import { getUser, User } from "../../types/User";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ContextMenu from "../ContextMenu/ContextMenu";
+import { AnimatePresence } from "framer-motion";
 
 const Profiles: React.FC = () => {
   const user = getUser() as User;
   const navigate = useNavigate();
-  const profileRef = useRef(null);
+  const profileRef = useRef<HTMLDivElement | null>(null);
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const logout = async () => {
     try {
@@ -29,6 +30,19 @@ const Profiles: React.FC = () => {
     }
   }
 
+  useEffect(() => {
+    const removeMenu = (e: MouseEvent) => {
+      const target = e.target as Node | null;
+
+      if (profileRef.current && profileRef.current.contains(target)) return;
+      setShowMenu(false);
+    };
+
+    document.addEventListener('click', removeMenu);
+    return () => document.removeEventListener('click', removeMenu);
+
+  }, [])
+
   return (
     <>
       <div className="flex justify-content-center-m" ref={profileRef}>
@@ -44,13 +58,15 @@ const Profiles: React.FC = () => {
           </div>
         </button>
       </div>
-      <ContextMenu
-        options={[{ id: "logout", text: `Log out @${user.username}`, func: logout },
-        { id: "logout", text: `Log out @${user.username}`, func: logout },
-        ]}
-        show={showMenu}
-        targetRef={profileRef}
-      />
+      <AnimatePresence>
+        {showMenu && (
+          <ContextMenu
+            options={[{ id: "logout", text: `Log out @${user.username}`, func: logout },
+            ]}
+            targetRef={profileRef}
+          />
+        )}
+      </AnimatePresence>
     </>
   )
 }

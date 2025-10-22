@@ -17,7 +17,7 @@ const CreatePost: React.FC = () => {
     e.preventDefault();
 
     const data = {
-      ownerid: user.id,
+      ownerid: user?.id,
       text: postText
     }
 

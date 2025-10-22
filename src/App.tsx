@@ -11,6 +11,7 @@ import PublicRouteProps from './utils/PublicRouteProps';
 import ResetPassword from './pages/ChangePassword';
 import { AlertProvider } from './components/AlertList/AlertContext';
 import AlertList from './components/AlertList/AlertList';
+import Profile from './components/Profile/Profile';
 
 function App() {
   return (
@@ -18,7 +19,12 @@ function App() {
       <AlertProvider>
         <Routes>
           <Route element={<ProtectedRoutes redirect="/login" />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home />}>
+              <Route index element={(<div>Home</div>)}/>
+              <Route path="/search" element={(<div>Search</div>)}/>
+              <Route path="/notifications" element={(<div>Notifications</div>)}/>
+              <Route path="/profile/:username" element={<Profile/>} />
+            </Route>
           </Route>
 
           <Route element={<PublicRouteProps redirect="/" />}>

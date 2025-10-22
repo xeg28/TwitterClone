@@ -1,4 +1,5 @@
-import React, { useEffect, useRef} from 'react';
+import React, { useEffect, useRef } from 'react';
+import { motion } from "framer-motion";
 import './ContextMenu.css';
 
 type MenuOption = {
@@ -9,12 +10,11 @@ type MenuOption = {
 
 interface ContextMenuProps {
   options: MenuOption[];
-  show: boolean;
   targetRef: React.RefObject<HTMLElement | null>;
 }
 
 
-const ContextMenu: React.FC<ContextMenuProps> = ({ options, show, targetRef}) => {
+const ContextMenu: React.FC<ContextMenuProps> = ({ options, targetRef }) => {
 
   const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -23,9 +23,14 @@ const ContextMenu: React.FC<ContextMenuProps> = ({ options, show, targetRef}) =>
       const rect = targetRef.current.getBoundingClientRect();
       menuRef.current.style.bottom = `${rect.height + 10}px`;
     }
-  }, [show])
+  }, [])
   return (
-    <div className={`context-menu ${show ? "" : "d-none"}`} ref={menuRef}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: .15 }}
+      className="context-menu" ref={menuRef}>
       <div className="menu-content">
         {options.map((option, idx) => (
           <div className="menu-option" key={option.id + idx}>
@@ -40,7 +45,7 @@ const ContextMenu: React.FC<ContextMenuProps> = ({ options, show, targetRef}) =>
           </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   )
 }
 

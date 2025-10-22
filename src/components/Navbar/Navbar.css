@@ -16,6 +16,7 @@ header > div {
   display: flex;
   flex-direction: column;
   gap: 4.5rem;
+  padding: 0 .5rem;
 }
 
 .nav-btns {
@@ -25,7 +26,7 @@ header > div {
   width: 100%;
 }
 
-.nav-btns button {
+.nav-btns a {
   display: flex;
   align-items: center;
   width: fit-content;
@@ -38,17 +39,21 @@ header > div {
   cursor: pointer;
 }
 
-.nav-btns button:hover {
+.nav-btns a:hover {
   background-color: color-mix(in srgb, white 10%, var(--background-color) 90%);
 }
 
-.nav-btns button:focus-visible {
+.nav-btns a:focus-visible {
   outline: 2px solid white;
 }
 
-.nav-btns button > span {
+.nav-btns a > span {
   margin-left: 20px;
   margin-right: 16px;
+}
+
+.nav-btns a.active {
+  font-weight: 700;
 }
 
 .post {
@@ -129,7 +134,7 @@ header > div {
     --header-width: 88px
   }
 
-  .nav-btns button > span {
+  .nav-btns a > span {
     display: none;
   }
 
