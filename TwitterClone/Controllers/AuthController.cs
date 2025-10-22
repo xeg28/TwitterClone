@@ -1,13 +1,13 @@
 ﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
 using TwitterClone.Data;
 using TwitterClone.Models;
 using TwitterClone.Models.Api;
 using TwitterClone.Services;
 using RegisterRequest = TwitterClone.Models.RegisterRequest;
+using System.Numerics;
 
 
 namespace TwitterClone.Controllers
@@ -27,6 +27,32 @@ namespace TwitterClone.Controllers
             _jwtService = jwtService;
         }
 
+        private CookieOptions BuildCookieOptions(DateTimeOffset? expires = null)
+        {
+            return new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                //SameSite = SameSiteMode.Strict,
+                SameSite = SameSiteMode.None,
+                Expires = expires
+            };
+        }
+
+        private DateTimeOffset GetRefreshExpiryFromUser(User? user = null)
+        {
+            int refreshTokenExpirySeconds = 0;
+            DateTimeOffset? refreshTokenExpiresAt = null;
+
+            if (user?.RefreshTokenExpiry is DateTime expiry)
+            {
+                var seconds = (expiry - DateTime.UtcNow).TotalSeconds;
+                refreshTokenExpirySeconds = (int)Math.Max(0, Math.Floor(seconds));
+                refreshTokenExpiresAt = DateTimeOffset.UtcNow.AddSeconds(refreshTokenExpirySeconds);
+            }
+            return refreshTokenExpiresAt ?? DateTimeOffset.UtcNow.AddDays(7);
+        }
+
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
@@ -38,26 +64,11 @@ namespace TwitterClone.Controllers
             var res = await _jwtService.RevokeRefreshTokenAsync(userId);
 
             // Remove the access token cookie
-            Response.Cookies.Delete("accessToken", new CookieOptions
-            {
-                HttpOnly = true,
-                SameSite = SameSiteMode.None,
-                Secure = true 
-            });
+            Response.Cookies.Delete("accessToken", BuildCookieOptions());
 
-            Response.Cookies.Delete("refreshToken", new CookieOptions
-            {
-                HttpOnly = true,
-                SameSite = SameSiteMode.None,
-                Secure = true
-            });
+            Response.Cookies.Delete("refreshToken", BuildCookieOptions());
 
-            Response.Cookies.Delete("userId", new CookieOptions
-            {
-                HttpOnly = true,
-                SameSite = SameSiteMode.None,
-                Secure = true
-            });
+            Response.Cookies.Delete("userId", BuildCookieOptions());
 
             return Ok(new { status = 200, message = "User logged out successfully.", success=res });
         }
@@ -75,38 +86,19 @@ namespace TwitterClone.Controllers
             Response.Cookies.Append(
                 "accessToken",
                 result.AccessToken ?? "",
-                new CookieOptions
-                {
-                    HttpOnly = true, // Prevents JavaScript access (recommended for security)
-                    Secure = true,
-                    //SameSite = SameSiteMode.Strict,
-                    SameSite = SameSiteMode.None, // Adjust as needed (Lax/Strict/None)
-                    Expires = DateTimeOffset.UtcNow.AddSeconds(result.ExpiresIn)
-                }
+                BuildCookieOptions(DateTimeOffset.UtcNow.AddSeconds(result.ExpiresIn))
             );
 
             Response.Cookies.Append(
                 "refreshToken",
                 result.RefreshToken ?? "",
-                new CookieOptions
-                {
-                    HttpOnly = true, // Prevents JavaScript access (recommended for security)
-                    Secure = true,
-                    //SameSite = SameSiteMode.Strict,
-                    SameSite = SameSiteMode.None // Adjust as needed (Lax/Strict/None)
-                }
+                BuildCookieOptions(GetRefreshExpiryFromUser(result.User))
             );
 
             Response.Cookies.Append(
                 "userId",
-                result.User.Id.ToString() ?? "",
-                new CookieOptions
-                {
-                    HttpOnly = true, // Prevents JavaScript access (recommended for security)
-                    Secure = true,
-                    //SameSite = SameSiteMode.Strict,
-                    SameSite = SameSiteMode.None // Adjust as needed (Lax/Strict/None)
-                }
+                result.User?.Id.ToString() ?? "",
+                BuildCookieOptions(GetRefreshExpiryFromUser(result.User))
             );
 
             var user = new User {
@@ -127,7 +119,6 @@ namespace TwitterClone.Controllers
         [HttpPost("refresh-token")]
         public async Task<ActionResult<LoginResponseModel>> RefreshToken()
         {
-
             var refreshToken = Request.Cookies["refreshToken"];
             var userIdString = Request.Cookies["userId"];
 
@@ -148,26 +139,19 @@ namespace TwitterClone.Controllers
             Response.Cookies.Append(
                 "accessToken",
                 result.AccessToken ?? "",
-                new CookieOptions
-                {
-                    HttpOnly = true, // Prevents JavaScript access (recommended for security)
-                    Secure = true,
-                    //SameSite = SameSiteMode.Strict,
-                    SameSite = SameSiteMode.None, // Adjust as needed (Lax/Strict/None)
-                    Expires = DateTimeOffset.UtcNow.AddSeconds(result.ExpiresIn)
-                }
+                BuildCookieOptions(DateTimeOffset.UtcNow.AddSeconds(result.ExpiresIn))
             );
 
             Response.Cookies.Append(
                 "refreshToken",
                 result.RefreshToken ?? "",
-                new CookieOptions
-                {
-                    HttpOnly = true, // Prevents JavaScript access (recommended for security)
-                    Secure = true,
-                    //SameSite = SameSiteMode.Strict,
-                    SameSite = SameSiteMode.None // Adjust as needed (Lax/Strict/None)
-                }
+                BuildCookieOptions(GetRefreshExpiryFromUser(result.User))
+            );
+
+            Response.Cookies.Append(
+                "userId",
+                result.User?.Id.ToString() ?? "",
+                BuildCookieOptions(GetRefreshExpiryFromUser(result.User))
             );
             return Ok(new { status = 200, response = result.User?.IsVerified });
         }
@@ -186,10 +170,21 @@ namespace TwitterClone.Controllers
             // Optionally, extract user info from claims
             var isVerifiedClaim = principal.FindFirst("IsVerified");
             var isVerified = isVerifiedClaim != null && bool.TryParse(isVerifiedClaim.Value, out var result) && result;
+            var email = principal.FindFirst(ClaimTypes.Email)?.Value
+                     ?? principal.FindFirst(JwtRegisteredClaimNames.Email)?.Value;
+            var userId = principal.FindFirst("UserId")?.Value;
+            var username = principal.FindFirst("Username")?.Value;
+            var legalName = principal.FindFirst(JwtRegisteredClaimNames.Name)?.Value;
 
-            var email = principal.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value
-                     ?? principal.FindFirst(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Email)?.Value;
-            return Ok(new { status = 200, message = "User is logged in.", isVerified, email});
+            var user = new User
+            {
+                Id=int.Parse(userId),
+                Email=email,
+                Username=username,
+                IsVerified= isVerified,
+                LegalName = legalName,
+            };
+            return Ok(new { status = 200, message = "User is logged in.", user});
         }
 
         [HttpGet("username-check/{username}")]
@@ -318,16 +313,9 @@ namespace TwitterClone.Controllers
                 Response.Cookies.Append(
                     "accessToken",
                     newAccessToken,
-                    new CookieOptions
-                    {
-                        HttpOnly = true,
-                        //SameSite = SameSiteMode.Strict,
-                        SameSite = SameSiteMode.None,
-                        Secure = true,
-                        Expires = DateTimeOffset.UtcNow.AddMinutes(
-                            _jwtService.TokenValidityMinutes // Use your config value
-                        )
-                    }
+                    BuildCookieOptions(DateTimeOffset.UtcNow.AddMinutes(
+                            _jwtService.TokenValidityMinutes
+                        ))
                 );
             }
 

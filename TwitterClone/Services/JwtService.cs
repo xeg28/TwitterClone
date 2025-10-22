@@ -130,11 +130,12 @@ namespace TwitterClone.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Name, user.Username),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                    new Claim("UserId", user.Id.ToString()),
+                    new Claim(JwtRegisteredClaimNames.Name, user.LegalName ?? ""),
+                    new Claim("Username", user.Username ?? ""),
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email ?? ""),
                     new Claim("IsVerified", user.IsVerified.ToString().ToLowerInvariant())
-                }),
+            }),
                 Expires = tokenExpiryTimeStamp,
                 Issuer = issuer,
                 Audience = audience,

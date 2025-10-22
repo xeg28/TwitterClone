@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.Eventing.Reader;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -82,12 +83,13 @@ namespace TwitterClone.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Post>> AddPost(Post newPost)
         {
             if (newPost == null)
                 return BadRequest();
 
-            newPost.DatePosted = DateTime.Now;
+            newPost.DatePosted = DateTime.UtcNow;
             _context.Posts.Add(newPost);
             await _context.SaveChangesAsync();
 
