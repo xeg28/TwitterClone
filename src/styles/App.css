@@ -9,7 +9,7 @@
   --text-color-dimm: rgb(120, 120, 120);
   --transparent-100: rgba(20,20,20,.95);
 
-  --fs-small: clamp(0.625rem, 0.5847rem + 0.2151vw, 0.875rem);
+  --fs-small: clamp(0.75rem, 0.7298rem + 0.1075vw, 0.875rem);
   --fs-medium: clamp(0.875rem, 0.8347rem + 0.2151vw, 1.125rem);
   --fs-large: clamp(1.125rem, 1.0746rem + 0.2688vw, 1.4375rem);
   --fs-xlarge: clamp(1.4375rem, 1.2401rem + 1.0526vw, 2.1875rem);
@@ -112,8 +112,16 @@ color: var(--link-visited-color);
   font-size: var(--fs-xlarge) !important;
 }
 
+.fs-lg {
+  font-size: var(--fs-large) !important;
+}
+
 .fs-m {
   font-size: var(--fs-medium) !important;
+}
+
+.fs-sm {
+  font-size: var(--fs-small) !important;
 }
 
 .m-0 {

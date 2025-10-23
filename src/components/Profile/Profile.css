@@ -1,0 +1,62 @@
+.top-bar {
+  height: var(--top-bar-height);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  align-items: center;
+}
+
+.top-bar div {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+
+.top-bar button {
+  background-color: transparent;
+  border-radius: 50%;
+  border: none;
+  padding: 7px;
+  cursor: pointer;
+  height: 36px;
+  width: 36px;
+  box-sizing: border-box;
+}
+
+.top-bar button:hover {
+  background-color: color-mix(in srgb, var(--background-color) 90%, var(--text-color) 10%);
+}
+
+.top-bar button:active {
+  background-color: color-mix(in srgb, var(--background-color) 80%, var(--text-color) 20%);
+}
+
+.top-bar button svg {
+  height: 100%;
+  object-fit: contain;
+}
+
+.banner-container {
+  aspect-ratio: 3 / 1;
+  width: 100%;
+  background-color: color-mix(in srgb, var(--background-color) 80%, var(--text-color) 20%);
+}
+
+.profile-content {
+  aspect-ratio: 3 / 1;
+  width: 100%;
+  padding: 12px 16px 0 16px;
+}
+
+.profile-picture {
+  height: 145px;
+  width: 145px;
+  border-radius: 50%;
+  margin-top: -15%;
+  background-color: red;
+
+}

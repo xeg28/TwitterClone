@@ -6,6 +6,7 @@ import {ReactComponent as Messages} from '../../icons/messages.svg';
 import {ReactComponent as Profile} from '../../icons/profile.svg';
 import {ReactComponent as More} from '../../icons/more.svg';
 import {ReactComponent as Post} from '../../icons/post.svg';
+import {ReactComponent as Back} from '../../icons/back.svg';
 
 export const Icons = {
   close: Close,
@@ -16,4 +17,5 @@ export const Icons = {
   profile: Profile,
   more: More,
   post: Post,
+  back: Back,
 };

@@ -1,3 +1,7 @@
+:root {
+  --top-bar-height: 53px;
+}
+
 .home-layout {
   display: flex;
   flex-direction: row;
@@ -13,6 +17,8 @@ main {
   width: 600px;
   max-inline-size: 600px;
   min-width: 0px;
+  border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
 }
 
 .alt-content {
