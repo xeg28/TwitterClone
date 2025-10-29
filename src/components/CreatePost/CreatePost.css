@@ -24,41 +24,7 @@
   display:none;
 }
 
-.post-popup {
-  position: fixed;
-  display: flex;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(91, 112, 131, 0.4);
-  justify-content: center;
-}
-
-.post-popup > div {
-  margin-top: 5dvh;
-  width: 100%;
-  padding: 10px;
-}
-
-form:has(.form-post-wrapper) {
-  max-inline-size: 500px;
-  margin-inline: auto;
-}
-
-.form-post-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: .5rem;
-  max-height: 90dvh;
-  background-color: var(--background-color);
-  
- 
-  border-radius: 1rem;
-  padding: .5rem 2rem 1rem 1rem;
-}
-
-.form-post-wrapper textarea {
+#post-text{
   background-color: var(--background-color);
   color: var(--text-color);
   outline: none;
@@ -69,6 +35,15 @@ form:has(.form-post-wrapper) {
   line-height: var(--fs-large) + 10px;
   margin-top: calc(20px - (var(--fs-large) + 10px) / 2);
   flex: 1;
+}
+
+.post-form {
+  padding: .5rem 1rem 1rem 1rem;
+}
+
+.post-form hr {
+  margin-top: .5rem;
+  margin-bottom: .5rem;
 }
 
 .form-post-wrapper form {
@@ -88,6 +63,7 @@ form:has(.form-post-wrapper) {
 }
 
 .post-btn {
+  --loader-height: calc(var(--fs-medium) + 2px);
   font-size: var(--fs-medium);
   background-color: color-mix(in srgb, var(--text-color) 90%, black 10%);
   color: var(--background-color);
@@ -96,6 +72,7 @@ form:has(.form-post-wrapper) {
   padding: 10px 15px 10px 15px;
   cursor: pointer;
   font-weight: 600;
+  min-width: 80px;
 }
 
 .post-btn:hover {

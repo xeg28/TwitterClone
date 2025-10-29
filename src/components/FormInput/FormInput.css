@@ -1,3 +1,10 @@
+.input-group {
+  width: 100%;
+  height: calc(70px + var(--fs-small));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
 .input-text {
   position: relative;
@@ -9,7 +16,15 @@
   border-radius: 5px;
   border: solid 1px var(--primary-color);
   cursor: text;
-  box-sizing: content-box !important;
+}
+
+.input-group:has(textarea) {
+  height: 150px;
+}
+
+.input-text:has(textarea) {
+  height: 130px;
+  padding: .5rem;
 }
 
 .input-text input {
@@ -25,6 +40,21 @@
   background: transparent;
   color: var(--text-color);
   box-sizing: content-box !important;
+}
+
+.input-text textarea{
+  font-family: inherit;
+  background-color: transparent;
+  border:none;
+  border-top: .5rem solid var(--background-color);
+  color: var(--text-color);
+  outline: none;
+  font-size: 18px;
+  resize: none;
+  line-height: var(--fs-large) + 10px;
+  height: 100px;
+  width: 100%;
+  background-color: transparent;
 }
 
 .input-text input:not(:placeholder-shown) {
@@ -89,7 +119,7 @@
 
 .placeholder {
   position: absolute;
-  top: 50%;
+  top: 24px;
   left: 10px;
   transform: translateY(-50%);
   color: var(--primary-color);
@@ -111,6 +141,8 @@
   transition: background-color 5000s ease-in-out 0s;
 }
 
+
+
 .input-text input:-internal-autofill-selected {
   background-color: black !important;
   border: none !important;
@@ -118,11 +150,16 @@
   outline: none !important;
 }
 
-.input-text input:focus + .placeholder,
-.input-text input:not(:placeholder-shown) + .placeholder {
-  top: 25%;
+.input-text :is(input, textarea):focus ~ .placeholder,
+.input-text :is(input, textarea):not(:placeholder-shown) ~ .placeholder,
+.input-text:focus-within .placeholder,
+.input-text:has(:is(input, textarea):not(:placeholder-shown)) .placeholder 
+{
+  top: 14px;
   font-size: 12px;
 }
+
+
 
 .input-text input:focus:valid + .placeholder{
   color: var(--secondary-color);

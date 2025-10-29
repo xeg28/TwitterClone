@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { motion } from "framer-motion";
+import ReactDOM from "react-dom";
 import './ContextMenu.css';
 
 type MenuOption = {
@@ -18,13 +19,31 @@ const ContextMenu: React.FC<ContextMenuProps> = ({ options, targetRef }) => {
 
   const menuRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (targetRef.current && menuRef.current) {
-      const rect = targetRef.current.getBoundingClientRect();
-      menuRef.current.style.bottom = `${rect.height + 10}px`;
+  useLayoutEffect(() => {
+    if (typeof document === "undefined") return; // SSR guard
+    const el = menuRef.current;
+    const target = targetRef.current;
+    if (!el || !target) return;
+
+    const positionMenu: () => void = () => {
+      const rect = target.getBoundingClientRect();
+      // place the menu relative to the target (adjust as needed)
+      el.style.bottom = `${window.innerHeight - rect.top + 10}px`;
+      el.style.left = `${rect.left}px`;
     }
-  }, [])
-  return (
+    // ensure measurement runs after motion element mounts/paints
+    const raf = window.requestAnimationFrame(positionMenu);
+
+    window.addEventListener("resize", positionMenu);
+
+    return () => {
+      window.cancelAnimationFrame(raf);
+      window.addEventListener("resize", positionMenu);
+    };
+  }, [targetRef]);
+
+  if (typeof document == "undefined") return null;
+  return ReactDOM.createPortal(
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -45,8 +64,9 @@ const ContextMenu: React.FC<ContextMenuProps> = ({ options, targetRef }) => {
           </div>
         ))}
       </div>
-    </motion.div>
-  )
-}
+    </motion.div>,
+    document.body
+  );
+};
 
 export default ContextMenu

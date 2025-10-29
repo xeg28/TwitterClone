@@ -3,7 +3,9 @@ import './CreatePost.css';
 import { getUser } from "../../types/User";
 import { addPost } from "../../api/posts";
 import { useAlert } from "../AlertList/AlertContext";
+import ReactDOM from "react-dom";
 import Icon from "../Icon/Icon";
+import PopupCard from "../PopupCard/PopupCard";
 const CreatePost: React.FC = () => {
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -11,7 +13,6 @@ const CreatePost: React.FC = () => {
   const { addAlert } = useAlert();
   const user = getUser();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,7 +48,7 @@ const CreatePost: React.FC = () => {
     setPostText(textarea.value);
 
     const rect = textarea.getBoundingClientRect();
-    let offset = 107;
+    let offset = 115;
     const available = Math.max(100, window.innerHeight - rect.top - offset);
 
     textarea.style.maxHeight = `${available}px`;
@@ -57,41 +58,38 @@ const CreatePost: React.FC = () => {
 
   return (
     <div className="w-100 flex align-center justify-content-center">
-      <button className= "post-btn-lg" onClick={() => setShowCreatePost(true)}>
-        <Icon name="post"/>
+      <button className="post-btn-lg" onClick={() => setShowCreatePost(true)}>
+        <Icon name="post" />
         <span>Post</span>
       </button>
-      {showCreatePost &&
-        (
-          <div className="post-popup">
-            <div>
-              <form onSubmit={handleSubmit}>
-                <div className="form-post-wrapper" ref={containerRef}>
-                  <div className="popup-header">
-                    <button className="close-btn" onClick={() => setShowCreatePost(false)}>
-                      <Icon name="close" className="close-icon" />
-                    </button>
-                  </div>
-                  <div className="flex" id="post-form">
-                    <div className="icon-img-wrapper">
+      {showCreatePost && typeof document !== "undefined" && ReactDOM.createPortal(
 
-                    </div>
-                    <textarea id="post-text" placeholder="What's happening?" ref={textareaRef} onInput={handleInput}></textarea>
-                  </div>
-                  <hr />
-                  <div className="post-options">
-                    <button className="post-btn">{isLoading ? (
-                      <div className="spinner"></div>) :
-                      (<span>Post</span>)
-                    }</button>
-                  </div>
+        <PopupCard setShowPopup={setShowCreatePost} 
+          responsiveText={textareaRef}
+          >
+          <form className="post-form" onSubmit={handleSubmit}>
+            <div className="flex post-form-wrapper" >
+              <div className="icon-img-wrapper">
 
-                </div>
-              </form>
-
+              </div>
+              <textarea id="post-text"
+                placeholder="What's happening?"
+                ref={textareaRef}
+                required
+                onInput={handleInput}></textarea>
             </div>
-          </div>
-        )
+            <hr />
+            <div className="post-options">
+              <button className="post-btn">{isLoading ? (
+                <div className="spinner"></div>) :
+                (<span>Post</span>)
+              }</button>
+            </div>
+          </form>
+        </PopupCard>
+        ,
+        document.body
+      )
       }
     </div>
   );

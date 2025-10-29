@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import { AnimatePresence } from "framer-motion";
 
+
 const Profiles: React.FC = () => {
   const user = getUser() as User;
   const navigate = useNavigate();

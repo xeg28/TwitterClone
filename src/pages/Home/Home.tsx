@@ -3,11 +3,13 @@ import { useEffect, useRef } from "react";
 import { getUser } from "../../types/User";
 import {Outlet} from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
+import { useNavigationHistory } from "../../hooks/useNavigationHistory";
 import "./Home.css";
+
 
 const Home: React.FC = () => {
   const user = useRef<any>({});
-
+  useNavigationHistory();
   useEffect(() => {
     user.current = getUser();
   }, []);

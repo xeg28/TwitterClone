@@ -7,6 +7,7 @@ import {ReactComponent as Profile} from '../../icons/profile.svg';
 import {ReactComponent as More} from '../../icons/more.svg';
 import {ReactComponent as Post} from '../../icons/post.svg';
 import {ReactComponent as Back} from '../../icons/back.svg';
+import {ReactComponent as Calendar} from '../../icons/calendar.svg';
 
 export const Icons = {
   close: Close,
@@ -18,4 +19,5 @@ export const Icons = {
   more: More,
   post: Post,
   back: Back,
+  calendar: Calendar,
 };

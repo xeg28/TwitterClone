@@ -1,9 +1,10 @@
 .context-menu {
-  position: absolute;
+  position: fixed;
   border: 1px solid var(--border-color);
   width: 250px;
   border-radius: 20px;
   background-color: var(--background-color);
+  z-index: 9999;
 }
 
 .menu-content {

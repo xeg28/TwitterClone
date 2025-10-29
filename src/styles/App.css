@@ -1,24 +1,62 @@
 :root {
   --background-color: black;
   --border-color: rgb(47, 51, 54);
+  --secondary-border-color: rgb(83, 100, 113);
   --primary-color: #888;
   --secondary-color: #61dafb;
   --link-color: #224dcf;
   --link-visited-color: #9918c1;
   --text-color: rgb(231, 233, 234);
   --text-color-dimm: rgb(120, 120, 120);
-  --transparent-100: rgba(20,20,20,.95);
+  --transparent-100: rgba(20, 20, 20, .95);
 
   --fs-small: clamp(0.75rem, 0.7298rem + 0.1075vw, 0.875rem);
-  --fs-medium: clamp(0.875rem, 0.8347rem + 0.2151vw, 1.125rem);
+  --fs-medium: clamp(0.875rem, 0.8548rem + 0.1075vw, 1rem);
   --fs-large: clamp(1.125rem, 1.0746rem + 0.2688vw, 1.4375rem);
   --fs-xlarge: clamp(1.4375rem, 1.2401rem + 1.0526vw, 2.1875rem);
   color: var(--text-color);
+
+    --scrollbar-track: rgba(255,255,255,0.05);
+  --scrollbar-thumb: rgba(255,255,255,0.2);
+  --scrollbar-thumb-hover: rgba(255,255,255,0.14);
+  --scrollbar-width: 12px;
+}
+
+/* Firefox */
+*,
+*::before,
+*::after {
+  scrollbar-width: thin; /* auto | thin | none */
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* WebKit (Chrome, Edge, Safari) */
+*::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
+}
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 9999px;
+  border: 3px solid transparent; /* creates a gap around the thumb */
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+/* Optional: avoid showing scrollbars on touch-only devices */
+@media (hover: none) and (pointer: coarse) {
+  *::-webkit-scrollbar { display: none; }
 }
 
 * {
   box-sizing: border-box;
 }
+
 body {
   background-color: var(--background-color);
   color: var(--text-color);
@@ -53,7 +91,7 @@ a {
 }
 
 a:visited {
-color: var(--link-visited-color);
+  color: var(--link-visited-color);
 }
 
 .form-title {
@@ -65,15 +103,15 @@ color: var(--link-visited-color);
 
 .button-reset {
   background: none;
-	color: inherit;
-	border: none;
-	padding: 0;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
   width: fit-content;
   padding-inline: 0;
-  padding-block:0;
+  padding-block: 0;
 }
 
 .inline-block {
@@ -81,7 +119,7 @@ color: var(--link-visited-color);
 }
 
 .d-none {
-  display:none !important;
+  display: none !important;
 }
 
 .link {
@@ -166,7 +204,7 @@ color: var(--link-visited-color);
   .align-center-m {
     align-items: center !important;
   }
-  
+
 }
 
 .align-end {
@@ -182,7 +220,11 @@ color: var(--link-visited-color);
 }
 
 .w-100 {
-  width: 100% !important; 
+  width: 100% !important;
+}
+
+.h-100 {
+  height: 100% !important;
 }
 
 .dimm-text {
@@ -190,13 +232,29 @@ color: var(--link-visited-color);
 }
 
 hr {
-  border: 1px solid transparent ;
+  border: 1px solid transparent;
   border-top: 1px solid var(--primary-color);
   margin: 0;
 }
 
-.spinner {
-  height: var(--fs-xlarge);
+.text-icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin-right: 5px;
+}
+
+.text-icon svg,
+img {
+  height: 100%;
+  object-fit: contain;
+  filter: invert(.5);
+  vertical-align: middle;
+}
+
+.spinner,
+.spinner-lt {
+  height: var(--loader-height, var(--fs-xlarge));
   aspect-ratio: 1 / 1;
   max-height: 80%;
   border: 5px solid transparent;
@@ -206,6 +264,11 @@ hr {
   animation: spin 1s linear infinite;
 }
 
+.spinner-lt {
+  border-top-color: var(--text-color);
+}
+
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -214,7 +277,7 @@ hr {
 
 
 .btn-group {
-  display:grid;
+  display: grid;
   grid-template-columns: 1fr 1fr;
   width: 100%;
   gap: 1rem;
@@ -230,15 +293,36 @@ hr {
   padding: 10px;
 }
 
-.close-btn img, svg{
+.close-btn img,
+svg {
   height: 100%;
   width: 100%;
   object-fit: contain;
   filter: invert(.8);
 }
 
-.close-btn:hover { 
+.close-btn:hover {
   background-color: color-mix(in srgb, var(--background-color) 90%, white 10%);
+}
+
+.main-btn {
+  border-radius: 9999px;
+  background-color: var(--background-color);
+  border: 1px solid var(--secondary-border-color);
+  color: var(--text-color);
+  font-size: var(--fs-medium);
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.main-btn:hover {
+  background-color: color-mix(in srgb, var(--background-color) 90%, var(--text-color) 10%);
+}
+
+.main-btn span {
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .wrapper {
@@ -269,9 +353,10 @@ hr {
   .form-wrapper {
     border: none;
   }
-   .form-wrapper  h1 {
-      text-align: center;
-   }
+
+  .form-wrapper h1 {
+    text-align: center;
+  }
 
   .form-wrapper .relative h1 {
     position: absolute;
@@ -290,13 +375,8 @@ hr {
   justify-content: center;
   align-items: center;
 }
-.input-group {
-  width: 100%;
-  height: calc(70px + var(--fs-small));
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
+
+
 
 .form-button {
   display: block;
@@ -317,7 +397,7 @@ hr {
 
 
 .input-error {
-  color: var(--error-color); 
+  color: var(--error-color);
   font-size: var(--fs-small);
   padding: 0rem 0.5rem .35rem;
 }
@@ -346,13 +426,13 @@ hr {
   .btn-group {
     grid-template-columns: auto;
   }
+
   .form-wrapper {
     width: 95%;
     padding: 1.5rem 1rem 3rem 1rem;
   }
+
   .d-none-500 {
     display: none !important;
   }
 }
-
-
