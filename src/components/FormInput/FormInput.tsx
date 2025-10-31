@@ -15,6 +15,7 @@ type FormInputProps = {
   info?: boolean;
   errors?: Map<string, string>;
   setErrors?: React.Dispatch<React.SetStateAction<Map<string, string>>>;
+  charLimit?:number
 }
 
 const FormInput: React.FC<FormInputProps> = ({
@@ -30,9 +31,11 @@ const FormInput: React.FC<FormInputProps> = ({
   pattern,
   info,
   errors,
-  setErrors
+  setErrors,
+  charLimit
 }) => {
   const [showInfo, setShowInfo] = useState<true | false>(false);
+  const [characters, setCharacters] = useState<number>(value?.length ?? 0);
   const infoRef = useRef<HTMLDivElement | null>(null);
   const handleInfoClick = (event: React.MouseEvent) => {
     setShowInfo((prevVal: boolean) => {
@@ -65,6 +68,7 @@ const FormInput: React.FC<FormInputProps> = ({
       const current = infoRef.current;
       const rect = current.getBoundingClientRect();
       const height = current.offsetHeight;
+
       if ((rect.top - (height + 5)) >= 0 && (rect.top - (height + 5)) <= window.innerHeight) {
         current.style.top = -(height + 5) + "px";
         current.style.right = "20px";
@@ -78,6 +82,18 @@ const FormInput: React.FC<FormInputProps> = ({
     }
   }, [showInfo]);
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = e.currentTarget.value;
+    setCharacters(v.length);
+    onChange && onChange(e);
+  }
+
+  const handleTextareaInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
+    const v = e.currentTarget.value;
+    setCharacters(v.length);
+    onInput && onInput(e);
+  }
+
   return (
     <div className="input-group">
       <div className="input-text" >
@@ -88,11 +104,12 @@ const FormInput: React.FC<FormInputProps> = ({
               name={name}
               placeholder=" "
               value={value ?? ""}
-              onInput={onInput}
+              onInput={handleTextareaInput}
               required={isRequired}
               title={title}
+              maxLength={charLimit}
             >
-
+            
             </textarea>
           ) :
           (
@@ -102,8 +119,9 @@ const FormInput: React.FC<FormInputProps> = ({
               name={name}
               placeholder=" "
               value={value ?? ""}
-              onChange={onChange}
+              onChange={handleInputChange}
               required={isRequired}
+              maxLength={charLimit}
               title={title}
               pattern={pattern} {...(setErrors && {
                 onFocus: () => setErrors((prevErrors: Map<string, string>) => {
@@ -116,6 +134,9 @@ const FormInput: React.FC<FormInputProps> = ({
           )
         }
         <span className="placeholder">{placeholder}</span>
+        {charLimit && (
+          <span className="char-limit">{`${characters} / ${charLimit}`}</span>
+        )}
         {info && (
           <div className="input-info">
             <button type="button" data-toggle="popover" data-placement="top" data-content={title} className="info-btn button-reset" name="Info Button"

@@ -62,23 +62,6 @@
   justify-content: space-between;
 }
 
-.post-btn {
-  --loader-height: calc(var(--fs-medium) + 2px);
-  font-size: var(--fs-medium);
-  background-color: color-mix(in srgb, var(--text-color) 90%, black 10%);
-  color: var(--background-color);
-  border-radius: 20px;
-  border: none;
-  padding: 10px 15px 10px 15px;
-  cursor: pointer;
-  font-weight: 600;
-  min-width: 80px;
-}
-
-.post-btn:hover {
-  background-color: var(--text-color);
-}
-
 
 @media (max-width: 1260px) {
   .post-btn-lg {

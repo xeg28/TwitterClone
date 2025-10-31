@@ -5,11 +5,12 @@ import { useRef } from "react";
 interface PopupCardProps {
   setShowPopup: any,
   popupTitle?: string,
-  responsiveText?: React.RefObject<any>,
+  onSubmit?: () => void,
+  submitText?: string,
   children: React.ReactNode
 }
 
-const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, popupTitle, children }) => {
+const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, popupTitle, children, onSubmit, submitText }) => {
 
   return (
     <div className="popup-card-wrapper">
@@ -21,8 +22,15 @@ const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, popupTitle, childre
                 <button className="close-btn" onClick={() => setShowPopup(false)}>
                   <Icon name="close" className="close-icon" />
                 </button>
-                <div className="popup-title">
-                  {popupTitle}
+                <div className="flex space-between flex-1 align-center plr-1">
+                  <div className="popup-title">
+                    {popupTitle}
+                  </div>
+                  {onSubmit && (
+                    <button className="popup-btn" onClick={() => onSubmit()}>
+                      {submitText ?? "Save"}
+                    </button>
+                  )}
                 </div>
               </div>
               <div className="popup-content">

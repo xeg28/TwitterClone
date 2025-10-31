@@ -3,11 +3,28 @@ import { useState } from "react";
 import { User } from "../../types/User";
 
 interface EditProfileProps {
-  user: User
+  user: User;
+  onDataChange: (data:User) => void;
 }
-const EditProfile:React.FC<EditProfileProps> = ({user}) => {
+
+const EditProfile:React.FC<EditProfileProps> = ({user, onDataChange}) => {
   const [name, setName] = useState<string>(user?.legalName ?? "");
   const [biography, setBiography] = useState<string>(user?.biography ?? "");
+  
+  const onNameChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const v = e.currentTarget.value;
+    setName(v);
+    const newData: User = {...user, legalName: v};
+    onDataChange(newData);
+  }
+
+  const onBioInput = (e:React.FormEvent<HTMLTextAreaElement>) => {
+    const v = e.currentTarget.value;
+    setBiography(v);
+    const newData: User = {...user, biography: v};
+    onDataChange(newData);
+  }
+
   return (
     <div className="edit-profile-wrapper">
       <div className="edit-banner"></div>
@@ -19,19 +36,21 @@ const EditProfile:React.FC<EditProfileProps> = ({user}) => {
             name="name" 
             id="legalName" 
             value={name}
-            onChange={e => setName(e.target.value)} 
+            onChange={onNameChange} 
             placeholder="Name"
             isRequired 
             pattern="[A-Za-z ]{2,50}" 
-            title="Name must be between 2-50 characters"/>
+            title="Name must be between 2-50 characters"
+            charLimit={50}/>
           <FormInput 
             type="textarea" 
             name="bio" 
             id="biography"
             placeholder="Bio"
-            onInput={e=>setBiography(e.currentTarget.value)}
+            onInput={onBioInput}
             value={biography} 
-            isRequired={false} />
+            isRequired={false}
+            charLimit={160} />
         </div>
       </form>
     </div>

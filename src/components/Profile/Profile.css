@@ -74,12 +74,13 @@
 }
 
 .edit-profile-pic {
-  max-inline-size: 115px;
+  max-width: 115px;
+  width: 20%;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   background-color: red;
   border: 5px solid black;
-  margin-top: -5%;
+  margin-top: -10%;
   margin-left: .5rem;
 }
 

@@ -10,8 +10,8 @@
   --text-color-dimm: rgb(120, 120, 120);
   --transparent-100: rgba(20, 20, 20, .95);
 
-  --fs-small: clamp(0.75rem, 0.7298rem + 0.1075vw, 0.875rem);
-  --fs-medium: clamp(0.875rem, 0.8548rem + 0.1075vw, 1rem);
+  --fs-small: 12px;
+  --fs-medium: clamp(0.9375rem, 0.9173rem + 0.1075vw, 1.0625rem);
   --fs-large: clamp(1.125rem, 1.0746rem + 0.2688vw, 1.4375rem);
   --fs-xlarge: clamp(1.4375rem, 1.2401rem + 1.0526vw, 2.1875rem);
   color: var(--text-color);
@@ -70,6 +70,9 @@ img {
   display: flex !important;
 }
 
+.flex-1 {
+  flex:1 !important;
+}
 
 #back-btn {
   z-index: 2;
@@ -83,6 +86,15 @@ img {
 .back-icon {
   display: inline;
   vertical-align: middle;
+}
+.plr-1 {
+  padding-left: .5rem !important;
+  padding-right: .5rem !important;
+}
+
+.ptb-1 {
+   padding-top: .5rem !important;
+  padding-bottom: .5rem !important;
 }
 
 a {
@@ -303,6 +315,10 @@ svg {
 
 .close-btn:hover {
   background-color: color-mix(in srgb, var(--background-color) 90%, white 10%);
+}
+
+.close-btn:active {
+  background-color: color-mix(in srgb, var(--background-color) 80%, white 20%);
 }
 
 .main-btn {

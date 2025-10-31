@@ -1,7 +1,7 @@
 import './Profile.css';
 import { useParams } from 'react-router-dom';
-import { fetchUser } from '../../api/user';
-import { useEffect, useState } from 'react';
+import { fetchUser, updateUser } from '../../api/user';
+import { useEffect, useState, useRef } from 'react';
 import { User } from '../../types/User';
 import { useAlert } from '../AlertList/AlertContext';
 import Icon from '../Icon/Icon';
@@ -16,6 +16,7 @@ import EditProfile from './EditProfile';
 const Profile: React.FC = () => {
   const { username } = useParams<{ username: string }>();
   const [user, setUser] = useState<User>({});
+  const userData = useRef<User>({});
   const [showEditUser, setShowEditUser] = useState<true | false>(false);
   const { addAlert } = useAlert();
   const [isLoading, setIsLoading] = useState<true | false>(false);
@@ -27,7 +28,18 @@ const Profile: React.FC = () => {
     navigate(prev ?? "/");
   }
 
-
+  const saveUser = async () => {
+    console.log(userData.current);
+    const response = await updateUser(userData.current);
+    if(response.ok) {
+      setUser(userData.current);
+      addAlert("Profile updated", "success");
+      setShowEditUser(false);
+    }
+    else {
+      addAlert("Can't update user", "error");
+    }
+  }
 
   useEffect(() => {
     if (!username) return;
@@ -36,6 +48,7 @@ const Profile: React.FC = () => {
       const response = await fetchUser(username);
       if (response.ok) {
         setUser(await response.json());
+        userData.current = user;
       }
       else {
         let res = await response.json();
@@ -92,6 +105,9 @@ const Profile: React.FC = () => {
                       <div className="fs-lg bolder">{user?.legalName}</div>
                       <div className='dimm-text'>@{user?.username}</div>
                     </div>
+                    <div className="bio">
+                      {user?.biography}
+                    </div>
                     <div className='dimm-text'>
                       <span className='text-icon'>
                         <Icon name="calendar" />
@@ -106,8 +122,13 @@ const Profile: React.FC = () => {
                 </div>
 
                 {showEditUser && typeof document !== "undefined" && ReactDOM.createPortal(
-                  <PopupCard setShowPopup={setShowEditUser} popupTitle='Edit profile'>
-                    <EditProfile user={user}/>
+                  <PopupCard 
+                  setShowPopup={setShowEditUser} 
+                  popupTitle='Edit profile'
+                  onSubmit={saveUser}
+                  submitText='Save'
+                  >
+                    <EditProfile user={user} onDataChange={(d) => (userData.current = d)}/>
                   </PopupCard>,
                   document.body
                 )}

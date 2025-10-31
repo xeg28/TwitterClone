@@ -87,7 +87,7 @@ header > div {
   justify-content: center;
   width: 90%;
   cursor: pointer;
-  font-size: var(--fs-medium);
+  font-size: inherit;
   overflow: hidden;
 }
 

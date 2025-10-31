@@ -65,7 +65,6 @@ const CreatePost: React.FC = () => {
       {showCreatePost && typeof document !== "undefined" && ReactDOM.createPortal(
 
         <PopupCard setShowPopup={setShowCreatePost} 
-          responsiveText={textareaRef}
           >
           <form className="post-form" onSubmit={handleSubmit}>
             <div className="flex post-form-wrapper" >
@@ -80,7 +79,7 @@ const CreatePost: React.FC = () => {
             </div>
             <hr />
             <div className="post-options">
-              <button className="post-btn">{isLoading ? (
+              <button className="popup-btn">{isLoading ? (
                 <div className="spinner"></div>) :
                 (<span>Post</span>)
               }</button>

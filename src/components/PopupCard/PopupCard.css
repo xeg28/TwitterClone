@@ -42,9 +42,6 @@
   background-color: var(--background-color);
 }
 
-.popup-content {
-
-}
 
 .popup-header {
   position: sticky;
@@ -69,4 +66,22 @@
   font-size: var(--fs-large);
   line-height: var(--fs-large);;
   font-weight: 600;
+}
+
+/* general styles */
+.popup-btn {
+  --loader-height: calc(var(--fs-medium) + 2px);
+  font-size: var(--fs-medium);
+  background-color: color-mix(in srgb, var(--text-color) 90%, black 10%);
+  color: var(--background-color);
+  border-radius: 20px;
+  border: none;
+  padding: 8px 15px 8px 15px;
+  cursor: pointer;
+  font-weight: 600;
+  min-width: 80px;
+}
+
+.popup-btn:hover {
+  background-color: var(--text-color);
 }

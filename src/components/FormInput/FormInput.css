@@ -11,7 +11,7 @@
   display: flex;
   align-items: end;
   width: 100%;
-  height: 55px;
+  height: 60px;
   margin: 0 auto;
   border-radius: 5px;
   border: solid 1px var(--primary-color);
@@ -34,7 +34,7 @@
   padding: 0px 10px 5px;
   margin-top: 10px;
   margin-bottom: 5px;
-  font-size: 18px;
+  font-size: var(--fs-medium);
   border-radius: 5px;
   border: none;
   background: transparent;
@@ -44,15 +44,14 @@
 
 .input-text textarea{
   font-family: inherit;
-  background-color: transparent;
+  background-color: var(--background-color);
   border:none;
-  border-top: .5rem solid var(--background-color);
   color: var(--text-color);
   outline: none;
-  font-size: 18px;
+  font-size: var(--fs-medium);
   resize: none;
   line-height: var(--fs-large) + 10px;
-  height: 100px;
+  height: 95px;
   width: 100%;
   background-color: transparent;
 }
@@ -119,11 +118,22 @@
 
 .placeholder {
   position: absolute;
-  top: 24px;
+  top: 27px;
   left: 10px;
   transform: translateY(-50%);
   color: var(--primary-color);
   transition: all 0.15s ease;
+  user-select: none;
+  cursor: text;
+}
+
+.char-limit {
+  position: absolute;
+  top: 14px;
+  right: 10px;
+  transform: translateY(-50%);
+  color: var(--primary-color);
+  font-size: var(--fs-small);
   user-select: none;
   cursor: text;
 }
@@ -156,23 +166,31 @@
 .input-text:has(:is(input, textarea):not(:placeholder-shown)) .placeholder 
 {
   top: 14px;
-  font-size: 12px;
+  font-size: var(--fs-small);
 }
 
 
 
-.input-text input:focus:valid + .placeholder{
+.input-text input:focus:valid ~ .placeholder, 
+.input-text textarea:focus:valid ~ .placeholder
+{
   color: var(--secondary-color);
 }
 
-.input-text:has(input:focus:valid) {
+.input-text:has(input:focus:valid), 
+.input-text:has(textarea:focus:valid)
+{
   border-color: var(--secondary-color);
 }
 
-.input-text input:focus:invalid + .placeholder{
+.input-text input:focus:invalid ~ .placeholder,
+.input-text textarea:focus:invalid + .placeholder
+{
   color: var(--error-color);
 }
 
-.input-text:has(input:focus:invalid) {
+.input-text:has(input:focus:invalid),
+.input-text:has(textarea:focus:invalid)
+{
   border-color: var(--error-color);
 }
