@@ -5,7 +5,7 @@ type FormInputProps = {
   type: string;
   id: string;
   name: string;
-  value?: string;
+  value: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   onInput?:  React.FormEventHandler<HTMLTextAreaElement>;
   placeholder?: string;

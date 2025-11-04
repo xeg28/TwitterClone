@@ -7,9 +7,9 @@
   left: 0;
   height: 100%;
   width: 100%;
-  background-color: rgba(91, 112, 131, 0.4);
+  background-color: var(--popup-background);
   justify-content: center;
-  z-index: 9999;
+  z-index: 5;
 }
 
 

@@ -45,7 +45,8 @@ const AccountRecovery: React.FC = () => {
           <div className="w-100">
             <FormInput type="email" id="email" name="email" 
             onChange={(e) => {setEmail(e.target.value)}} isRequired={true} 
-            pattern="[^@\s]+@[^@\s]+\.[^@\s]+" placeholder='Email'/>
+            pattern="[^@\s]+@[^@\s]+\.[^@\s]+" placeholder='Email'
+            value={email}/>
             <button className="form-button relative" type="submit">
                 { isLoading ? (<div className="spinner"></div>) :
                   (<span>Recover</span>)

@@ -23,7 +23,10 @@ function App() {
               <Route index element={(<div>Home</div>)}/>
               <Route path="/search" element={(<div>Search</div>)}/>
               <Route path="/notifications" element={(<div>Notifications</div>)}/>
-              <Route path="/profile/:username" element={<Profile/>} />
+              <Route path="/profile/:username/" element={<Profile/>} > 
+                <Route index element={(<div>Posts</div>)} />
+                <Route path="replies" element={(<div>Replies</div>)} />
+              </Route>
             </Route>
           </Route>
 

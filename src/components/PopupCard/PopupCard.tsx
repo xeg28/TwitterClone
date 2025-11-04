@@ -1,17 +1,37 @@
 import Icon from "../Icon/Icon";
 import './PopupCard.css';
-import { useRef } from "react";
+import ConfirmDialog, { ConfirmDialogProps } from "../ConfirmDialog/ConfirmDialog";
+import { useEffect, useState } from "react";
+import ReactDOM from 'react-dom';
 
 interface PopupCardProps {
   setShowPopup: any,
   popupTitle?: string,
   onSubmit?: () => void,
   submitText?: string,
-  children: React.ReactNode
+  children: React.ReactNode,
+  confirmDialogProps?: ConfirmDialogProps
 }
 
-const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, popupTitle, children, onSubmit, submitText }) => {
-
+const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, popupTitle, children, onSubmit, submitText, confirmDialogProps }) => {
+  const [showConfirmation, setShowConfirmation] = useState<true | false>(false);
+  useEffect(() => {
+    if(confirmDialogProps) {
+      confirmDialogProps.onDeny = () => setShowConfirmation(false);
+    }
+  }, [])
+  const handleClose = ()=> {
+    if(!confirmDialogProps) {
+      setShowPopup(false)
+      return;
+    }
+    else if(confirmDialogProps.trigger()) {
+      setShowConfirmation(true);
+    }
+    else {
+      setShowPopup(false);
+    }
+  }
   return (
     <div className="popup-card-wrapper">
       <div>
@@ -19,7 +39,7 @@ const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, popupTitle, childre
           <div className="popup-card">
             <div>
               <div className="popup-header">
-                <button className="close-btn" onClick={() => setShowPopup(false)}>
+                <button className="close-btn" onClick={handleClose}>
                   <Icon name="close" className="close-icon" />
                 </button>
                 <div className="flex space-between flex-1 align-center plr-1">
@@ -40,6 +60,10 @@ const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, popupTitle, childre
           </div>
         </div>
       </div>
+      {showConfirmation && confirmDialogProps && typeof document != "undefined" && ReactDOM.createPortal(
+        <ConfirmDialog {...confirmDialogProps} />,
+        document.body
+      )}
     </div>
   )
 }

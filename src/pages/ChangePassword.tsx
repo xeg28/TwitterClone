@@ -74,10 +74,12 @@ const ResetPassword: React.FC = () => {
             <FormInput type="password" id="password" name="password" placeholder="Password"
                   onChange={e=> setPassword(e.target.value)} isRequired={true}
                   pattern="^(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{5,50}$"
-                  title="Must contain at least 5 characters, a number, and a special character" info={true}/>
+                  title="Must contain at least 5 characters, a number, and a special character" info={true}
+                  value={password}/>
             <FormInput type="password" id="c-password" name="c-password" 
                     placeholder="Confirm Password" onChange={e=>setConfirmPassword(e.target.value)}
-                    pattern="^(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{5,50}$" isRequired={true}/>
+                    pattern="^(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{5,50}$" isRequired={true}
+                    value={confirmPassword}/>
             <button className='form-button' type="submit">
               {isLoading ? (
                 <div className="spinner"></div>

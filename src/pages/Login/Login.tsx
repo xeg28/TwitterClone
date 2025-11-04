@@ -49,6 +49,7 @@ const Login:React.FC = () => {
       const result = await response.json();
       if(result.status === 401) {
          addAlert(result.message, "error");
+         addData('password', "", setData);
       }
       else if(result.status === 200) {
         navigate('/');
@@ -68,13 +69,13 @@ const Login:React.FC = () => {
         <h1 className="fs-xl">Sign In</h1>
         <form className="login-form" onSubmit={handleLogin} id="login-form">
           <div className="w-100">
-            <FormInput type="text" name="email-user" id="email-user" value={data.email}
+            <FormInput type="text" name="email-user" id="email-user" value={data.user}
                   onChange={e => addData('user', e.target.value, setData)} placeholder="Email or Username"
                   isRequired={true} title=""
                   pattern=".*" />
             <FormInput type="password" id="password" name="password" placeholder="Password"
                     onChange={e=> addData('password', e.target.value, setData)} isRequired={true}
-                    pattern=".*"/>
+                    pattern=".*" value={data.password}/>
             <hr className='w-100 d-none-500'/>
           </div>
           <div className="w-100">

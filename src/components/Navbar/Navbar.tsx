@@ -10,17 +10,6 @@ const Navbar: React.FC = () => {
   const location = useLocation();
   const containerRef = useRef<HTMLDivElement>(null);
   const user = getUser();
-  useEffect(() => {
-    const containerEl = containerRef.current;
-    if(!containerEl) return;
-    
-    Array.from(containerEl.children).forEach((child) => {
-      child.classList.remove("active");
-    });
-
-    const link = containerEl.querySelector(`a[href='${location.pathname}']`);
-    link?.classList.add("active");
-  }, [location.pathname])
 
   return (
     <header>
@@ -28,31 +17,36 @@ const Navbar: React.FC = () => {
       <div className="nav-content">
         <div className='flex flex-col gap-1 align-center-m'>
           <div className='nav-btns' ref={containerRef}>
-            <Link to="/">
+            <Link to="/"
+              className={location.pathname === "/" ? 'active' : ''}>
               <div className="nav-icon">
                 <Icon name="home"/>
               </div>
               <span>Home</span>
             </Link>
-            <Link to="/search">
+            <Link to="/search"
+              className={location.pathname === "/search" ? 'active' : ''}>
               <div className="nav-icon">
                 <Icon name="search"/>
               </div>
               <span>Explore</span>
             </Link>
-            <Link to="/notifications">
+            <Link to="/notifications"
+              className={location.pathname === "/notifications" ? 'active' : ''}>
               <div className="nav-icon">
                 <Icon name="notification"/>
               </div>
               <span>Notifications</span>
             </Link>
-            <Link to="/messages">
+            <Link to="/messages"
+              className={location.pathname === "/messages" ? 'active' : ''}>
               <div className="nav-icon">
                 <Icon name="messages"/>
               </div>
               <span>Messages</span>
             </Link>
-            <Link to={`/profile/${user?.username}`}>
+            <Link to={`/profile/${user?.username}`} 
+              className={location.pathname.startsWith('/profile/') ? 'active' : ''}>
               <div className="nav-icon">
                 <Icon name="profile"/>
               </div>

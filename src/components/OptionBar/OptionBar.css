@@ -1,0 +1,42 @@
+
+.option-bar {
+  height: 53px;
+  display:flex;
+  flex-direction: row;
+  border-bottom: 1px solid var(--border-color);
+}
+.option-link {
+  flex:1;
+  display:flex;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--text-color);
+  padding: 0 1rem;
+  cursor: pointer;
+}
+
+.option-link:hover {
+  background-color: color-mix(in srgb, var(--background-color) 90%, var(--text-color) 10%);
+}
+
+.option-link:visited {
+  color: var(--text-color);
+}
+
+.option-link span {
+  position: relative;
+  display: inline-block;
+  padding: 1rem 0;
+}
+
+.option-link.active span::after {
+  position: absolute;
+  content:"";
+  height: 3px;
+  width: 105%;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--secondary-color);
+  border-radius: 2px;
+} 

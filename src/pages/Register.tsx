@@ -193,11 +193,14 @@ const Registration: React.FC = () => {
                 <FormInput type="password" id="password" name="password" placeholder="Password"
                     onChange={e=> addData('password', e.target.value, setData)} isRequired={true}
                     pattern="^(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{5,50}$"
-                    title="Must contain at least 5 characters, a number, and a special character" info={true}/>
+                    title="Must contain at least 5 characters, a number, and a special character" info={true}
+                    value={data.password}
+                    />
 
                 <FormInput type="password" id="c-password" name="c-password" 
                     placeholder="Confirm Password" onChange={e=>addData('confirmPassword', e.target.value, setData)}
-                    pattern="^(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{5,50}$" isRequired={true}/>
+                    pattern="^(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{5,50}$" isRequired={true}
+                    value={data.confirmPassword}/>
 
                 <button className = "form-button" type="submit" >
                   { isLoading ? (<div className="spinner"></div>) :

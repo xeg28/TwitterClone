@@ -1,5 +1,5 @@
 import './Profile.css';
-import { useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 import { fetchUser, updateUser } from '../../api/user';
 import { useEffect, useState, useRef } from 'react';
 import { User } from '../../types/User';
@@ -11,6 +11,7 @@ import { getDateJoined } from '../../helpers/dateHelper';
 import ReactDOM from 'react-dom';
 import PopupCard from '../PopupCard/PopupCard';
 import EditProfile from './EditProfile';
+import OptionBar from '../OptionBar/OptionBar';
 
 
 const Profile: React.FC = () => {
@@ -29,9 +30,8 @@ const Profile: React.FC = () => {
   }
 
   const saveUser = async () => {
-    console.log(userData.current);
     const response = await updateUser(userData.current);
-    if(response.ok) {
+    if (response.ok) {
       setUser(userData.current);
       addAlert("Profile updated", "success");
       setShowEditUser(false);
@@ -41,6 +41,12 @@ const Profile: React.FC = () => {
     }
   }
 
+  const confirmationTrigger = (): boolean => {
+    const current = userData.current;
+    if (user.legalName === current.legalName && user.biography === current.biography) return false;
+    return true;
+  }
+
   useEffect(() => {
     if (!username) return;
     const fetchData = async (username: string) => {
@@ -48,7 +54,6 @@ const Profile: React.FC = () => {
       const response = await fetchUser(username);
       if (response.ok) {
         setUser(await response.json());
-        userData.current = user;
       }
       else {
         let res = await response.json();
@@ -60,6 +65,11 @@ const Profile: React.FC = () => {
     fetchData(username);
   }, []);
 
+  const handleEditUser = () => {
+    setShowEditUser((prev) => { return !prev })
+    userData.current = user;
+  }
+
   return (
     <>
       <div className="profile relative h-100" >
@@ -69,7 +79,7 @@ const Profile: React.FC = () => {
               <div className="center"><div className="spinner-lt"></div></div>
             ) :
             (
-              <div className="profile-wrapper">
+              <div className="flex flex-col">
                 <div className="top-bar">
                   <button onClick={handleBack}>
                     <Icon name="back" />
@@ -94,8 +104,7 @@ const Profile: React.FC = () => {
 
                     </div>
                     <div>
-                      <button className='main-btn' onClick={() =>
-                        setShowEditUser((prev) => { return !prev })}>
+                      <button className='main-btn' onClick={handleEditUser}>
                         <span>Edit Profile</span>
                       </button>
                     </div>
@@ -122,16 +131,30 @@ const Profile: React.FC = () => {
                 </div>
 
                 {showEditUser && typeof document !== "undefined" && ReactDOM.createPortal(
-                  <PopupCard 
-                  setShowPopup={setShowEditUser} 
-                  popupTitle='Edit profile'
-                  onSubmit={saveUser}
-                  submitText='Save'
+                  <PopupCard
+                    setShowPopup={setShowEditUser}
+                    popupTitle='Edit profile'
+                    onSubmit={saveUser}
+                    submitText='Save'
+                    confirmDialogProps={
+                      {
+                        trigger: confirmationTrigger,
+                        onConfirm: () => setShowEditUser(false),
+                        type: "discard",
+                        title: "Discard changes?",
+                        dialog: "This can't be undone and you'll lose all your changes."
+                      }}
                   >
-                    <EditProfile user={user} onDataChange={(d) => (userData.current = d)}/>
+                    <EditProfile user={user} onDataChange={(d) => (userData.current = d)} />
                   </PopupCard>,
                   document.body
                 )}
+
+                <div>
+                  <OptionBar optionTitles={['Posts', 'Replies']} baseURI={`/profile/${username}`} optionParamater={['', '/replies']} >
+                    <Outlet />
+                  </OptionBar>
+                </div>
               </div>
             )
         }

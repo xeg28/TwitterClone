@@ -1,0 +1,43 @@
+.confirm-popup {
+  position: fixed;
+  display: flex;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--popup-background);
+  justify-content: center;
+  z-index: 5;
+}
+
+.confirm-popup > div {
+  position: relative;
+  width: 320px;
+  margin: 0 auto;
+}
+
+.confirm-card {
+  position: absolute;
+  width: 100%;
+  background-color: var(--background-color);
+  border-radius: 1rem;
+  max-height: 100%;
+  top:50%;
+  transform: translateY(-50%);
+  padding: 2rem;
+}
+
+
+.confirm-btn.save {
+  background-color: var(--font-color);
+  border: none;
+}
+
+.confirm-btn.discard {
+  background-color: var(--error-color);
+  border: none;
+}
+
+.confirm-btn.discard:hover {
+  background-color: color-mix(in srgb, var(--error-color) 90%, var(--background-color) 10%);
+}
