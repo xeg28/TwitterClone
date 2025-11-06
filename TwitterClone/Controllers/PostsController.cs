@@ -86,7 +86,7 @@ namespace TwitterClone.Controllers
         [Authorize]
         public async Task<ActionResult<Post>> AddPost(Post newPost)
         {
-            if (newPost == null)
+            if (newPost == null || newPost.Text == null)
                 return BadRequest();
 
             newPost.DatePosted = DateTime.UtcNow;

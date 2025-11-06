@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Numerics;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
@@ -18,9 +21,9 @@ namespace TwitterClone.Controllers
             _context = context;
         }
 
-        // add [authorize] attribute to protect this endpoint 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUserById(int id)
+        [Authorize]
+        [HttpGet("{username}")]
+        public async Task<ActionResult<User>> GetUserById(string username)
         {
             var user = await _context.Users.Select(user => new
             {
@@ -31,11 +34,38 @@ namespace TwitterClone.Controllers
                 user.Followers,
                 user.DateJoined,
                 user.Following
-            }).FirstOrDefaultAsync(u  => u.Id == id);
+            }).FirstOrDefaultAsync(u  => u.Username == username);
 
             if (user == null) return NotFound();
 
             return Ok(user);
+        }
+
+        [Authorize]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(int id, User updatedUser)
+        {
+            Request.Cookies.TryGetValue("userId", out var userIdString);
+
+            if (userIdString == null) return Unauthorized(new { status = 401, message = "You are unauthorized to edit this resource" });
+
+            if(userIdString != null && int.Parse(userIdString) != id)
+            {
+                return Forbid();
+            }
+
+            var user = await _context.Users.FindAsync(id);
+            if (user == null) return NotFound();
+
+            user.LegalName = updatedUser.LegalName;
+            user.Biography = updatedUser.Biography;
+            user.Following = updatedUser.Following;
+            user.Followers = updatedUser.Followers;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+            
         }
 
         [HttpGet("email-check/{email}")]
