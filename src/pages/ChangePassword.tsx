@@ -1,13 +1,13 @@
 import {useState} from 'react';
 import FormInput from '../components/FormInput/FormInput';
-import { useAlert } from '../components/AlertList/AlertContext';
+import { useAlertActions } from '../components/AlertList/AlertContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 const ResetPassword: React.FC = () => {
   document.title = "Change Password";
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<true | false>(false);
-  const { addAlert } = useAlert();
+  const { addAlert } = useAlertActions();
   const apiURL = process.env.REACT_APP_API_URL as string;
   const location = useLocation();
   const navigate = useNavigate();

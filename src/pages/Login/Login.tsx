@@ -1,6 +1,6 @@
-import { useLocation, useNavigate, Location} from "react-router-dom";
-import {useState, useEffect} from 'react';
-import { useAlert } from '../../components/AlertList/AlertContext';
+import { useNavigate} from "react-router-dom";
+import {useState} from 'react';
+import { useAlertActions } from '../../components/AlertList/AlertContext';
 import FormInput from '../../components/FormInput/FormInput';
 import {HOST} from '../../config'
 import './Login.css';
@@ -22,7 +22,7 @@ const Login:React.FC = () => {
 
   document.title = "Login";
   
-  const { addAlert } = useAlert();
+  const { addAlert } = useAlertActions();
   const [isLoading, setIsLoading] = useState<true | false>(false);
   const [data, setData] = useState<LoginData>({
     user: "",

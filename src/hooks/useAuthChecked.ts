@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef} from "react";
-import { setUser } from "../types/User";
+import { setCurrentUser } from "../types/User";
 const apiURL = process.env.REACT_APP_API_URL;
 
 export function useAuthChecked() {
@@ -15,7 +15,7 @@ export function useAuthChecked() {
       const result = await res.json();
       if (result.status === 200) {
         console.log(result.user);
-        setUser(result.user);
+        setCurrentUser(result.user);
         setIsVerified(result.user.isVerified);
         setEmail(result.user.email);
         setIsLoggedIn(true);

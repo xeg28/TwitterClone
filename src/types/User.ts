@@ -8,13 +8,15 @@ export type User = {
   following?: number;
   biography?: string;
   dateJoined?: Date;
+  profilePicUrl?:string;
+  bannerPicUrl?:string;
 }
 
-export const setUser = (user: User) => {
+export const setCurrentUser = (user: User) => {
   localStorage.setItem("user", JSON.stringify(user))
 }
 
-export const getUser = (): User | null => {
+export const getCurrentUser = (): User | null => {
   const user = localStorage.getItem("user");
   return user ? JSON.parse(user) : null;
 }

@@ -1,8 +1,8 @@
 import { useState, useRef } from "react";
 import './CreatePost.css';
-import { getUser } from "../../types/User";
+import { getCurrentUser } from "../../types/User";
 import { addPost } from "../../api/posts";
-import { useAlert } from "../AlertList/AlertContext";
+import { useAlertActions } from "../AlertList/AlertContext";
 import ReactDOM from "react-dom";
 import Icon from "../Icon/Icon";
 import PopupCard from "../PopupCard/PopupCard";
@@ -10,8 +10,8 @@ const CreatePost: React.FC = () => {
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [postText, setPostText] = useState<String>();
-  const { addAlert } = useAlert();
-  const user = getUser();
+  const { addAlert } = useAlertActions();
+  const user = getCurrentUser();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {

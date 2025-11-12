@@ -1,13 +1,13 @@
 import FormInput from '../components/FormInput/FormInput';
 import {useState} from 'react';
-import { useAlert } from '../components/AlertList/AlertContext';
+import { useAlertActions } from '../components/AlertList/AlertContext';
 import { useNavigate } from 'react-router-dom';
 
 const AccountRecovery: React.FC = () => {
   document.title = "Recover Account";
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
-  const { addAlert } = useAlert();
+  const { addAlert } = useAlertActions();
   const [isLoading, setIsLoading] = useState<true | false>(false);
   const apiURL = process.env.REACT_APP_API_URL as string;
   const handleSubmit = async (event:React.FormEvent) => {

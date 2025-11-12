@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import FormInput from '../components/FormInput/FormInput';
 import {HOST} from '../config'
 import { useNavigate } from "react-router-dom";
-import { useAlert } from '../components/AlertList/AlertContext';
+import { useAlertActions } from '../components/AlertList/AlertContext';
 
 type RegistrationData = {
   [name:string]: string;
@@ -23,7 +23,7 @@ const addData = (dataTitle: string, value: string, setData: React.Dispatch<React
 
 const Registration: React.FC = () => {
   document.title = "Register";
-  const { addAlert } = useAlert();
+  const { addAlert } = useAlertActions();
   const [inputErrors, setInputErrors] = useState<Map<string, string>>(new Map<string, string>());
   const [form, setForm] = useState<'email' | 'password'>('email');
   const [data, setData] = useState<RegistrationData>({

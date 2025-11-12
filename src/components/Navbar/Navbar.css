@@ -16,7 +16,9 @@ header > div {
   display: flex;
   flex-direction: column;
   gap: 4.5rem;
-  padding: 0 .5rem;
+  padding: 56px .5rem .5rem;
+  max-height: 100vh;
+  overflow-y: auto;
 }
 
 .nav-btns {
@@ -107,12 +109,19 @@ header > div {
   border-radius: 50%;
 }
 
+.profiles-pic img, 
+.profiles-pic svg {
+  object-fit: cover;
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+}
+
 
 .profiles-text {
   margin-left: 12px;
   margin-right: 12px;
   display: block;
-  flex-direction: column;
   align-items: start;
   flex:1;
   min-width: 0;

@@ -1,6 +1,6 @@
 
 import { useEffect, useRef } from "react";
-import { getUser } from "../../types/User";
+import { getCurrentUser } from "../../types/User";
 import {Outlet} from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import { useNavigationHistory } from "../../hooks/useNavigationHistory";
@@ -11,7 +11,7 @@ const Home: React.FC = () => {
   const user = useRef<any>({});
   useNavigationHistory();
   useEffect(() => {
-    user.current = getUser();
+    user.current = getCurrentUser();
   }, []);
 
   return (

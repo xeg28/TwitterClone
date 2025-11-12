@@ -1,49 +1,65 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useCallback, useMemo } from "react";
 
 type Alert = {
   id: number;
   type: "success" | "error" | "info";
   message: string;
-  timeout?: NodeJS.Timeout;
+  timeout?: ReturnType<typeof setTimeout>;
 };
 
-type AlertContextType = {
+type AlertActions = {
+  addAlert: (message: string, type?: Alert["type"]) => void;
+};
+
+type AlertState = {
   alerts: Alert[];
-  addAlert: (message: string, type?: "success" | "error" | "info") => void;
   removeAlert: (alert: Alert) => void;
 };
 
-const AlertContext = createContext<AlertContextType | undefined>(undefined);
+const AlertActionsContext = createContext<AlertActions | undefined>(undefined);
+const AlertStateContext = createContext<AlertState | undefined>(undefined);
 
 export const AlertProvider = ({ children }: { children: ReactNode }) => {
   const [alerts, setAlerts] = useState<Alert[]>([]);
 
-  const addAlert = (message: string, type: "success" | "error" | "info" = "info") => {
-    setAlerts((prev) => {
-      if (prev.some((a) => a.type === type && a.message === message)) return prev;
-      const id = Date.now();
-      const timeout = setTimeout(() => {
-        setAlerts((cur) => cur.filter((a) => a.id !== id));
-      }, 7000);
-      return [...prev, { id, type, message, timeout }];
-    });
-  };
+  const addAlert = useCallback(
+    (message: string, type: Alert["type"] = "info") => {
+      setAlerts((prev) => {
+        if (prev.some((a) => a.type === type && a.message === message))
+          return prev;
+        const id = Date.now();
+        const timeout = setTimeout(() => {
+          setAlerts((cur) => cur.filter((a) => a.id !== id));
+        }, 7000);
+        return [...prev, { id, type, message, timeout }];
+      });
+    },
+    []
+  );
 
-  const removeAlert = (alert: Alert) => {
+  const removeAlert = useCallback((alert: Alert) => {
     if (alert.timeout) clearTimeout(alert.timeout);
-
     setAlerts((prev) => prev.filter((a) => a.id !== alert.id));
-  };
+  }, []);
+
+  const actions = useMemo(() => ({ addAlert }), [addAlert]);
+  const state = useMemo(() => ({ alerts, removeAlert }), [alerts, removeAlert]);
 
   return (
-    <AlertContext.Provider value={{ alerts, addAlert, removeAlert }}>
-      {children}
-    </AlertContext.Provider>
+    <AlertActionsContext.Provider value={actions}>
+      <AlertStateContext.Provider value={state}>{children}</AlertStateContext.Provider>
+    </AlertActionsContext.Provider>
   );
 };
 
-export const useAlert = () => {
-  const context = useContext(AlertContext);
-  if (!context) throw new Error("useAlert must be used inside AlertProvider");
-  return context;
+export const useAlertActions = () => {
+  const ctx = useContext(AlertActionsContext);
+  if (!ctx) throw new Error("useAlertActions must be used within AlertProvider");
+  return ctx;
+};
+
+export const useAlerts = () => {
+  const ctx = useContext(AlertStateContext);
+  if (!ctx) throw new Error("useAlerts must be used within AlertProvider");
+  return ctx;
 };

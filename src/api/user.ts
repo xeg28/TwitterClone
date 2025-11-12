@@ -23,3 +23,10 @@ export async function updateUser(user: User) {
     body: JSON.stringify(user)
   });
 }
+
+export async function updateUserPicture(data: FormData) {
+  return fetchWithAuth(`${API_URL}/upload/image/profile`,{
+    method:"POST",
+    body:data
+  });
+}

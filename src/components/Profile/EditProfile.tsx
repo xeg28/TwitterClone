@@ -1,7 +1,7 @@
 import FormInput from "../FormInput/FormInput";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { User } from "../../types/User";
-
+import ProfileImageUpload from "./ProfileImageUpload";
 interface EditProfileProps {
   user: User;
   onDataChange: (data:User) => void;
@@ -10,25 +10,38 @@ interface EditProfileProps {
 const EditProfile:React.FC<EditProfileProps> = ({user, onDataChange}) => {
   const [name, setName] = useState<string>(user?.legalName ?? "");
   const [biography, setBiography] = useState<string>(user?.biography ?? "");
-  
+  const [profileImg, setProfileImg] = useState<File | null>(null);
+  const [profileBannerImg, setProfileBannerImg] = useState<File | null>(null);
+  const updateData = () => {
+    const newData = {
+      legalName: name, 
+      biography: biography,
+      profilePic: profileImg, 
+      profileBanner: profileBannerImg
+    }
+    onDataChange(newData);
+  }
+
+  useEffect(() => {
+    updateData();
+  }, [profileImg, name, biography, profileBannerImg, updateData])
+
   const onNameChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const v = e.currentTarget.value;
     setName(v);
-    const newData: User = {...user, legalName: v};
-    onDataChange(newData);
   }
 
   const onBioInput = (e:React.FormEvent<HTMLTextAreaElement>) => {
     const v = e.currentTarget.value;
     setBiography(v);
-    const newData: User = {...user, biography: v};
-    onDataChange(newData);
   }
 
   return (
     <div className="edit-profile-wrapper">
       <div className="edit-banner"></div>
-      <div className="edit-profile-pic"></div>
+      <div className="edit-profile-pic">
+        <ProfileImageUpload setImg={setProfileImg} profilePicture={user.profilePicUrl}/>
+      </div>
       <form>
         <div className="edit-profile-form">
           <FormInput 

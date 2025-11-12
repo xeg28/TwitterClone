@@ -3,13 +3,13 @@ import CreatePost from '../CreatePost/CreatePost';
 import Icon from '../Icon/Icon';
 import Profiles from './Profiles';
 import { Link, useLocation } from 'react-router-dom';
-import { useEffect, useRef} from 'react';
-import { getUser } from '../../types/User';
+import { useRef} from 'react';
+import { getCurrentUser } from '../../types/User';
 
 const Navbar: React.FC = () => { 
   const location = useLocation();
   const containerRef = useRef<HTMLDivElement>(null);
-  const user = getUser();
+  const user = getCurrentUser();
 
   return (
     <header>
@@ -20,35 +20,35 @@ const Navbar: React.FC = () => {
             <Link to="/"
               className={location.pathname === "/" ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name="home"/>
+                <Icon name={location.pathname === "/" ? 'homeActive' : 'home'}/>
               </div>
               <span>Home</span>
             </Link>
             <Link to="/search"
               className={location.pathname === "/search" ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name="search"/>
+                <Icon name={location.pathname === "/search" ? 'searchActive' : 'search'}/>
               </div>
               <span>Explore</span>
             </Link>
             <Link to="/notifications"
               className={location.pathname === "/notifications" ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name="notification"/>
+                <Icon name={location.pathname === "/notifications" ? 'notificationActive' : 'notification'}/>
               </div>
               <span>Notifications</span>
             </Link>
             <Link to="/messages"
-              className={location.pathname === "/messages" ? 'active' : ''}>
+              className={location.pathname.startsWith('/messages') ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name="messages"/>
+                <Icon name={location.pathname.startsWith('/messages') ? 'messagesActive' : 'messages'}/>
               </div>
               <span>Messages</span>
             </Link>
             <Link to={`/profile/${user?.username}`} 
               className={location.pathname.startsWith('/profile/') ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name="profile"/>
+                <Icon name={location.pathname.startsWith('/profile/') ? 'profileActive' : 'profile'}/>
               </div>
               <span>Profile</span>
             </Link>

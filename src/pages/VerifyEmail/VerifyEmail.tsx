@@ -1,13 +1,13 @@
 import {useEffect, useState, useRef} from "react";
 import { useLocation, useNavigate, Location} from "react-router-dom";
-import { useAlert } from "../../components/AlertList/AlertContext";
+import { useAlertActions } from "../../components/AlertList/AlertContext";
 import "./VerifyEmail.css";
 
 
 const VerifyEmail: React.FC = () => {
   document.title = "Verify Email";
   const navigate = useNavigate();
-  const { addAlert } = useAlert();
+  const { addAlert } = useAlertActions();
   const [isLoading, setIsLoading] = useState<true | false>(false);
   const apiURL = process.env.REACT_APP_API_URL as string;
   const didResend = useRef(false);
