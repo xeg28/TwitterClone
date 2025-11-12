@@ -175,6 +175,7 @@ namespace TwitterClone.Controllers
             var userId = principal.FindFirst("UserId")?.Value;
             var username = principal.FindFirst("Username")?.Value;
             var legalName = principal.FindFirst(JwtRegisteredClaimNames.Name)?.Value;
+            var profilePicUrl = principal.FindFirst("ProfilePicURL")?.Value;
 
             var user = new User
             {
@@ -183,6 +184,7 @@ namespace TwitterClone.Controllers
                 Username=username,
                 IsVerified= isVerified,
                 LegalName = legalName,
+                ProfilePicUrl = profilePicUrl
             };
             return Ok(new { status = 200, message = "User is logged in.", user});
         }

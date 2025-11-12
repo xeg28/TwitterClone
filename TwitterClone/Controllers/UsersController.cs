@@ -33,7 +33,9 @@ namespace TwitterClone.Controllers
                 user.Biography,
                 user.Followers,
                 user.DateJoined,
-                user.Following
+                user.Following, 
+                user.ProfilePicUrl, 
+                user.BannerPicUrl,
             }).FirstOrDefaultAsync(u  => u.Username == username);
 
             if (user == null) return NotFound();

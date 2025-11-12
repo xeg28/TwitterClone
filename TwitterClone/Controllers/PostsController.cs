@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Eventing.Reader;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TwitterClone.Data;

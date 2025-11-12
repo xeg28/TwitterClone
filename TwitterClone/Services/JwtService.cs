@@ -134,7 +134,8 @@ namespace TwitterClone.Services
                     new Claim(JwtRegisteredClaimNames.Name, user.LegalName ?? ""),
                     new Claim("Username", user.Username ?? ""),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email ?? ""),
-                    new Claim("IsVerified", user.IsVerified.ToString().ToLowerInvariant())
+                    new Claim("IsVerified", user.IsVerified.ToString().ToLowerInvariant()),
+                    new Claim("ProfilePicURL", user.ProfilePicUrl ?? "")
             }),
                 Expires = tokenExpiryTimeStamp,
                 Issuer = issuer,

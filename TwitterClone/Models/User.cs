@@ -13,6 +13,8 @@
         public DateTime? DateJoined { get; set; }
         public String? HashedPassword { get; set; }
         public String? RefreshToken { get; set; }
+        public String? ProfilePicUrl {  get; set; }
+        public String? BannerPicUrl { get; set; }
         public DateTime? RefreshTokenExpiry { get; set; }
     }
 }

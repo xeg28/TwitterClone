@@ -36,6 +36,7 @@ builder.Services.AddDbContext<TwitterCloneContext>(options =>
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddHostedService<EmailVerificationCleanupService>();
 builder.Services.AddHostedService<PasswordResetCleanupService>();
+builder.Services.AddSingleton<CloudinaryService>();
 
 builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
