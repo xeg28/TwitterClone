@@ -23,7 +23,7 @@ const VerifyEmail: React.FC = () => {
       navigate("/", { replace: true });
       return;
     }
-    // Only call resendCode once, even in Strict Mode
+
     if (!didResend.current) {
       didResend.current = true;
       resendCode();
