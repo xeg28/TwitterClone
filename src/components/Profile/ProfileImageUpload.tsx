@@ -10,16 +10,20 @@ interface ProfileImageUploadProps {
 
 const ProfileImageUpload: React.FC<ProfileImageUploadProps> = ({ setImg, profilePicture }) => {
   const [preview, setPreview] = useState<string | undefined>();
+  const [croppedPreview, setCroppedPreview] = useState<string | undefined>();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    // revoke object URL when component unmounts or preview changes
     return () => {
       if (preview) URL.revokeObjectURL(preview);
     };
   }, [preview]);
 
-
+  useEffect(() => {
+    return () => {
+      if (croppedPreview) URL.revokeObjectURL(croppedPreview);
+    };
+  }, [croppedPreview])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.currentTarget.files?.[0];
@@ -40,18 +44,22 @@ const ProfileImageUpload: React.FC<ProfileImageUploadProps> = ({ setImg, profile
   }
 
   return (
-
     <>
       <input
         type="file"
         accept="image/*"
         onChange={handleFileChange}
         style={{ display: "none" }} ref={inputRef} />
-        <ImageCrop preview={preview} setPreview={setPreview} inputRef={inputRef}/>
+      <ImageCrop
+        preview={preview}
+        setPreview={setPreview}
+        inputRef={inputRef}
+        setImg={setImg}
+        setCroppedPreview={setCroppedPreview} />
       <button className="upload-image" onClick={handleInputClick} title="Choose image">
         <Icon name="addImage" />
       </button>
-      {(preview && <img src={preview} alt="preview" className="profile-preview" />) ||
+      {(croppedPreview && <img src={croppedPreview} alt="preview" className="profile-preview" />) ||
         (profilePicture && <img src={profilePicture} alt="preview" className="profile-preview" />) ||
         (<Icon name="profileDefault" />)
       }

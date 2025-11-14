@@ -1,13 +1,16 @@
 import './ImageCrop.css';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import ReactCrop, { Crop } from 'react-image-crop';
 import PopupCard from '../PopupCard/PopupCard';
 import CropSlider from './CropSlider';
+
 interface ImageCropProps {
   preview: string | undefined;
   setPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
   inputRef: React.RefObject<HTMLInputElement | null>;
+  setImg: React.Dispatch<React.SetStateAction<File | null>>;
+  setCroppedPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
 function getSquareDimensionsPercentage(
@@ -38,7 +41,7 @@ function getSquareDimensionsPercentage(
   };
 }
 
-const ImageCrop: React.FC<ImageCropProps> = ({ preview, setPreview, inputRef }) => {
+const ImageCrop: React.FC<ImageCropProps> = ({ preview, setPreview, inputRef, setImg, setCroppedPreview }) => {
   const [crop, setCrop] = useState<Crop>({
     unit: '%',
     width: 50,
@@ -50,9 +53,8 @@ const ImageCrop: React.FC<ImageCropProps> = ({ preview, setPreview, inputRef }) 
     height: 0,
     width: 0
   });
-  const portalCropRef = useRef<HTMLElement | null>(null);
   const [cropSizeVal, setCropSizeVal] = useState<number>(1);
-  const [originalImage, setOriginalImage] = useState<EventTarget | undefined>();
+  const imgRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     if (!preview) return;
@@ -97,24 +99,7 @@ const ImageCrop: React.FC<ImageCropProps> = ({ preview, setPreview, inputRef }) 
     });
   }, [cropSizeVal]);
 
-  useEffect(() => {
-    if (typeof document === 'undefined') return;
-    let root = document.getElementById('crop-root') as HTMLElement | null;
-    if (!root) {
-      root = document.createElement('div');
-      root.id = 'crop-root';
-      document.body.appendChild(root);
-    }
-    portalCropRef.current = root;
-    return () => {
-      // keep the root if other code might use it; if you want, remove when empty:
-      // if (root && root.childElementCount === 0) document.body.removeChild(root);
-    };
-  }, []);
 
-  const onImageLoad = (img: EventTarget) => {
-    setOriginalImage(img);
-  };
   const setShowPopup = (show: boolean) => {
     if (show || inputRef.current == null) return;
     inputRef.current.value = "";
@@ -122,13 +107,73 @@ const ImageCrop: React.FC<ImageCropProps> = ({ preview, setPreview, inputRef }) 
 
   }
 
+  const createCroppedFile = useCallback(
+    async (image: HTMLImageElement, crop: Crop): Promise<File> => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("Canvas context not available");
+
+      const imgWidth = image.naturalWidth;
+      const imgHeight = image.naturalHeight;
+
+      // Convert crop from % or px to actual pixels on the *displayed* image
+      const cropX = (crop.x / 100) * imgWidth;
+      const cropY = (crop.y / 100) * imgHeight;
+      const cropWidth = (crop.width / 100) * imgWidth;
+      const cropHeight = (crop.height / 100) * imgHeight;
+
+      const outputSize = 400; // will be change when doing banner
+      canvas.width = outputSize;
+      canvas.height = outputSize;
+      // Draw the cropped region, scaled to output size
+      ctx.drawImage(
+        image,
+        cropX,           // source X
+        cropY,           // source Y
+        cropWidth,       // source width
+        cropHeight,      // source height
+        0,               // dest X
+        0,               // dest Y
+        outputSize,     // dest width
+        outputSize     // dest height
+      );
+
+      return new Promise((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const file = new File([blob], "cropped.jpg", { type: "image/jpeg" });
+            resolve(file);
+          } else {
+            reject(new Error("Failed to create blob"));
+          }
+        }, "image/jpeg");
+      });
+    },
+    []
+  );
+
+  const handleDone = async () => {
+    if (imgRef.current && crop.width && crop.height) {
+      const file = await createCroppedFile(imgRef.current, crop);
+
+      const obj = URL.createObjectURL(file);
+      setCroppedPreview(obj); // show preview
+      setImg(file);
+    }
+    if (inputRef.current != null)
+      inputRef.current.value = "";
+    if (preview) URL.revokeObjectURL(preview);
+    setPreview(undefined); // close cropper
+  };
+
 
   if (typeof document == "undefined") return null;
-  return preview && portalCropRef.current ? ReactDOM.createPortal(
+  return preview ? ReactDOM.createPortal(
     <PopupCard
       setShowPopup={setShowPopup}
       popupTitle="Crop Image"
-      submitText="Confirm"
+      submitText="Done"
+      onSubmit={handleDone}
     >
       <div className="image-crop">
         <ReactCrop
@@ -140,12 +185,17 @@ const ImageCrop: React.FC<ImageCropProps> = ({ preview, setPreview, inputRef }) 
           ruleOfThirds={false}
           style={{ maxWidth: '100%', width: 'fit-content' }}
         >
-          <img className="crop-preview-image" src={preview} onLoad={(e) => onImageLoad(e.target)} alt="crop" />
+          <img
+            className="crop-preview-image"
+            src={preview}
+            alt="crop"
+            ref={imgRef}
+          />
         </ReactCrop>
         <CropSlider setPercentage={setCropSizeVal} />
       </div>
     </PopupCard>,
-    portalCropRef.current
+    document.body
   ) : null
 }
 
