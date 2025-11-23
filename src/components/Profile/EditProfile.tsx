@@ -18,13 +18,13 @@ const EditProfile: React.FC<EditProfileProps> = ({ user, onDataChange }) => {
       legalName: name,
       biography: biography,
       profilePic: profileImg,
-      profileBanner: profileBannerImg
+      bannerPic: profileBannerImg
     }
     onDataChange(newData);
-  }, [name, biography, profileImg, profileBannerImg, onDataChange])
+  }, [name, biography, profileImg, profileBannerImg, onDataChange]);
   useEffect(() => {
     updateData();
-  }, [profileImg, name, biography, profileBannerImg, updateData])
+  }, [profileImg, name, biography, profileBannerImg, updateData]);
 
   const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = e.currentTarget.value;
@@ -38,9 +38,11 @@ const EditProfile: React.FC<EditProfileProps> = ({ user, onDataChange }) => {
 
   return (
     <div className="edit-profile-wrapper">
-      <div className="edit-banner"></div>
+      <div className="edit-banner">
+        <ProfileImageUpload setImg={setProfileBannerImg} currentImg={user.bannerPicUrl} imgType="banner"/>
+      </div>
       <div className="edit-profile-pic">
-        <ProfileImageUpload setImg={setProfileImg} profilePicture={user.profilePicUrl} />
+        <ProfileImageUpload setImg={setProfileImg} currentImg={user.profilePicUrl} imgType="profile"/>
       </div>
       <form>
         <div className="edit-profile-form">

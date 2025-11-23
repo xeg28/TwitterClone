@@ -3,15 +3,25 @@ import CreatePost from '../CreatePost/CreatePost';
 import Icon from '../Icon/Icon';
 import Profiles from './Profiles';
 import { Link, useLocation } from 'react-router-dom';
-import { useRef} from 'react';
+import { useRef } from 'react';
 import { getCurrentUser } from '../../types/User';
+import { useState, useEffect } from 'react';
+import MobileNav from './MobileNav';
 
-const Navbar: React.FC = () => { 
+const Navbar: React.FC = () => {
   const location = useLocation();
   const containerRef = useRef<HTMLDivElement>(null);
   const user = getCurrentUser();
+  const [isWide, setIsWide] = useState(window.innerWidth > 500);
 
-  return (
+  useEffect(() => {
+    const handleResize = () => setIsWide(window.innerWidth > 500);
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return isWide ? (
     <header>
       <div></div>
       <div className="nav-content">
@@ -20,56 +30,58 @@ const Navbar: React.FC = () => {
             <Link to="/"
               className={location.pathname === "/" ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name={location.pathname === "/" ? 'homeActive' : 'home'}/>
+                <Icon name={location.pathname === "/" ? 'homeActive' : 'home'} />
               </div>
               <span>Home</span>
             </Link>
             <Link to="/search"
               className={location.pathname === "/search" ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name={location.pathname === "/search" ? 'searchActive' : 'search'}/>
+                <Icon name={location.pathname === "/search" ? 'searchActive' : 'search'} />
               </div>
               <span>Explore</span>
             </Link>
             <Link to="/notifications"
               className={location.pathname === "/notifications" ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name={location.pathname === "/notifications" ? 'notificationActive' : 'notification'}/>
+                <Icon name={location.pathname === "/notifications" ? 'notificationActive' : 'notification'} />
               </div>
               <span>Notifications</span>
             </Link>
             <Link to="/messages"
               className={location.pathname.startsWith('/messages') ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name={location.pathname.startsWith('/messages') ? 'messagesActive' : 'messages'}/>
+                <Icon name={location.pathname.startsWith('/messages') ? 'messagesActive' : 'messages'} />
               </div>
               <span>Messages</span>
             </Link>
-            <Link to={`/profile/${user?.username}`} 
+            <Link to={`/profile/${user?.username}`}
               className={location.pathname.startsWith('/profile/') ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name={location.pathname.startsWith('/profile/') ? 'profileActive' : 'profile'}/>
+                <Icon name={location.pathname.startsWith('/profile/') ? 'profileActive' : 'profile'} />
               </div>
               <span>Profile</span>
             </Link>
             <Link to="more">
               <div className="nav-icon">
-                <Icon name="more"/>
+                <Icon name="more" />
               </div>
               <span>More</span>
             </Link>
           </div>
           <div className="post">
-            <CreatePost />
+            <div className="w-100 flex align-center justify-content-center">
+              <CreatePost isMobile={false}/>
+            </div>
           </div>
         </div>
 
         <div className="relative">
-          <Profiles/>
+          <Profiles />
         </div>
       </div>
     </header>
-  )
+  ) : <MobileNav />
 }
 
 export default Navbar;

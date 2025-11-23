@@ -24,8 +24,15 @@ export async function updateUser(user: User) {
   });
 }
 
-export async function updateUserPicture(data: FormData) {
+export async function updateProfileImage(data: FormData) {
   return fetchWithAuth(`${API_URL}/upload/image/profile`,{
+    method:"POST",
+    body:data
+  });
+}
+
+export async function updateBannerImage(data: FormData) {
+  return fetchWithAuth(`${API_URL}/upload/image/banner`,{
     method:"POST",
     body:data
   });

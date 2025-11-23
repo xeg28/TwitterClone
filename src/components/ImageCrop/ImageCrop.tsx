@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import ReactCrop, { Crop } from 'react-image-crop';
 import PopupCard from '../PopupCard/PopupCard';
 import CropSlider from './CropSlider';
+import { getSquareDimensionsPercentage, getBannerDimensions } from '../../helpers/imageHelper';
 
 interface ImageCropProps {
   preview: string | undefined;
@@ -11,37 +12,11 @@ interface ImageCropProps {
   inputRef: React.RefObject<HTMLInputElement | null>;
   setImg: React.Dispatch<React.SetStateAction<File | null>>;
   setCroppedPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
+  imgType: "banner" | "profile";
 }
 
-function getSquareDimensionsPercentage(
-  originalWidth: number,
-  originalHeight: number
-): { widthPercent: number; heightPercent: number } {
 
-  const maxDimension = Math.max(originalWidth, originalHeight);
-  const squareDimension = Math.min(originalWidth, originalHeight);
-  const percentage = (squareDimension / maxDimension) * 100;
-
-  let widthPercent: number;
-  let heightPercent: number;
-
-  if (originalWidth > originalHeight) {
-    widthPercent = percentage;
-    heightPercent = 100;
-  } else if (originalHeight > originalWidth) {
-    widthPercent = 100;
-    heightPercent = percentage;
-  } else {
-    widthPercent = 100;
-    heightPercent = 100;
-  }
-  return {
-    widthPercent: widthPercent,
-    heightPercent: heightPercent
-  };
-}
-
-const ImageCrop: React.FC<ImageCropProps> = ({ preview, setPreview, inputRef, setImg, setCroppedPreview }) => {
+const ImageCrop: React.FC<ImageCropProps> = ({ preview, setPreview, inputRef, setImg, setCroppedPreview, imgType}) => {
   const [crop, setCrop] = useState<Crop>({
     unit: '%',
     width: 50,
@@ -64,7 +39,9 @@ const ImageCrop: React.FC<ImageCropProps> = ({ preview, setPreview, inputRef, se
       const width = image.width;
       const height = image.height;
 
-      const dimensions = getSquareDimensionsPercentage(width, height);
+      const dimensions = imgType === "profile" ? 
+        getSquareDimensionsPercentage(width, height) :
+        getBannerDimensions(width, height);
       setCrop({
         x: 0,
         y: 0,
@@ -108,7 +85,7 @@ const ImageCrop: React.FC<ImageCropProps> = ({ preview, setPreview, inputRef, se
   }
 
   const createCroppedFile = useCallback(
-    async (image: HTMLImageElement, crop: Crop): Promise<File> => {
+    async (image: HTMLImageElement, crop: Crop, destDimensions: any): Promise<File> => {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       if (!ctx) throw new Error("Canvas context not available");
@@ -121,10 +98,8 @@ const ImageCrop: React.FC<ImageCropProps> = ({ preview, setPreview, inputRef, se
       const cropY = (crop.y / 100) * imgHeight;
       const cropWidth = (crop.width / 100) * imgWidth;
       const cropHeight = (crop.height / 100) * imgHeight;
-
-      const outputSize = 400; // will be change when doing banner
-      canvas.width = outputSize;
-      canvas.height = outputSize;
+      canvas.width = destDimensions.width; 
+      canvas.height = destDimensions.height;
       // Draw the cropped region, scaled to output size
       ctx.drawImage(
         image,
@@ -134,8 +109,8 @@ const ImageCrop: React.FC<ImageCropProps> = ({ preview, setPreview, inputRef, se
         cropHeight,      // source height
         0,               // dest X
         0,               // dest Y
-        outputSize,     // dest width
-        outputSize     // dest height
+        destDimensions.width,     // dest width
+        destDimensions.height     // dest height
       );
 
       return new Promise((resolve, reject) => {
@@ -154,7 +129,17 @@ const ImageCrop: React.FC<ImageCropProps> = ({ preview, setPreview, inputRef, se
 
   const handleDone = async () => {
     if (imgRef.current && crop.width && crop.height) {
-      const file = await createCroppedFile(imgRef.current, crop);
+      const destDimensions = (imgType === 'profile') ?
+      {
+        height: 400, 
+        width: 400
+      } : 
+      {
+        height: 360,
+        width: 1080
+      }
+
+      const file = await createCroppedFile(imgRef.current, crop, destDimensions);
 
       const obj = URL.createObjectURL(file);
       setCroppedPreview(obj); // show preview

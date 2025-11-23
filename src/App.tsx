@@ -12,6 +12,7 @@ import ResetPassword from './pages/ChangePassword';
 import { AlertProvider } from './components/AlertList/AlertContext';
 import AlertList from './components/AlertList/AlertList';
 import Profile from './components/Profile/Profile';
+import { dimensionValueTypes } from 'framer-motion';
 
 function App() {
   return (
@@ -20,12 +21,22 @@ function App() {
         <Routes>
           <Route element={<ProtectedRoutes redirect="/login" />}>
             <Route path="/" element={<Home />}>
-              <Route index element={(<div>Home</div>)}/>
+              <Route index element={(
+                <div>home</div>
+                )}/>
               <Route path="/search" element={(<div>Search</div>)}/>
               <Route path="/notifications" element={(<div>Notifications</div>)}/>
               <Route path="/messages" element={(<div>Messages</div>)} />
               <Route path="/profile/:username/" element={<Profile/>} > 
-                <Route index element={(<div>Posts</div>)} />
+                <Route index element={
+                  <>
+                <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime praesentium dicta assumenda illo! Suscipit, ipsa soluta ab quasi asperiores fugiat iusto officia laboriosam possimus tempora ducimus consequatur officiis quidem dolores?</div>
+                <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime praesentium dicta assumenda illo! Suscipit, ipsa soluta ab quasi asperiores fugiat iusto officia laboriosam possimus tempora ducimus consequatur officiis quidem dolores?</div>
+                <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime praesentium dicta assumenda illo! Suscipit, ipsa soluta ab quasi asperiores fugiat iusto officia laboriosam possimus tempora ducimus consequatur officiis quidem dolores?</div>
+                <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime praesentium dicta assumenda illo! Suscipit, ipsa soluta ab quasi asperiores fugiat iusto officia laboriosam possimus tempora ducimus consequatur officiis quidem dolores?</div>
+                <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime praesentium dicta assumenda illo! Suscipit, ipsa soluta ab quasi asperiores fugiat iusto officia laboriosam possimus tempora ducimus consequatur officiis quidem dolores?</div>
+                </>
+                } />
                 <Route path="replies" element={(<div>Replies</div>)} />
               </Route>
             </Route>

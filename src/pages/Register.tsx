@@ -147,7 +147,7 @@ const Registration: React.FC = () => {
                 <FormInput type="text" id="name" name="name" value={data.name}
                   onChange={e => addData("name", e.target.value, setData)} placeholder="Name" 
                   isRequired={true} title="Name must be 2-50 letters only" 
-                  pattern="[A-Za-z ]{2,50}"/>
+                  pattern="[A-Za-z ]{2,50}" charLimit={50}/>
                   
                 <FormInput type="email" name="email" id="email" value={data.email}
                 onChange={e => addData('email', e.target.value, setData)} placeholder="Email"
@@ -188,7 +188,7 @@ const Registration: React.FC = () => {
                  <FormInput type="text" id="username" name="username" placeholder="Username"
                   value={data.username} onChange={e => addData('username', e.target.value, setData)}
                   pattern=".{2,50}" isRequired={true} title="Must be between 2-50 characters" 
-                  errors={inputErrors} setErrors={setInputErrors}/>
+                  errors={inputErrors} setErrors={setInputErrors} charLimit={50}/>
 
                 <FormInput type="password" id="password" name="password" placeholder="Password"
                     onChange={e=> addData('password', e.target.value, setData)} isRequired={true}

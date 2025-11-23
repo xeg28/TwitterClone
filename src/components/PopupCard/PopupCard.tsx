@@ -10,10 +10,11 @@ interface PopupCardProps {
   onSubmit?: () => void,
   submitText?: string,
   children: React.ReactNode,
-  confirmDialogProps?: ConfirmDialogProps
+  confirmDialogProps?: ConfirmDialogProps,
+  isLoading?: boolean
 }
 
-const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, popupTitle, children, onSubmit, submitText, confirmDialogProps }) => {
+const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, popupTitle, children, onSubmit, submitText, confirmDialogProps, isLoading}) => {
   const [showConfirmation, setShowConfirmation] = useState<true | false>(false);
   useEffect(() => {
     if(confirmDialogProps) {
@@ -48,7 +49,12 @@ const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, popupTitle, childre
                   </div>
                   {onSubmit && (
                     <button className="popup-btn" onClick={() => onSubmit()}>
-                      {submitText ?? "Save"}
+                      {!isLoading ? 
+                      (<span>{submitText ?? "Save"}</span>) :
+                      (
+                        <div className="spinner"></div>
+                      )
+                      }
                     </button>
                   )}
                 </div>

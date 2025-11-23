@@ -6,7 +6,12 @@ import { useAlertActions } from "../AlertList/AlertContext";
 import ReactDOM from "react-dom";
 import Icon from "../Icon/Icon";
 import PopupCard from "../PopupCard/PopupCard";
-const CreatePost: React.FC = () => {
+
+interface CreatePostProps {
+  isMobile: boolean;
+}
+
+const CreatePost: React.FC<CreatePostProps> = ({isMobile}) => {
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [postText, setPostText] = useState<String>();
@@ -25,7 +30,6 @@ const CreatePost: React.FC = () => {
     try {
       setIsLoading(true);
       const response = await addPost(data);
-      const result = await response.json();
       if (response.ok) {
         addAlert("Post created", "success");
         setShowCreatePost(false);
@@ -57,15 +61,23 @@ const CreatePost: React.FC = () => {
   };
 
   return (
-    <div className="w-100 flex align-center justify-content-center">
-      <button className="post-btn-lg" onClick={() => setShowCreatePost(true)}>
-        <Icon name="post" />
-        <span>Post</span>
-      </button>
+    <>
+      {!isMobile ? (
+        <button className="post-btn-lg" onClick={() => setShowCreatePost(true)}>
+          <Icon name="post" />
+          <span>Post</span>
+        </button>
+      ) :
+        (
+          <button className="post-btn-sm" onClick={() => setShowCreatePost(true)} >
+            <Icon name="post" className="icon-svg" />
+          </button>
+        )
+      }
       {showCreatePost && typeof document !== "undefined" && ReactDOM.createPortal(
 
-        <PopupCard setShowPopup={setShowCreatePost} 
-          >
+        <PopupCard setShowPopup={setShowCreatePost}
+        >
           <form className="post-form" onSubmit={handleSubmit}>
             <div className="flex post-form-wrapper" >
               <div className="icon-img-wrapper">
@@ -90,7 +102,7 @@ const CreatePost: React.FC = () => {
         document.body
       )
       }
-    </div>
+    </>
   );
 }
 

@@ -13,7 +13,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({redirect}) => {
     return <Navigate to={redirect} />;
   }
 
-  if (!isVerified) {
+  if (!isVerified && isLoggedIn) {
+    console.log(isVerified);
+    console.log(isLoggedIn);
     return <Navigate to="/verify-email" state={{email}}/>;
   }
 

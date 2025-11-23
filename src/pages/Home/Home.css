@@ -7,6 +7,8 @@
   flex-direction: row;
   justify-content: center;
   width: 100%;
+  min-height: 100%;
+  height: fit-content;
 }
 
 main {
@@ -16,6 +18,7 @@ main {
 .main-content {
   width: 600px;
   height: 100%;
+  min-height: 100vh;
   max-inline-size: 600px;
   min-width: 0px;
   border-left: 1px solid var(--border-color);
@@ -42,3 +45,8 @@ main {
   }
 }
 
+@media (max-width: 500px) {
+  .home-layout {
+    flex-direction: column-reverse;
+  }
+}

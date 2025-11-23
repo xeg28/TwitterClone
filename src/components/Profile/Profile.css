@@ -7,6 +7,12 @@
   padding-left: 1rem;
   padding-right: 1rem;
   align-items: center;
+  position: sticky;
+  top: 0;
+  left: 0;
+  background-color: var(--top-bar-color);
+  backdrop-filter: var(--top-bar-backdrop);
+  z-index: 3;
 }
 
 .top-bar div {
@@ -46,6 +52,11 @@
   background-color: color-mix(in srgb, var(--background-color) 80%, var(--text-color) 20%);
 }
 
+.profile {
+  --loader-height: 35px;
+  min-height: 400px;
+}
+
 .profile-content {
   aspect-ratio: 3 / 1;
   width: 100%;
@@ -54,7 +65,7 @@
 }
 
 .profile-picture {
-  aspect-ratio: 1 / 1 ;
+  aspect-ratio: 1 / 1;
   width: 25%;
   border-radius: 50%;
   margin-top: -15%;
@@ -65,12 +76,13 @@
 
 
 .edit-profile-wrapper {
-  display:flex;
+  display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
 .edit-banner {
+  position: relative;
   aspect-ratio: 3 / 1;
   width: 100%;
   background-color: color-mix(in srgb, var(--background-color) 80%, var(--text-color) 20%);
@@ -79,6 +91,7 @@
 .edit-profile-pic {
   position: relative;
   max-width: 115px;
+  min-width: 75px;
   width: 20%;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
@@ -91,17 +104,29 @@
 
 
 .edit-profile-pic img.profile-preview,
-.profile-picture > img,
-.profile-picture > svg
-{            
+.profile-picture>img,
+.profile-picture>svg {
+  border-radius: 50%;
+}
+
+.profile-picture img,
+.banner-container img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+img.profile-preview,
+img.banner-preview {
   width: 100%;
   height: 100%;
-  object-fit: cover;       
+  object-fit: cover;
   display: block;
-  border-radius: 50%;      
-  pointer-events: none;  
+  pointer-events: none;
   user-select: none;
 }
+
 
 .upload-image {
   background-color: var(--transparent-300);
@@ -122,11 +147,11 @@
 }
 
 .upload-image:hover {
-  background-color: color-mix(in srgb, var(--transparent-300) 97%, var(--text-color) 3%);
+  background-color: color-mix(in srgb, var(--transparent-300) 95%, var(--text-color) 5%);
 }
 
 .upload-image:active {
-  background-color: color-mix(in srgb, var(--transparent-300) 95%, var(--text-color) 5%);
+  background-color: color-mix(in srgb, var(--transparent-300) 90%, var(--text-color) 10%);
 }
 
 .upload-image svg {
@@ -136,6 +161,5 @@
 
 .edit-profile-form {
   padding-left: 1rem;
-  padding-right: 1rem; 
+  padding-right: 1rem;
 }
-

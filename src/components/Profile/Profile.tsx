@@ -1,6 +1,6 @@
 import './Profile.css';
 import { Outlet, useParams } from 'react-router-dom';
-import { fetchUser, updateUser, updateUserPicture } from '../../api/user';
+import { fetchUser, updateUser, updateProfileImage, updateBannerImage } from '../../api/user';
 import { useEffect, useState, useRef } from 'react';
 import { User } from '../../types/User';
 import { useAlertActions } from '../AlertList/AlertContext';
@@ -27,6 +27,7 @@ const Profile: React.FC = () => {
   const [showEditUser, setShowEditUser] = useState<true | false>(false);
   const { addAlert } = useAlertActions();
   const [isLoading, setIsLoading] = useState<true | false>(true);
+  const [editIsLoading, setEditIsLoading] = useState<true | false>(false);
   const navigate = useNavigate();
 
 
@@ -38,38 +39,61 @@ const Profile: React.FC = () => {
   const saveUser = async () => {
     const newData = userData.current;
 
-    if (newData.profilePic) {
-      const formData = new FormData();
-      formData.append("file", newData.profilePic);
-      const response = await updateUserPicture(formData);
-      if (!response.ok) {
-        addAlert("There was an error when uploading, try again.", "error");
-        return;
+    try {
+      setEditIsLoading(true);
+      if (newData.profilePic) {
+        const formData = new FormData();
+        formData.append("file", newData.profilePic);
+        const response = await updateProfileImage(formData);
+        if (!response.ok) {
+          addAlert("There was an error when uploading, try again.", "error");
+          return;
+        }
+        else {
+          const result = await response.json();
+          setUser((prev) => { return { ...prev, profilePicUrl: result.url } });
+        }
+      }
+      console.log(newData);
+      if (newData.bannerPic) {
+        const formData = new FormData();
+        formData.append("file", newData.bannerPic);
+        const response = await updateBannerImage(formData);
+        if (!response.ok) {
+          addAlert("There was an error when uploading, try again.", "error");
+          return;
+        }
+        else {
+          const result = await response.json();
+          setUser((prev) => { return { ...prev, bannerPicUrl: result.url } });
+        }
+      }
+
+      const response = await updateUser({
+        ...user,
+        legalName: newData.legalName,
+        biography: newData.biography
+      });
+      if (response.ok) {
+        setUser((prev) => {
+          return {
+            ...prev,
+            legalName: newData.legalName,
+            biography: newData.biography
+          };
+        });
+        addAlert("Profile updated", "success");
+        setShowEditUser(false);
       }
       else {
-        const result = await response.json();
-        setUser((prev) => { return { ...prev, profilePicUrl: result.url } });
+        addAlert("Can't update user", "error");
       }
     }
-
-    const response = await updateUser({
-      ...user,
-      legalName: newData.legalName,
-      biography: newData.biography
-    });
-    if (response.ok) {
-      setUser((prev) => {
-        return {
-          ...prev,
-          legalName: newData.legalName,
-          biography: newData.biography
-        };
-      });
-      addAlert("Profile updated", "success");
-      setShowEditUser(false);
+    catch (e) {
+      addAlert("Error updating user, try again", "error");
     }
-    else {
-      addAlert("Can't update user", "error");
+    finally {
+      setEditIsLoading(false);
     }
   }
 
@@ -127,13 +151,15 @@ const Profile: React.FC = () => {
               </div>
 
               <div className="banner-container">
-
+                {(user.bannerPicUrl != null &&
+                  <img src={user.bannerPicUrl} alt="profile" />)
+                }
               </div>
               <div className="profile-content">
                 <div className='flex flex-row space-between'>
                   <div className="profile-picture">
-                    {(user.profilePicUrl != null && 
-                    <img src={user.profilePicUrl} alt="profile" />) ||
+                    {(user.profilePicUrl != null &&
+                      <img src={user.profilePicUrl} alt="profile" />) ||
                       (<Icon name="profileDefault" />)
                     }
                   </div>
@@ -177,6 +203,7 @@ const Profile: React.FC = () => {
                     title: "Discard changes?",
                     dialog: "This can't be undone and you'll lose all your changes."
                   }}
+                  isLoading={editIsLoading}
                 >
                   <EditProfile user={user} onDataChange={(d) => (userData.current = d)} />
                 </PopupCard>,
@@ -184,9 +211,9 @@ const Profile: React.FC = () => {
               )}
 
               <div>
-                <OptionBar 
-                  optionTitles={['Posts', 'Replies']} 
-                  baseURI={`/profile/${username}`} 
+                <OptionBar
+                  optionTitles={['Posts', 'Replies']}
+                  baseURI={`/profile/${username}`}
                   optionParamater={['', '/replies']} >
                   <Outlet />
                 </OptionBar>

@@ -4,11 +4,12 @@ import 'react-image-crop/dist/ReactCrop.css';
 import ImageCrop from "../ImageCrop/ImageCrop";
 
 interface ProfileImageUploadProps {
-  profilePicture?: string,
+  imgType: "banner" | "profile",
+  currentImg?: string,
   setImg: React.Dispatch<React.SetStateAction<File | null>>,
 }
 
-const ProfileImageUpload: React.FC<ProfileImageUploadProps> = ({ setImg, profilePicture }) => {
+const ProfileImageUpload: React.FC<ProfileImageUploadProps> = ({ setImg, currentImg, imgType}) => {
   const [preview, setPreview] = useState<string | undefined>();
   const [croppedPreview, setCroppedPreview] = useState<string | undefined>();
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -55,13 +56,15 @@ const ProfileImageUpload: React.FC<ProfileImageUploadProps> = ({ setImg, profile
         setPreview={setPreview}
         inputRef={inputRef}
         setImg={setImg}
-        setCroppedPreview={setCroppedPreview} />
+        setCroppedPreview={setCroppedPreview} 
+        imgType={imgType}
+        />
       <button className="upload-image" onClick={handleInputClick} title="Choose image">
         <Icon name="addImage" />
       </button>
-      {(croppedPreview && <img src={croppedPreview} alt="preview" className="profile-preview" />) ||
-        (profilePicture && <img src={profilePicture} alt="preview" className="profile-preview" />) ||
-        (<Icon name="profileDefault" />)
+      {(croppedPreview && <img src={croppedPreview} alt="preview" className={`${imgType}-preview`} />) ||
+        (currentImg && <img src={currentImg} alt="preview" className={`${imgType}-preview`} />) ||
+        (imgType==="profile" && (<Icon name="profileDefault" />))
       }
     </>
   );

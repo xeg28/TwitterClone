@@ -138,6 +138,39 @@ header > div {
   text-align: start;
 }
 
+.navbar-sm-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+.post-btn-sm {
+  display:flex;
+  border:none;
+  border-radius: 50%;
+  background: var(--secondary-color);
+  height: 56px;
+  width: 56px;
+  padding: .75rem;
+  cursor: pointer;
+}
+
+.navbar-sm {
+  border-top: 1px solid var(--border-color);
+  background-color: var(--background-color);
+  width: 100%;
+}
+.navbar-sm > .nav-btns {
+  flex-direction: row;
+  width: 100%;
+  padding: 5px 0;
+  justify-content: space-around;
+} 
+
 @media (max-width: 1260px) {
   header {
     --header-width: 88px
