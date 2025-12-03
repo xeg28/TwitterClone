@@ -12,6 +12,7 @@ import ReactDOM from 'react-dom';
 import PopupCard from '../PopupCard/PopupCard';
 import EditProfile from './EditProfile';
 import OptionBar from '../OptionBar/OptionBar';
+import Topbar from '../Topbar/Topbar';
 
 type UserProfile = {
   legalName?: string,
@@ -54,7 +55,7 @@ const Profile: React.FC = () => {
           setUser((prev) => { return { ...prev, profilePicUrl: result.url } });
         }
       }
-      console.log(newData);
+   
       if (newData.bannerPic) {
         const formData = new FormData();
         formData.append("file", newData.bannerPic);
@@ -135,7 +136,7 @@ const Profile: React.FC = () => {
           ) :
           (
             <div className="flex flex-col">
-              <div className="top-bar">
+              {/* <div className="top-bar">
                 <button onClick={handleBack}>
                   <Icon name="back" />
                 </button>
@@ -148,7 +149,16 @@ const Profile: React.FC = () => {
                 <button>
                   <Icon name="search" />
                 </button>
-              </div>
+              </div> */}
+
+              <Topbar handleBack={handleBack}>
+                {!isLoading && (
+                  <div>
+                    <span className='fs-lg bolder'>{user.legalName}</span>
+                    <span className='fs-sm dimm-text'># posts</span>
+                  </div>
+                )}
+              </Topbar>
 
               <div className="banner-container">
                 {(user.bannerPicUrl != null &&

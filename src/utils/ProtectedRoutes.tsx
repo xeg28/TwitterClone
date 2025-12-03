@@ -7,7 +7,7 @@ type ProtectedRouteProps = {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({redirect}) => {
   const {authChecked, isLoggedIn, isVerified, email} = useAuthChecked();
-  if (!authChecked) return <LoadingScreen/>;
+  if (!authChecked || isVerified == null) return <LoadingScreen/>;
 
   if (!isLoggedIn) {
     return <Navigate to={redirect} />;

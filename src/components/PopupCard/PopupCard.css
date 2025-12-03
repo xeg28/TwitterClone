@@ -85,3 +85,17 @@
 .popup-btn:hover {
   background-color: var(--text-color);
 }
+
+@media (max-width: 500px) {
+  .popup-card-wrapper > div{
+    margin-top: 0;
+    padding: 0;
+    background-color: var(--background-color);
+  }
+
+  .popup-card {
+    height: 100%;
+    border-radius: 0;
+  }
+
+}

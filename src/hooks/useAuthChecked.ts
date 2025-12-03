@@ -5,7 +5,7 @@ const apiURL = process.env.REACT_APP_API_URL;
 export function useAuthChecked() {
   const [authChecked, setAuthChecked] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
+  const [isVerified, setIsVerified] = useState<boolean | null>(null);
   const [email, setEmail] = useState<string>('');
   const didRun = useRef(false);
 
@@ -26,14 +26,18 @@ export function useAuthChecked() {
         const refreshResult = await response.json();
         if (refreshResult.status === 200) {
           setIsLoggedIn(true);
+          setIsVerified(true);
         } else {
           setIsLoggedIn(false);
+          setIsVerified(false);
         }
       } else {
         setIsLoggedIn(false);
+        setIsVerified(false);
       }
     } catch {
       setIsLoggedIn(false);
+      setIsVerified(false);
     } finally {
       setAuthChecked(true);
     }

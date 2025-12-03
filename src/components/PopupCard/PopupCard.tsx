@@ -17,10 +17,16 @@ interface PopupCardProps {
 const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, popupTitle, children, onSubmit, submitText, confirmDialogProps, isLoading}) => {
   const [showConfirmation, setShowConfirmation] = useState<true | false>(false);
   useEffect(() => {
+    document.body.classList.add("no-scroll");
     if(confirmDialogProps) {
       confirmDialogProps.onDeny = () => setShowConfirmation(false);
     }
+    return () => {
+       document.body.classList.remove("no-scroll");
+    }
   }, [])
+
+
   const handleClose = ()=> {
     if(!confirmDialogProps) {
       setShowPopup(false)

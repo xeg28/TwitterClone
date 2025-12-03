@@ -1,24 +1,24 @@
-import {useRef } from "react";
+import { useRef, useCallback } from "react";
 
 export function useScrollSpeed() {
   const lastPos = useRef(0);
   const lastTime = useRef(Date.now());
   const speed = useRef(0);
 
-  const handleScroll = () => {
-      const currentPos = window.scrollY;
-      const currentTime = Date.now();
+  const handleScroll = useCallback(() => {
+    const currentPos = window.scrollY;
+    const currentTime = Date.now();
 
-      const deltaPos = currentPos - lastPos.current;
-      const deltaTime = currentTime - lastTime.current; // ms
+    const deltaPos = currentPos - lastPos.current;
+    const deltaTime = currentTime - lastTime.current; // ms
 
-      if (deltaTime > 0) {
-        speed.current = deltaPos / deltaTime; 
-      }
+    if (deltaTime > 0) {
+      speed.current = deltaPos / deltaTime; 
+    }
 
-      lastPos.current = currentPos;
-      lastTime.current = currentTime;
-    };
+    lastPos.current = currentPos;
+    lastTime.current = currentTime;
+  }, []);
 
-  return {handleScroll, speed};
+  return { handleScroll, speed };
 }
