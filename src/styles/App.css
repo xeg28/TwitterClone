@@ -100,9 +100,23 @@ img {
   display: inline;
   vertical-align: middle;
 }
+
+.p-1 {
+  padding: .5rem !important;
+}
+
+.p-2 {
+  padding: 1rem !important;
+}
+
 .plr-1 {
   padding-left: .5rem !important;
   padding-right: .5rem !important;
+}
+
+.plr-2 {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
 }
 
 .ptb-1 {
@@ -154,6 +168,7 @@ a:visited {
 
 .bolder {
   font-weight: bolder !important;
+  color: var(--text-color) !important;
 }
 
 .relative {
@@ -265,8 +280,12 @@ a:visited {
 
 }
 
+.align-start {
+  align-items: start !important;
+}
+
 .align-end {
-  align-items: end;
+  align-items: end !important;
 }
 
 .gap-1 {

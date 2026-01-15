@@ -171,6 +171,22 @@ header > div {
   justify-content: space-around;
 } 
 
+.mobile-nav-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: 100vw;
+  z-index: 5;
+  background-color: var(--popup-background);
+}
+
+.mobile-nav {
+  background-color: var(--background-color);
+  max-width: 280px;
+  height: 100%;
+}
+
 @media (max-width: 1260px) {
   header {
     --header-width: 88px
@@ -190,5 +206,40 @@ header > div {
 
   .profiles-text {
     display:none;
+  }
+
+  .nav-menu-btn {
+    border: none !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    height: 40px;
+    width: 40px;
+  }
+
+  .nav-menu-btn > img{
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .mobile-nav-menu {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobile-nav-menu a {
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    font-size: var(--fs-large);
+    color: var(--text-color);
+    font-weight: 900;
+    align-items: center;
+  }
+
+  .mobile-nav-menu a:active {
+    background-color: color-mix(in srgb, var(--background-color) 90%, var(--text-color) 10%);
   }
 }

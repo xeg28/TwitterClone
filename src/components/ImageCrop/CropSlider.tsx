@@ -25,32 +25,47 @@ const CropSlider: React.FC<CropSliderProps> = ({ setPercentage }) => {
     ballRef.current.style.left = `${x}px`;
   }, [setPercentage]);
 
-  // Mouse move - only when dragging
+  // Mouse and touch move - only when dragging
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMove = (clientX: number) => {
       if (!dragging) return;
 
       const now = performance.now();
       if (now - lastUpdate.current < 16) return;
       lastUpdate.current = now;
 
-      moveBall(e.clientX);
+      moveBall(clientX);
     };
 
-    const handleMouseUp = () => setDragging(false);
+    const handleMouseMove = (e: MouseEvent) => handleMove(e.clientX);
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      handleMove(e.touches[0].clientX);
+    };
+
+    const handleEnd = () => setDragging(false);
 
     document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("mouseup", handleEnd);
+    document.addEventListener("touchmove", handleTouchMove, { passive: false });
+    document.addEventListener("touchend", handleEnd);
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("mouseup", handleEnd);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleEnd);
     };
   }, [dragging, moveBall]);
 
-  // Start dragging ONLY when clicking the ball
+  // Start dragging when clicking/touching the ball
   const handleMouseDown = (e: React.MouseEvent) => {
     moveBall(e.clientX);
+    setDragging(true);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    moveBall(e.touches[0].clientX);
     setDragging(true);
   };
 
@@ -59,7 +74,7 @@ const CropSlider: React.FC<CropSliderProps> = ({ setPercentage }) => {
       <div className="slider-container">
         <span>&minus;</span>
 
-        <div className="slider" onMouseDown={handleMouseDown} ref={sliderRef}>
+        <div className="slider" onMouseDown={handleMouseDown} onTouchStart={handleTouchStart} ref={sliderRef}>
           <div
             className="slider-ball"
             ref={ballRef}

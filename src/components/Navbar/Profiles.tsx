@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { API_URL } from '../../config';
 import { getCurrentUser, User } from "../../types/User";
 import { useEffect, useRef, useState } from "react";
 import ContextMenu from "../ContextMenu/ContextMenu";
@@ -12,25 +11,6 @@ const Profiles: React.FC = () => {
   const navigate = useNavigate();
   const profileRef = useRef<HTMLDivElement | null>(null);
   const [showMenu, setShowMenu] = useState<boolean>(false);
-  const logout = async () => {
-    try {
-      const response = await fetch(`${API_URL}/auth/logout`, {
-        method: 'POST',
-        credentials: 'include'
-      });
-      const result = await response.json();
-      if (result.status === 200) {
-        navigate('/login');
-      }
-      else {
-        console.log(result.message);
-      }
-
-    }
-    catch (e) {
-
-    }
-  }
 
   useEffect(() => {
     const removeMenu = (e: MouseEvent) => {
@@ -67,7 +47,7 @@ const Profiles: React.FC = () => {
       <AnimatePresence>
         {showMenu && (
           <ContextMenu
-            options={[{ id: "logout", text: `Log out @${user.username}`, func: logout },
+            options={[{ id: "logout", text: `Log out @${user.username}`, path: "logout" },
             ]}
             targetRef={profileRef}
           />

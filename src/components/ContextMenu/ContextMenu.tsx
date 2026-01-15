@@ -2,11 +2,11 @@ import React, { useLayoutEffect, useRef } from 'react';
 import { motion } from "framer-motion";
 import ReactDOM from "react-dom";
 import './ContextMenu.css';
-
+import {Link} from 'react-router-dom'
 type MenuOption = {
   id: string;
   text: string;
-  func(): void;
+  path: string;
 }
 
 interface ContextMenuProps {
@@ -53,14 +53,9 @@ const ContextMenu: React.FC<ContextMenuProps> = ({ options, targetRef }) => {
       <div className="menu-content">
         {options.map((option, idx) => (
           <div className="menu-option" key={option.id + idx}>
-            <a href='#'
-              onClick={
-                (e) => {
-                  e.preventDefault();
-                  option.func()
-                }}>
+            <Link to={option.path}>
               {option.text}
-            </a>
+            </Link>
           </div>
         ))}
       </div>

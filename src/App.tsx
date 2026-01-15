@@ -12,7 +12,9 @@ import ResetPassword from './pages/ChangePassword';
 import { AlertProvider } from './components/AlertList/AlertContext';
 import AlertList from './components/AlertList/AlertList';
 import Profile from './components/Profile/Profile';
-import { dimensionValueTypes } from 'framer-motion';
+import HomeComponent from './components/Home/Home';
+import Logout from './components/Logout/Logout';
+
 
 function App() {
   return (
@@ -22,7 +24,7 @@ function App() {
           <Route element={<ProtectedRoutes redirect="/login" />}>
             <Route path="/" element={<Home />}>
               <Route index element={(
-                <div>home</div>
+                <div><HomeComponent/></div>
                 )}/>
               <Route path="/search" element={(<div>Search</div>)}/>
               <Route path="/notifications" element={(<div>Notifications</div>)}/>
@@ -40,6 +42,7 @@ function App() {
                 <Route path="replies" element={(<div>Replies</div>)} />
               </Route>
             </Route>
+            <Route path="/logout" element={<Logout />} />
           </Route>
 
           <Route element={<PublicRouteProps redirect="/" />}>

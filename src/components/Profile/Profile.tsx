@@ -136,24 +136,9 @@ const Profile: React.FC = () => {
           ) :
           (
             <div className="flex flex-col">
-              {/* <div className="top-bar">
-                <button onClick={handleBack}>
-                  <Icon name="back" />
-                </button>
-                {!isLoading && (
-                  <div>
-                    <span className='fs-lg bolder'>{user.legalName}</span>
-                    <span className='fs-sm dimm-text'># posts</span>
-                  </div>
-                )}
-                <button>
-                  <Icon name="search" />
-                </button>
-              </div> */}
-
               <Topbar handleBack={handleBack}>
                 {!isLoading && (
-                  <div>
+                  <div className='flex flex-col'>
                     <span className='fs-lg bolder'>{user.legalName}</span>
                     <span className='fs-sm dimm-text'># posts</span>
                   </div>

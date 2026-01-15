@@ -62,11 +62,11 @@ const Navbar: React.FC = () => {
               </div>
               <span>Profile</span>
             </Link>
-            <Link to="more">
+            <Link to="bookmarks" className={location.pathname === '/bookmarks' ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name="more" />
+                <Icon name={location.pathname === '/bookmarks' ? 'bookmarkActive' : 'bookmark'} />
               </div>
-              <span>More</span>
+              <span>Bookmark</span>
             </Link>
           </div>
           <div className="post">

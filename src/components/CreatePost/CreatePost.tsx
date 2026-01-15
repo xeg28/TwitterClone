@@ -52,7 +52,7 @@ const CreatePost: React.FC<CreatePostProps> = ({isMobile}) => {
     setPostText(textarea.value);
 
     const rect = textarea.getBoundingClientRect();
-    let offset = 115;
+    let offset = 115 ;
     const available = Math.max(100, window.innerHeight - rect.top - offset);
 
     textarea.style.maxHeight = `${available}px`;

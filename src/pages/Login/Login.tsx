@@ -54,8 +54,8 @@ const Login:React.FC = () => {
       else if(result.status === 200) {
         navigate('/');
       }
-    } catch(e) {
-        addAlert("Server error, try again", "error");
+    } catch(e:any) {
+        addAlert(e.message, "error");
     }
     finally {
       setIsLoading(false);

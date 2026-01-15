@@ -29,10 +29,14 @@
   padding: 1rem 0;
 }
 
+.option-link.active span { 
+  font-weight: bold;
+}
+
 .option-link.active span::after {
   position: absolute;
   content:"";
-  height: 3px;
+  height: 4px;
   width: 105%;
   bottom: 0px;
   left: 50%;

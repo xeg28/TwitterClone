@@ -95,6 +95,7 @@
 
   .popup-card {
     height: 100%;
+    max-height: initial;
     border-radius: 0;
   }
 

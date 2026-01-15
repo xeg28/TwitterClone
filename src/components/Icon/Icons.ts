@@ -15,6 +15,11 @@ import {ReactComponent as MessagesActive} from '../../icons/messages-active.svg'
 import {ReactComponent as ProfileActive} from '../../icons/profile-active.svg';
 import {ReactComponent as AddImage} from '../../icons/add-image.svg';
 import {ReactComponent as ProfileDefault} from '../../icons/profile-default.svg'
+import {ReactComponent as Bookmark} from '../../icons/bookmark.svg';
+import {ReactComponent as BookmarkActive} from '../../icons/bookmark-active.svg';
+import {ReactComponent as Settings} from '../../icons/settings.svg';
+import {ReactComponent as Logout} from '../../icons/logout.svg';
+
 
 
 export const Icons = {
@@ -35,5 +40,8 @@ export const Icons = {
   messagesActive: MessagesActive,
   addImage: AddImage,
   profileDefault: ProfileDefault,
-  
+  bookmark: Bookmark,
+  bookmarkActive: BookmarkActive,
+  settings: Settings,
+  logout: Logout,
 };
