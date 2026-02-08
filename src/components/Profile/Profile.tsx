@@ -1,8 +1,8 @@
 import './Profile.css';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useParams, Link, useLocation } from 'react-router-dom';
 import { fetchUser, updateUser, updateProfileImage, updateBannerImage } from '../../api/user';
 import { useEffect, useState, useRef } from 'react';
-import { User } from '../../types/User';
+import { getCurrentUser, User } from '../../types/User';
 import { useAlertActions } from '../AlertList/AlertContext';
 import Icon from '../Icon/Icon';
 import { popPrevious } from '../../utils/NavigationHistory';
@@ -24,12 +24,14 @@ type UserProfile = {
 const Profile: React.FC = () => {
   const { username } = useParams<{ username: string }>();
   const [user, setUser] = useState<User>({});
+  const currentUser = getCurrentUser();
   const userData = useRef<UserProfile>({});
   const [showEditUser, setShowEditUser] = useState<true | false>(false);
   const { addAlert } = useAlertActions();
   const [isLoading, setIsLoading] = useState<true | false>(true);
   const [editIsLoading, setEditIsLoading] = useState<true | false>(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
 
   const handleBack = () => {
@@ -55,7 +57,7 @@ const Profile: React.FC = () => {
           setUser((prev) => { return { ...prev, profilePicUrl: result.url } });
         }
       }
-   
+
       if (newData.bannerPic) {
         const formData = new FormData();
         formData.append("file", newData.bannerPic);
@@ -147,22 +149,29 @@ const Profile: React.FC = () => {
 
               <div className="banner-container">
                 {(user.bannerPicUrl != null &&
-                  <img src={user.bannerPicUrl} alt="profile" />)
+                  <Link to="header_photo" state={{ backgroundLocation: location }}>
+                    <img src={user.bannerPicUrl} alt="profile" />
+                  </Link>
+                )
                 }
               </div>
               <div className="profile-content">
                 <div className='flex flex-row space-between'>
                   <div className="profile-picture">
                     {(user.profilePicUrl != null &&
-                      <img src={user.profilePicUrl} alt="profile" />) ||
+                      <Link to="photo">
+                        <img src={user.profilePicUrl} alt="profile" />
+                      </Link>) ||
                       (<Icon name="profileDefault" />)
                     }
                   </div>
-                  <div>
-                    <button className='main-btn' onClick={handleEditUser}>
-                      <span>Edit Profile</span>
-                    </button>
-                  </div>
+                  {currentUser?.id === user.id && (
+                    <div>
+                      <button className='main-btn' onClick={handleEditUser}>
+                        <span>Edit Profile</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <div className='flex flex-col gap-1'>
                   <div className="flex flex-col">

@@ -19,6 +19,7 @@ header > div {
   padding: 56px .5rem .5rem;
   max-height: 100vh;
   overflow-y: auto;
+  overflow-x:hidden;
 }
 
 .nav-btns {

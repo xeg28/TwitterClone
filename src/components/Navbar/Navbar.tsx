@@ -68,6 +68,12 @@ const Navbar: React.FC = () => {
               </div>
               <span>Bookmark</span>
             </Link>
+            <Link to="settings" className={location.pathname === '/settings' ? 'active' : ''}>
+              <div className="nav-icon">
+                <Icon name={location.pathname === '/settings' ? 'settingsActive' : 'settings'} />
+              </div>
+              <span>Settings</span>
+            </Link>
           </div>
           <div className="post">
             <div className="w-100 flex align-center justify-content-center">

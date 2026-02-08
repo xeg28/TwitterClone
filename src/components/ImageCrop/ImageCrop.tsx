@@ -135,8 +135,8 @@ const ImageCrop: React.FC<ImageCropProps> = ({ preview, setPreview, inputRef, se
         width: 400
       } : 
       {
-        height: 360,
-        width: 1080
+        height: 500,
+        width: 1500
       }
 
       const file = await createCroppedFile(imgRef.current, crop, destDimensions);

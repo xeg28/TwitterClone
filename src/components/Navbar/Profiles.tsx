@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { getCurrentUser, User } from "../../types/User";
 import { useEffect, useRef, useState } from "react";
 import ContextMenu from "../ContextMenu/ContextMenu";
@@ -8,7 +7,6 @@ import Icon from "../Icon/Icon";
 
 const Profiles: React.FC = () => {
   const user = getCurrentUser() as User;
-  const navigate = useNavigate();
   const profileRef = useRef<HTMLDivElement | null>(null);
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
@@ -30,7 +28,7 @@ const Profiles: React.FC = () => {
       <div className="flex justify-content-center-m" ref={profileRef}>
         <button className="profiles-btn" onClick={() => setShowMenu((prev) => { return !prev })}>
           <div className="profiles-pic">
-            {(user.profilePicUrl && <img src={user.profilePicUrl}/>) ||
+            {(user.profilePicUrl && <img src={user.profilePicUrl} alt="Profile"/>) ||
               <Icon name="profileDefault"/>
             }
           </div>

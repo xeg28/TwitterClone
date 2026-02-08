@@ -18,6 +18,7 @@ import {ReactComponent as ProfileDefault} from '../../icons/profile-default.svg'
 import {ReactComponent as Bookmark} from '../../icons/bookmark.svg';
 import {ReactComponent as BookmarkActive} from '../../icons/bookmark-active.svg';
 import {ReactComponent as Settings} from '../../icons/settings.svg';
+import {ReactComponent as SettingsActive} from '../../icons/settings-acitve.svg';
 import {ReactComponent as Logout} from '../../icons/logout.svg';
 
 
@@ -43,5 +44,6 @@ export const Icons = {
   bookmark: Bookmark,
   bookmarkActive: BookmarkActive,
   settings: Settings,
+  settingsActive: SettingsActive,
   logout: Logout,
 };

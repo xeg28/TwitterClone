@@ -12,7 +12,8 @@ const MobileNavMenu: React.FC = () => {
   return (
     <div className="mlr-1">
       <button className="nav-menu-btn" onClick={() => setShowMenu(true)}>
-        <img src={user?.profilePicUrl} alt="Profile Picture" />
+        {(user.profilePicUrl && <img src={user.profilePicUrl} alt="Profile-Alt" />)
+          || ((<Icon name="profileDefault" />))}
       </button>
       {showMenu && typeof document !== 'undefined' && ReactDOM.createPortal(
         <motion.div
@@ -32,7 +33,9 @@ const MobileNavMenu: React.FC = () => {
               <div className="flex flex-col p-2 gap-1">
                 <div className="flex flex-row space-between">
                   <Link className="nav-menu-btn" to={`${HOST}/profile/${user?.username}`} >
-                   <img src={user?.profilePicUrl} alt="profile" />
+                    {(user.profilePicUrl && <img src={user.profilePicUrl} alt="profile" />)
+                      || ((<Icon name="profileDefault" />))
+                    }
                   </Link>
                 </div>
                 <div className="flex flex-col">
@@ -40,14 +43,14 @@ const MobileNavMenu: React.FC = () => {
                   <span className="dimm-text">@{user?.username}</span>
                 </div>
                 <div className="flex flex-row gap-2">
-                  <a>
+                  <Link to={`user/following/${user?.username}`}>
                     <span className="bolder">{user?.following}&nbsp;</span>
                     <span className="dimm-text">Following</span>
-                  </a>
-                  <a>
+                  </Link>
+                  <Link to={`user/followers/${user?.username}`}>
                     <span className="bolder">{user?.followers}&nbsp;</span>
                     <span className="dimm-text">Followers</span>
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="mobile-nav-menu">

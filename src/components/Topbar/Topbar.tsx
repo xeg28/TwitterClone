@@ -3,7 +3,7 @@ import './Topbar.css';
 import { useScrollSpeed } from "../../helpers/scrollHelper";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import MobileNavMenu from "../Navbar/MobilleNavMenu";
+import MobileNavMenu from "../Navbar/MobileNavMenu";
 interface TopbarProps {
   navMenu?: boolean;
   topElement?: React.ReactNode;

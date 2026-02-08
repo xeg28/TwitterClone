@@ -26,11 +26,20 @@ const ContextMenu: React.FC<ContextMenuProps> = ({ options, targetRef }) => {
     if (!el || !target) return;
 
     const positionMenu: () => void = () => {
+      console.log('resize');
       const rect = target.getBoundingClientRect();
       // place the menu relative to the target (adjust as needed)
       el.style.bottom = `${window.innerHeight - rect.top + 10}px`;
       el.style.left = `${rect.left}px`;
     }
+
+    const observer = new ResizeObserver(() => {
+      positionMenu();
+    })
+
+    observer.observe(target);
+
+
     // ensure measurement runs after motion element mounts/paints
     const raf = window.requestAnimationFrame(positionMenu);
 
@@ -38,7 +47,8 @@ const ContextMenu: React.FC<ContextMenuProps> = ({ options, targetRef }) => {
 
     return () => {
       window.cancelAnimationFrame(raf);
-      window.addEventListener("resize", positionMenu);
+      observer.disconnect();
+      window.removeEventListener("resize", positionMenu);
     };
   }, [targetRef]);
 
