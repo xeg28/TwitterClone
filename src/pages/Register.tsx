@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import FormInput from '../components/FormInput/FormInput';
+import FormInput from '../components/UIElements/FormInput/FormInput';
 import {HOST} from '../config'
 import { useNavigate } from "react-router-dom";
-import { useAlertActions } from '../components/AlertList/AlertContext';
+import { useAlertActions } from '../components/Utilities/AlertList/AlertContext';
 
 type RegistrationData = {
   [name:string]: string;

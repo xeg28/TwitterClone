@@ -1,7 +1,7 @@
 import { useNavigate} from "react-router-dom";
 import {useState} from 'react';
-import { useAlertActions } from '../../components/AlertList/AlertContext';
-import FormInput from '../../components/FormInput/FormInput';
+import { useAlertActions } from '../../components/Utilities/AlertList/AlertContext';
+import FormInput from '../../components/UIElements/FormInput/FormInput';
 import {HOST} from '../../config'
 import './Login.css';
 

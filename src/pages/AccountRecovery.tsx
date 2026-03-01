@@ -1,6 +1,6 @@
-import FormInput from '../components/FormInput/FormInput';
+import FormInput from '../components/UIElements/FormInput/FormInput';
 import {useState} from 'react';
-import { useAlertActions } from '../components/AlertList/AlertContext';
+import { useAlertActions } from '../components/Utilities/AlertList/AlertContext';
 import { useNavigate } from 'react-router-dom';
 
 const AccountRecovery: React.FC = () => {

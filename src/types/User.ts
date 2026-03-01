@@ -10,6 +10,7 @@ export type User = {
   dateJoined?: Date;
   profilePicUrl?:string;
   bannerPicUrl?:string;
+  posts?:string;
 }
 
 export const setCurrentUser = (user: User) => {

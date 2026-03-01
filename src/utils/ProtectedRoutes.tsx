@@ -1,6 +1,6 @@
 import {Outlet, Navigate } from "react-router-dom";
 import { useAuthChecked } from "../hooks/useAuthChecked";
-import LoadingScreen from "../components/LoadingScreen/LoadingScreen";
+import LoadingScreen from "../components/Utilities/LoadingScreen/LoadingScreen";
 type ProtectedRouteProps = {
   redirect: string;
 }

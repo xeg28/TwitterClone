@@ -6,14 +6,16 @@ import AccountRecovery from './pages/AccountRecovery';
 import ProtectedRoutes from './utils/ProtectedRoutes';
 import PublicRouteProps from './utils/PublicRouteProps';
 import ResetPassword from './pages/ChangePassword';
-import { AlertProvider } from './components/AlertList/AlertContext';
-import AlertList from './components/AlertList/AlertList';
-import Profile from './components/Profile/Profile';
-import HomeComponent from './components/Home/Home';
-import Logout from './components/Logout/Logout';
-import ProfilePhoto from './components/Profile/ProfilePhoto';
+import { AlertProvider } from './components/Utilities/AlertList/AlertContext';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { MODAL_ROUTES } from './ModalRoutes';
+import AlertList from './components/Utilities/AlertList/AlertList';
+import HomeComponent from './components/PageSections/Home/Home';
+import Profile from './components/PageSections/Profile/Profile';
+import UserPosts from './components/PageSections/Profile/UserPosts';
+import Logout from './components/FeatureModules/Logout/Logout';
+import ProfilePhoto from './components/PageSections/Profile/ProfilePhoto';
+
 
 const AppRoutes: React.FC = () => {
 
@@ -47,15 +49,7 @@ const AppRoutes: React.FC = () => {
             <Route path="/bookmarks" element={<div>Bookmarks</div>} />
             <Route path="/settings" element={<div>Settings</div>} />
             <Route path="/profile/:username/" element={<Profile />} >
-              <Route index element={
-                <>
-                  <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime praesentium dicta assumenda illo! Suscipit, ipsa soluta ab quasi asperiores fugiat iusto officia laboriosam possimus tempora ducimus consequatur officiis quidem dolores?</div>
-                  <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime praesentium dicta assumenda illo! Suscipit, ipsa soluta ab quasi asperiores fugiat iusto officia laboriosam possimus tempora ducimus consequatur officiis quidem dolores?</div>
-                  <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime praesentium dicta assumenda illo! Suscipit, ipsa soluta ab quasi asperiores fugiat iusto officia laboriosam possimus tempora ducimus consequatur officiis quidem dolores?</div>
-                  <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime praesentium dicta assumenda illo! Suscipit, ipsa soluta ab quasi asperiores fugiat iusto officia laboriosam possimus tempora ducimus consequatur officiis quidem dolores?</div>
-                  <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime praesentium dicta assumenda illo! Suscipit, ipsa soluta ab quasi asperiores fugiat iusto officia laboriosam possimus tempora ducimus consequatur officiis quidem dolores?</div>
-                </>
-              } />
+              <Route index element={<UserPosts/>} />
               <Route path="replies" element={(<div>Replies</div>)} />
             </Route>
           </Route>

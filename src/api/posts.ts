@@ -13,3 +13,10 @@ export async function getPosts() {
     method: "GET",
   });
 }
+
+export async function getUserPosts(username : string) {
+  return fetchWithAuth(`${API_URL}/posts/user/${username}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" }
+  });
+}

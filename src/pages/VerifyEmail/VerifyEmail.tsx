@@ -1,6 +1,6 @@
 import {useEffect, useState, useRef} from "react";
 import { useLocation, useNavigate, Location} from "react-router-dom";
-import { useAlertActions } from "../../components/AlertList/AlertContext";
+import { useAlertActions } from "../../components/Utilities/AlertList/AlertContext";
 import "./VerifyEmail.css";
 
 

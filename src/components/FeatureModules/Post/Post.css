@@ -1,0 +1,40 @@
+.post-container {
+  display:flex;
+  flex-direction: row;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  gap: .5rem;
+}
+
+.post-p-pic {
+  height: 40px;
+  width: 40px;
+  flex-shrink: 0;
+}
+
+.post-p-pic img,
+.post-p-pic svg {
+  border-radius: 50%;
+  display: block;
+}
+
+.name:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+
+.show-more {
+  background-color: var(--background-color);
+  color: var(--link-color);
+  border: none;
+  outline:none;
+  cursor: pointer;
+  padding: 0;
+  font-size: var(--fs-m);
+}
+
+.show-more:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  
+}

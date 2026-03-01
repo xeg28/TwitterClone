@@ -1,6 +1,6 @@
 import {useState} from 'react';
-import FormInput from '../components/FormInput/FormInput';
-import { useAlertActions } from '../components/AlertList/AlertContext';
+import FormInput from '../components/UIElements/FormInput/FormInput';
+import { useAlertActions } from '../components/Utilities/AlertList/AlertContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 const ResetPassword: React.FC = () => {
   document.title = "Change Password";

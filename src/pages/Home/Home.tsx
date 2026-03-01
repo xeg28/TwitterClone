@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import { getCurrentUser } from "../../types/User";
 import {Outlet} from "react-router-dom";
-import Navbar from "../../components/Navbar/Navbar";
+import Navbar from "../../components/Layout/Navbar/Navbar";
 import { useNavigationHistory } from "../../hooks/useNavigationHistory";
 import "./Home.css";
 

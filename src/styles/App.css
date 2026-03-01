@@ -4,7 +4,7 @@
   --secondary-border-color: rgb(83, 100, 113);
   --primary-color: #888;
   --secondary-color: #438cdf;
-  --link-color: #224dcf;
+  --link-color: #097bee;
   --link-visited-color: #9918c1;
   --text-color: rgb(231, 233, 234);
   --text-color-dimm: rgb(120, 120, 120);
@@ -253,6 +253,14 @@ a:visited {
 .mtb-1 {
   margin-top: .5rem !important;
   margin-bottom: .5rem !important;
+}
+
+.mtb-1 {
+  margin: .5rem 0 !important;
+}
+
+.mtb-2 {
+  margin: 1rem 0 !important;
 }
 
 .m-auto {
