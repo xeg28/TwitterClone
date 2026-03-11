@@ -38,3 +38,38 @@
   text-decoration-thickness: 1px;
   
 }
+
+.more-btn {
+  border: 50%;
+  height: 18.75px;
+  width: 18.75px;
+  position: relative;
+}
+
+.more-btn div {
+  top: 50%;
+  left:50%;
+  translate: -50% -50%;
+  position: absolute;
+  height: 34.75px;
+  width: 34.75px;
+  border-radius: 50%;
+
+}
+
+.more-btn div:hover {
+  background-color: color-mix(in srgb, var(--secondary-color), transparent 85%);
+}
+
+.more-btn svg {
+  width: 100%;
+  filter: invert(.5);
+}
+
+.more-btn:hover svg {
+  filter: invert(0);
+}
+
+.more-btn:hover svg path {
+  stroke: var(--secondary-color);
+}

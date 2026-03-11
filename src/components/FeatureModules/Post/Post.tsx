@@ -1,5 +1,4 @@
 import { Post as PostType } from "../../../types/Post";
-import Icon from "../../UIElements/Icon/Icon";
 import './Post.css';
 import { Link } from "react-router-dom";
 import { getPostTime } from "../../../helpers/dateHelper";
@@ -7,13 +6,19 @@ import { useState } from "react";
 import { useRef } from "react";
 import ProfilePopup from "./ProfilePopup";
 import './ProfilePopup.css'
+import ProfilePicture from "../../UIElements/ProfilePicture/ProfilePicture";
+import Icon from "../../UIElements/Icon/Icon";
+import ContextMenu from "../../Utilities/ContextMenu/ContextMenu";
+import DeletePost from "../DeletePost/DeletePost";
 interface PostProps {
   post: PostType;
+  setPosts: React.Dispatch<React.SetStateAction<PostType[] | undefined>>;
 }
 
-const Post: React.FC<PostProps> = ({ post }) => {
-  const [showFull, setShowFull] = useState(false);
+const Post: React.FC<PostProps> = ({ post, setPosts, }) => {
+  const [showFull, setShowFull] = useState<true | false>(false);
   const profilePicRef = useRef<HTMLAnchorElement | null>(null);
+  const postBtnRef = useRef<HTMLButtonElement | null>(null);
 
   const postText = (() => {
     if (!post.text) return null;
@@ -59,22 +64,53 @@ const Post: React.FC<PostProps> = ({ post }) => {
 
 
   return (
-    <div className="post-container">
+    <div className="post-container" >
       <div className="post-p-pic">
         <Link to={`/profile/${post.owner?.username}`} ref={profilePicRef}>
-          {(post.owner && post.owner.profilePicUrl && (
-            <img src={post.owner.profilePicUrl} alt="Profile" />
-          )) || <Icon name="profileDefault" />}
+          <ProfilePicture url={post.owner?.profilePicUrl} />
         </Link>
-        <ProfilePopup user={post.owner} refElement={profilePicRef}/>
+        <ProfilePopup user={post.owner} refElement={profilePicRef} />
       </div>
       <div className="flex-1">
-        <Link to={`/profile/${post.owner?.username}`}>
-          <span className="bolder name">{post.owner?.legalName}</span>
-          &nbsp;
-          <span className="dimm-text">@{post.owner?.username}</span>
-        </Link>
-        <span className="dimm-text">&nbsp;&middot; {getPostTime(post.datePosted)}</span>
+        <div className="flex flex-row space-between">
+          <div>
+            <Link to={`/profile/${post.owner?.username}`}>
+              <span className="bolder name">{post.owner?.legalName}</span>
+              &nbsp;
+              <span className="dimm-text">@{post.owner?.username}</span>
+            </Link>
+            <span className="dimm-text">&nbsp;&middot; {getPostTime(post.datePosted)}</span>
+          </div>
+          <div className="flex flex-row align-center">
+            <div>
+              {post.id &&
+                <ContextMenu
+                  options={[
+                    {
+                      id: "DeletePost",
+                      text: "Delete",
+                      ActionElement: <DeletePost
+                        postId={post.id}
+                        setShow={() => { }}
+                        onCloseContextMenu={() => {}}
+                        setPosts={setPosts}
+                      />,
+                      className:"red-text",
+                      icon: "delete"
+                    }]}
+                  targetRef={postBtnRef}
+                  trigger={({ onClick, ref }) => (
+                    <button className="more-btn button-reset" onClick={onClick} ref={ref}>
+                      <Icon name="moreSm" />
+                      <div></div>
+                    </button>
+                  )}
+                  dynamic
+                />
+              }
+            </div>
+          </div>
+        </div>
         <div className='post-text'>{postText}</div>
       </div>
     </div>

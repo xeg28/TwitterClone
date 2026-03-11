@@ -1,4 +1,5 @@
 import './ConfirmDialog.css'
+import ReactDom from 'react-dom';
 export interface ConfirmDialogProps {
   trigger: () => boolean;
   onConfirm: () => void;
@@ -10,8 +11,8 @@ export interface ConfirmDialogProps {
   type: "discard" | "save";
 }
 const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ onConfirm, onDeny, confirmText, denyText, title, dialog, type }) => {
-
-  return (
+  if (typeof document === "undefined") return null;
+  return ReactDom.createPortal(
     <div className="confirm-popup">
       <div>
         <div className="confirm-card">
@@ -25,7 +26,8 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ onConfirm, onDeny, confir
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
 

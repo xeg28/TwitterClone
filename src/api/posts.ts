@@ -8,6 +8,12 @@ export async function addPost(newPost = {}) {
   });
 }
 
+export async function deletePost(id: string | number) {
+  return fetchWithAuth(`${API_URL}/posts/${id}`, {
+    method: "DELETE"
+  })
+}
+
 export async function getPosts() {
   return fetchWithAuth(`${API_URL}/posts`, {
     method: "GET",

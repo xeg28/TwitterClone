@@ -4,7 +4,8 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { getCurrentUser } from '../../../types/User';
-import Icon from '../../UIElements/Icon/Icon';
+import Follow from '../Follow/Follow';
+import ProfilePicture from '../../UIElements/ProfilePicture/ProfilePicture';
 
 interface ProfilePopupProps {
   user: User | undefined;
@@ -51,7 +52,6 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({ user, refElement }) => {
     };
   }, [refElement, handleMouseEnter]);
 
-  // Clean up timers on unmount
   useEffect(() => {
     return () => {
       if (showTimer.current) clearTimeout(showTimer.current);
@@ -76,7 +76,6 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({ user, refElement }) => {
       }
       else {
         popup.style.top = `${bottomPos}px`;
-        console.log(popup.style.top);
       }
       if (centerPos < 0) {
         popup.style.left = `${leftPos}px`
@@ -107,12 +106,10 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({ user, refElement }) => {
               <Link
                 to={`/profile/${user.username}`}
                 className="p-img">
-                {(user.profilePicUrl && (
-                  <img src={user.profilePicUrl} alt="Profile" />
-                )) || <Icon name="profileDefault" />}
+                {<ProfilePicture url={user.profilePicUrl}/>}
               </Link>
               {currentUser?.id !== user.id &&
-                (<button className="f-btn">Follow</button>)
+                (<div style={{fontSize:'15px'}}><Follow/></div>)
               }
             </div>
             <div className='mb-2'>

@@ -14,25 +14,25 @@ interface PopupCardProps {
   isLoading?: boolean
 }
 
-const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, popupTitle, children, onSubmit, submitText, confirmDialogProps, isLoading}) => {
+const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, popupTitle, children, onSubmit, submitText, confirmDialogProps, isLoading }) => {
   const [showConfirmation, setShowConfirmation] = useState<true | false>(false);
   useEffect(() => {
     document.body.classList.add("no-scroll");
-    if(confirmDialogProps) {
+    if (confirmDialogProps) {
       confirmDialogProps.onDeny = () => setShowConfirmation(false);
     }
     return () => {
-       document.body.classList.remove("no-scroll");
+      document.body.classList.remove("no-scroll");
     }
   }, [confirmDialogProps])
 
 
-  const handleClose = ()=> {
-    if(!confirmDialogProps) {
+  const handleClose = () => {
+    if (!confirmDialogProps) {
       setShowPopup(false)
       return;
     }
-    else if(confirmDialogProps.trigger()) {
+    else if (confirmDialogProps.trigger()) {
       setShowConfirmation(true);
     }
     else {
@@ -55,11 +55,11 @@ const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, popupTitle, childre
                   </div>
                   {onSubmit && (
                     <button className="popup-btn" onClick={() => onSubmit()}>
-                      {!isLoading ? 
-                      (<span>{submitText ?? "Save"}</span>) :
-                      (
-                        <div className="spinner"></div>
-                      )
+                      {!isLoading ?
+                        (<span>{submitText ?? "Save"}</span>) :
+                        (
+                          <div className="spinner"></div>
+                        )
                       }
                     </button>
                   )}
@@ -72,10 +72,8 @@ const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, popupTitle, childre
           </div>
         </div>
       </div>
-      {showConfirmation && confirmDialogProps && typeof document != "undefined" && ReactDOM.createPortal(
-        <ConfirmDialog {...confirmDialogProps} />,
-        document.body
-      )}
+      {showConfirmation && confirmDialogProps
+        && (<ConfirmDialog {...confirmDialogProps} />)}
     </div>
   )
 }

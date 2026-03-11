@@ -28,8 +28,13 @@ const UserPosts: React.FC = () => {
 
   return (
     <div>
-      {posts.map((post : PostType, index) => (
-        <div key={`user-post-${index}`}><Post post={post} /></div>
+      {posts.map((post: PostType, index) => (
+        <div key={`user-post-${index}`}>
+          <Post
+            post={post}
+            setPosts={setPosts}
+          />
+        </div>
       ))}
     </div>
   )

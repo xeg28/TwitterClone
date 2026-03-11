@@ -6,6 +6,7 @@ import { getCurrentUser } from "../../../types/User";
 import { addPost } from "../../../api/posts";
 import Icon from "../../UIElements/Icon/Icon";
 import PopupCard from "../../Popups/PopupCard/PopupCard";
+import ProfilePicture from "../../UIElements/ProfilePicture/ProfilePicture";
 
 
 interface CreatePostProps {
@@ -82,7 +83,7 @@ const CreatePost: React.FC<CreatePostProps> = ({isMobile}) => {
           <form className="post-form" onSubmit={handleSubmit}>
             <div className="flex post-form-wrapper" >
               <div className="icon-img-wrapper">
-
+                <ProfilePicture url={user?.profilePicUrl} />
               </div>
               <textarea id="post-text"
                 placeholder="What's happening?"

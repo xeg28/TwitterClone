@@ -20,6 +20,8 @@ import {ReactComponent as BookmarkActive} from '../../../icons/bookmark-active.s
 import {ReactComponent as Settings} from '../../../icons/settings.svg';
 import {ReactComponent as SettingsActive} from '../../../icons/settings-acitve.svg';
 import {ReactComponent as Logout} from '../../../icons/logout.svg';
+import {ReactComponent as MoreSm} from '../../../icons/more-sm.svg';
+import {ReactComponent as Delete} from '../../../icons/delete.svg';
 
 
 
@@ -46,4 +48,6 @@ export const Icons = {
   settings: Settings,
   settingsActive: SettingsActive,
   logout: Logout,
+  moreSm: MoreSm,
+  delete: Delete,
 };

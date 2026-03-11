@@ -37,6 +37,10 @@
   filter: brightness(.85);
 }
 
+.profile-btn {
+  font-size: 15px;
+}
+
 
 .edit-profile-wrapper {
   display: flex;

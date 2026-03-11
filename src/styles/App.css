@@ -384,7 +384,7 @@ hr {
 }
 
 .spinner-lt {
-  border-top-color: var(--text-color);
+  border-top-color: var(--secondary-color);
 }
 
 
@@ -428,24 +428,30 @@ hr {
   background-color: color-mix(in srgb, var(--background-color) 80%, white 20%);
 }
 
-.main-btn {
+.main-btn, .main-btn-lt {
   border-radius: 9999px;
   background-color: var(--background-color);
   border: 1px solid var(--secondary-border-color);
   color: var(--text-color);
-  font-size: var(--fs-medium);
-  padding: 10px;
+  padding-inline: 1rem;
   font-weight: bold;
   cursor: pointer;
+  font-size: inherit;
+  min-height: 36px;
+  min-width: 36px;
 }
 
 .main-btn:hover {
   background-color: color-mix(in srgb, var(--background-color) 90%, var(--text-color) 10%);
 }
 
-.main-btn span {
-  margin-left: 10px;
-  margin-right: 10px;
+.main-btn-lt {
+  color: var(--background-color);
+  background-color: var(--text-color);
+}
+
+.main-btn-lt:hover {
+  background-color: color-mix(in srgb, var(--text-color) 95%, var(--background-color) 5%); ;
 }
 
 .wrapper {

@@ -15,6 +15,7 @@ import Profile from './components/PageSections/Profile/Profile';
 import UserPosts from './components/PageSections/Profile/UserPosts';
 import Logout from './components/FeatureModules/Logout/Logout';
 import ProfilePhoto from './components/PageSections/Profile/ProfilePhoto';
+import DeletePost from './components/FeatureModules/DeletePost/DeletePost';
 
 
 const AppRoutes: React.FC = () => {
