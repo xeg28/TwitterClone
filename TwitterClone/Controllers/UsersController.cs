@@ -23,23 +23,28 @@ namespace TwitterClone.Controllers
 
         [Authorize]
         [HttpGet("{username}")]
-        public async Task<ActionResult<User>> GetUserById(string username)
+        public async Task<ActionResult<UserDto>> GetUserById(string username)
         {
-            var user = await _context.Users.Select(user => new
+            var user = await _context.Users.Select(user => new UserDto
             {
-                user.Id,
-                user.LegalName,
-                user.Username,
-                user.Biography,
-                user.Followers,
-                user.DateJoined,
-                user.Following, 
-                user.ProfilePicUrl, 
-                user.BannerPicUrl,
+                Id=user.Id,
+                LegalName=user.LegalName,
+                Username=user.Username,
+                Biography=user.Biography,
+                Followers=user.Followers,
+                DateJoined=user.DateJoined,
+                Following=user.Following, 
+                ProfilePicUrl=user.ProfilePicUrl, 
+                BannerPicUrl=user.BannerPicUrl,
+                Posts=0
             }).FirstOrDefaultAsync(u  => u.Username == username);
+
 
             if (user == null) return NotFound();
 
+            var postCount = await _context.Posts
+                .CountAsync(p => p.OwnerId == user.Id);
+            user.Posts = postCount;
             return Ok(user);
         }
 

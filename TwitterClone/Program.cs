@@ -4,7 +4,6 @@ using Microsoft.IdentityModel.Tokens;
 using TwitterClone.Data;
 using TwitterClone.Services;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -19,7 +18,8 @@ builder.Services.AddCors(o =>
           // explicitly allow your React dev server
           .WithOrigins(
             "http://localhost:3000",
-            "https://twittercloneapp-s03c.onrender.com")
+            "https://twittercloneapp-s03c.onrender.com",
+            "http://192.168.0.213:3000")
           .AllowAnyMethod()
           .AllowCredentials()
           .AllowAnyHeader();
