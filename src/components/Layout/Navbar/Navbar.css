@@ -16,10 +16,12 @@ header > div {
   display: flex;
   flex-direction: column;
   gap: 4.5rem;
-  padding: 56px .5rem .5rem;
+  padding: 56px .5rem 1rem;
   max-height: 100vh;
+  height: 100vh;
   overflow-y: auto;
   overflow-x:hidden;
+  justify-content: space-between;
 }
 
 .nav-btns {
@@ -75,8 +77,13 @@ header > div {
 }
 
 .nav-icon svg {
+  filter: invert(0);
   width: 100%;
   object-fit: contain;
+}
+
+.nav-icon svg path {
+  stroke: var(--text-color);
 }
 
 .profiles-btn {

@@ -3,10 +3,12 @@ import { Post as PostType } from "../../../types/Post";
 import { useParams } from "react-router-dom";
 import { getUserPosts } from '../../../api/posts';
 import Post from '../../FeatureModules/Post/Post';
+import { useAlertActions } from '../../Utilities/AlertList/AlertContext';
 
 const UserPosts: React.FC = () => {
   const [posts, setPosts] = useState<Array<PostType>>();
   const { username } = useParams<{ username: string }>();
+const { addAlert } = useAlertActions();
   useEffect(() => {
     if (!username) return;
     const fetchData = async (username: string) => {
@@ -16,7 +18,7 @@ const UserPosts: React.FC = () => {
         setPosts(result);
       }
       else {
-
+        addAlert("Failed to retrieve posts. Try again.", "error");
       }
     }
 

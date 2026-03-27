@@ -18,7 +18,7 @@
   --fs-small: 12px;
   --fs-medium: clamp(0.9375rem, 0.9173rem + 0.1075vw, 1.0625rem);
   --fs-large: clamp(1.125rem, 1.0746rem + 0.2688vw, 1.4375rem);
-  --fs-xlarge: clamp(1.4375rem, 1.2401rem + 1.0526vw, 2.1875rem);
+  --fs-xlarge: clamp(1.25rem, 3.125rem + -1.3889vw, 1.875rem);
   color: var(--text-color);
 
   --scrollbar-track: rgba(255, 255, 255, 0.05);
@@ -38,6 +38,14 @@ svg {
   object-fit: cover;
   filter: invert(.8);
   display: block;
+}
+
+svg.fill {
+  fill: var(--text-color);
+}
+
+svg.thick {
+  stroke-width: 2.5px;
 }
 
 .no-scroll {
@@ -123,6 +131,14 @@ img {
 
 .p-2 {
   padding: 1rem !important;
+}
+
+.pt-1 {
+  padding-top: .5rem !important;
+}
+
+.pt-2 {
+  padding-top: 1rem !important;
 }
 
 .plr-1 {
@@ -224,6 +240,10 @@ a:visited {
 
 .m-0 {
   margin: 0 !important;
+}
+
+.m-2 {
+  margin: 1rem !important;
 }
 
 .ml-1 {

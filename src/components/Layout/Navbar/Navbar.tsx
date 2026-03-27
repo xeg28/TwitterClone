@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
             <Link to="/"
               className={location.pathname === "/" ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name={location.pathname === "/" ? 'homeActive' : 'home'} />
+                <Icon name="home" className={`${location.pathname === "/" ? 'fill':''}`} />
               </div>
               <span>Home</span>
             </Link>
@@ -44,27 +44,27 @@ const Navbar: React.FC = () => {
             <Link to="/notifications"
               className={location.pathname === "/notifications" ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name={location.pathname === "/notifications" ? 'notificationActive' : 'notification'} />
+                <Icon name='notification' className={`${location.pathname === "/notifications" ? 'fill' : ''}`} />
               </div>
               <span>Notifications</span>
             </Link>
             <Link to="/messages"
               className={location.pathname.startsWith('/messages') ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name={location.pathname.startsWith('/messages') ? 'messagesActive' : 'messages'} />
+                <Icon name='messages' className={`${location.pathname.startsWith('/messages') ? 'thick' : ''}`}/>
               </div>
               <span>Messages</span>
             </Link>
             <Link to={`/profile/${user?.username}`}
               className={location.pathname.startsWith(`/profile/${user?.username}`) ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name={location.pathname.startsWith(`/profile/${user?.username}`) ? 'profileActive' : 'profile'} />
+                <Icon name='profile' className={`${location.pathname.startsWith(`/profile/${user?.username}`) ? 'thick' : ''}`} />
               </div>
               <span>Profile</span>
             </Link>
             <Link to="bookmarks" className={location.pathname === '/bookmarks' ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name={location.pathname === '/bookmarks' ? 'bookmarkActive' : 'bookmark'} />
+                <Icon name='bookmark' className={`${location.pathname === '/bookmarks' ? 'fill' : ''}`} />
               </div>
               <span>Bookmark</span>
             </Link>

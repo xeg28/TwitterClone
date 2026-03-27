@@ -25,7 +25,7 @@ type UserProfile = {
 
 const Profile: React.FC = () => {
   const { username } = useParams<{ username: string }>();
-  const [user, setUser] = useState<User>({});
+  const [user, setUser] = useState<User | undefined>();
   const currentUser = getCurrentUser();
   const userData = useRef<UserProfile>({});
   const [showEditUser, setShowEditUser] = useState<true | false>(false);
@@ -103,6 +103,7 @@ const Profile: React.FC = () => {
   }
 
   const confirmationTrigger = (): boolean => {
+    if (!user) return false;
     const current = userData.current;
     if (user.legalName === current.legalName && user.biography === current.biography) return false;
     return true;
@@ -116,10 +117,6 @@ const Profile: React.FC = () => {
       if (response.ok) {
         setUser(await response.json());
       }
-      else {
-        let res = await response.json();
-        addAlert(res.message, "error");
-      }
       setIsLoading(false);
     }
 
@@ -127,6 +124,7 @@ const Profile: React.FC = () => {
   }, [username, addAlert]);
 
   const handleEditUser = () => {
+    if (!user) return;
     setShowEditUser((prev) => { return !prev })
     userData.current.legalName = user.legalName;
     userData.current.biography = user.biography;
@@ -137,6 +135,21 @@ const Profile: React.FC = () => {
       <div className="center"><div className="spinner-lt"></div></div>
     </div>
   )
+
+
+  if (!user) return <div>
+    <Topbar handleBack={handleBack} >
+      <div className="fs-lg bolder">Profile</div>
+    </Topbar>
+    <div className='flex m-2 p-2 justify-content-center'>
+      <div>
+        <div className='fs-xl bolder'>This account doesn't exist.</div>
+        <div className="dimm-text">
+          Try searching another
+        </div>
+      </div>
+    </div>
+  </div>
 
   return (
     <div className="profile relative h-100" >
@@ -163,7 +176,7 @@ const Profile: React.FC = () => {
             <div className="profile-picture">
               {(user.profilePicUrl != null &&
                 <Link to="photo">
-                  <ProfilePicture url={user.profilePicUrl}/>
+                  <ProfilePicture url={user.profilePicUrl} />
                 </Link>) ||
                 (<Icon name="profileDefault" />)
               }
@@ -176,7 +189,7 @@ const Profile: React.FC = () => {
               </div>
             ) :
               (
-                <div className='profile-btn'><Follow/></div>
+                <div className='profile-btn'><Follow /></div>
               )
             }
           </div>
@@ -223,9 +236,9 @@ const Profile: React.FC = () => {
 
         <div>
           <OptionBar
-            optionTitles={['Posts', 'Replies']}
+            optionTitles={['Posts', 'Replies', 'Likes']}
             baseURI={`/profile/${username}`}
-            optionParamater={['', '/replies']} >
+            optionParamater={['', '/replies', '/likes']} >
             <Outlet />
           </OptionBar>
         </div>

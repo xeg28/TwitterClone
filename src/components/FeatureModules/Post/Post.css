@@ -1,9 +1,24 @@
 .post-container {
-  display:flex;
+  display: flex;
   flex-direction: row;
   padding: 1rem;
   border-bottom: 1px solid var(--border-color);
   gap: .5rem;
+}
+
+.post-text {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.post-text a:visited { 
+  color: var(--link-color);
+}
+
+.post-text a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
 }
 
 .post-p-pic {
@@ -27,28 +42,46 @@
   background-color: var(--background-color);
   color: var(--link-color);
   border: none;
-  outline:none;
+  outline: none;
   cursor: pointer;
   padding: 0;
   font-size: var(--fs-m);
 }
 
-.show-more:hover {
+.show-more:hover,
+.show-more:focus-visible{
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  
 }
 
-.more-btn {
-  border: 50%;
+.post-btn-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: calc(var(--fs-small) + 2px);
+  gap: 4px;
+  color: var(--text-color-dimm);
+  --active-color: var(--secondary-color);
+}
+
+.post-btn-group.repost {
+  --active-color: rgb(0, 186, 124);
+  ;
+}
+
+.post-btn-group.like {
+  --active-color: rgb(249, 24, 128);
+}
+
+.post-i-btn {
   height: 18.75px;
   width: 18.75px;
   position: relative;
 }
 
-.more-btn div {
+.post-i-btn div {
   top: 50%;
-  left:50%;
+  left: 50%;
   translate: -50% -50%;
   position: absolute;
   height: 34.75px;
@@ -57,19 +90,40 @@
 
 }
 
-.more-btn div:hover {
-  background-color: color-mix(in srgb, var(--secondary-color), transparent 85%);
+.post-i-btn div:hover {
+  background-color: color-mix(in srgb, var(--active-color), transparent 85%);
 }
 
-.more-btn svg {
+.post-i-btn:focus-visible div {
+  background-color: color-mix(in srgb, var(--active-color), transparent 85%);
+  outline: 2px solid color-mix(in srgb, var(--active-color), white 40%);
+}
+
+.post-i-btn svg {
   width: 100%;
-  filter: invert(.5);
-}
-
-.more-btn:hover svg {
   filter: invert(0);
 }
 
-.more-btn:hover svg path {
-  stroke: var(--secondary-color);
+.post-btn-group:has(.post-i-btn:hover) {
+  color: var(--active-color) !important;
+}
+
+
+.post-i-btn:hover svg path,
+.post-i-btn:focus-visible svg path {
+  stroke-color: var(--active-color);
+}
+
+.post-i-btn.active svg {
+  fill: var(--active-color);
+}
+
+.post-btn-group:has(.post-i-btn.active),
+.post-btn-group:has(.post-i-btn:focus-visible) {
+  color: var(--active-color) !important;
+}
+
+
+.post-i-btn.active svg path {
+  stroke: var(--active-color);
 }

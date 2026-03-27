@@ -20,9 +20,35 @@ export async function getPosts() {
   });
 }
 
-export async function getUserPosts(username : string) {
+export async function getUserPosts(username: string) {
   return fetchWithAuth(`${API_URL}/posts/user/${username}`, {
     method: "GET",
     headers: { "Content-Type": "application/json" }
   });
+}
+
+export async function likePost(id: number | string) {
+  return fetchWithAuth(`${API_URL}/posts/like/${id}`, {
+    method: "POST",
+  });
+}
+
+export async function unlikePost(id: number | string) {
+  return fetchWithAuth(`${API_URL}/posts/like/${id}`, {
+    method: "DELETE",
+  });
+}
+
+export async function getUserLikedPost(username: string) {
+  return fetchWithAuth(`${API_URL}/posts/likes/user/${username}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" }
+  });
+}
+
+export async function isLikedPost(id: number | string) {
+  return fetchWithAuth(`${API_URL}/posts/isLiked/${id}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" }
+  })
 }

@@ -13,13 +13,16 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0);
+  background: rgba(0, 0, 0, 0);
   z-index: 5;
   cursor: default,
 }
 
 .menu-content {
   padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
 }
 
 .menu-option.red-text a,
@@ -40,8 +43,8 @@
   width: 20px;
 }
 
-.menu-option a, 
-.menu-option button {
+.menu-option>a,
+.menu-option>button {
   display: inline-flex;
   flex-direction: row;
   align-items: center;
@@ -55,7 +58,38 @@
   text-align: start;
 }
 
-.menu-option a:hover,
-.menu-option button:hover {
+.menu-option>a:hover,
+.menu-option>button:hover {
   background-color: color-mix(in srgb, var(--background-color) 90%, var(--text-color) 10%);
+}
+
+.cancel-cm-btn {
+  display: none;
+  margin-inline: 1rem;
+}
+
+.cancel-cm-btn button {
+  width: 100%;
+}
+
+@media (max-width: 500px) {
+  .context-menu {
+    position: fixed;
+    width: 100vw;
+    bottom: 0 !important;
+    border-radius: 0;
+    border: none;
+  }
+
+  .context-menu-overlay {
+    background-color: var(--popup-background);
+  }
+
+  .menu-content {
+    justify-content: center;
+  }
+
+  .cancel-cm-btn {
+    display: block;
+  }
 }

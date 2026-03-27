@@ -21,30 +21,52 @@ interface ContextMenuProps {
   targetRef: React.RefObject<HTMLElement | null>;
   trigger: (props: { onClick: React.MouseEventHandler; ref: React.Ref<any> }) => React.ReactElement;
   dynamic?: true;
+  closeBtn?: true;
 }
 
 
 
-const ContextMenu: React.FC<ContextMenuProps> = ({ options, targetRef, trigger, dynamic }) => {
+const ContextMenu: React.FC<ContextMenuProps> = (
+  {
+    options,
+    targetRef,
+    trigger,
+    dynamic,
+    closeBtn,
+  }) => {
   const menuRef = useRef<HTMLDivElement | null>(null);
   const [visible, setVisible] = useState(false);
   const [showActionComponent, setShowActionComponent] = useState<true | false>();
-
+  const [isWide, setIsWide] = useState(window.innerWidth > 500);
 
   const handleTriggerClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!isWide) {
+      document.body.classList.toggle('no-scroll');
+    }
     setVisible((prev) => !prev);
   };
+
+  useEffect(() => {
+    const handleResize = () => setIsWide(window.innerWidth > 500);
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (!visible || showActionComponent) return;
     const handleClick = (e: MouseEvent) => {
       const target = e.target as Node | null;
+
       if (
         (menuRef.current && menuRef.current.contains(target)) ||
         (targetRef.current && targetRef.current.contains(target))
       ) {
         return;
+      }
+      if (!isWide) {
+        document.body.classList.remove('no-scroll');
       }
       setVisible(false);
     };
@@ -65,21 +87,32 @@ const ContextMenu: React.FC<ContextMenuProps> = ({ options, targetRef, trigger, 
     const positionMenu: () => void = () => {
       const rect = target.getBoundingClientRect();
       const menu = el;
+
+      if (!isWide) {
+        el.style.bottom = '0px';
+        el.style.left = '0px';
+        return;
+      }
+
       if (!menu) return;
+
+
 
       if (!dynamic) {
         el.style.bottom = `${window.innerHeight - rect.top + 10}px`;
         el.style.left = `${rect.left}px`;
       } else {
         const offset = 15;
+        let top = rect.top + window.scrollY;
         let right = window.innerWidth - rect.right - offset;
-        let top = rect.bottom + window.scrollY - offset;
-        right = Math.max(0, right);
-        top = Math.max(0, Math.min(top, window.innerHeight + window.scrollY - menu.offsetHeight));
-        menu.style.right = `${right}px`;
+   
+        const menuHeight = menu.offsetHeight;
+        const viewportBottom = window.innerHeight + window.scrollY;
+        if (top + menuHeight > viewportBottom) {
+          top = rect.bottom + window.scrollY - menuHeight;
+        }
         menu.style.top = `${top}px`;
-        menu.style.left = '';
-        menu.style.bottom = '';
+        menu.style.right = `${right}px`;
       }
     };
 
@@ -123,50 +156,60 @@ const ContextMenu: React.FC<ContextMenuProps> = ({ options, targetRef, trigger, 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: .15 }}
+            transition={{ duration: isWide ? .15 : 0 }}
             className="context-menu"
             ref={menuRef}
             style={{
-              position: dynamic ? 'absolute' : 'fixed',
+              position: dynamic && isWide ? 'absolute' : 'fixed',
               display: showActionComponent ? 'none' : undefined
             }}
           >
             <div className="menu-content">
-              {options.map((option, idx) => (
-                <div className={`menu-option ${option.className ?? ''}`} key={option.id + idx}>
-                  {option.path && (
-                    <Link to={option.path} onClick={() => setVisible(false)}>
-                      {option.icon && (
-                        <div className="option-icon">
-                          <Icon name={option.icon} />
-                        </div>
-                      )}
-                      {option.text}
-                    </Link>
-                  )}
-                  {option.ActionElement && (
-                    <button className="button-reset" onClick={() => setShowActionComponent(true)}>
-                      {option.icon && (
-                        <div className="option-icon">
-                          <Icon name={option.icon} />
-                        </div>
-                      )}
-                      {option.text}
-                    </button>
-                  )}
-                  {showActionComponent && option.ActionElement &&
-                    React.cloneElement(option.ActionElement, {
-                      setShow: (show: boolean) => {
-                        setShowActionComponent(show);
-                      },
-                      onCloseContextMenu: () => {
-                        setShowActionComponent(false);
-                        setVisible(false);
-                      }
-                    })
-                  }
+              <div>
+                {options.map((option, idx) => (
+                  <div className={`menu-option ${option.className ?? ''}`} key={option.id + idx}>
+                    {option.path && (
+                      <Link to={option.path} onClick={() => setVisible(false)}>
+                        {option.icon && (
+                          <div className="option-icon">
+                            <Icon name={option.icon} />
+                          </div>
+                        )}
+                        {option.text}
+                      </Link>
+                    )}
+                    {option.ActionElement && (
+                      <button className="button-reset" onClick={() => setShowActionComponent(true)}>
+                        {option.icon && (
+                          <div className="option-icon">
+                            <Icon name={option.icon} />
+                          </div>
+                        )}
+                        {option.text}
+                      </button>
+                    )}
+                    {showActionComponent && option.ActionElement &&
+                      React.cloneElement(option.ActionElement, {
+                        setShow: (show: boolean) => {
+                          setShowActionComponent(show);
+                        },
+                        onCloseContextMenu: () => {
+                          setShowActionComponent(false);
+                          if (!isWide) {
+                            document.body.classList.toggle('no-scroll');
+                          }
+                          setVisible(false);
+                        }
+                      })
+                    }
+                  </div>
+                ))}
+              </div>
+              {closeBtn && (
+                <div className="cancel-cm-btn">
+                  <button className='main-btn' onClick={handleTriggerClick}>Cancel</button>
                 </div>
-              ))}
+              )}
             </div>
           </motion.div>
         </>,

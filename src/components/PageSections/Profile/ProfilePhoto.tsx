@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { fetchUser } from '../../../api/user';
 import { User } from '../../../types/User';
@@ -17,7 +17,7 @@ type PhotoType = {
 const ProfilePhoto: React.FC<ProfilePhotoProps> = ({ type }) => {
   const { username } = useParams<{ username: string }>();
   const [photoURLs, setPhotoURLs] = useState<PhotoType | null>(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (!username) return;
     const fetchData = async (username: string) => {
@@ -35,13 +35,16 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({ type }) => {
     fetchData(username);
   }, [username])
 
+  const closePhoto = () => {
+    navigate(`/profile/${username}`);
+  }
   if (typeof document === 'undefined') return null;
   return photoURLs ? ReactDOM.createPortal(
-    <div className={`large-photo ${type}`}>
+    <div className={`large-photo ${type}`} onClick={closePhoto}>
       <Link to={`/profile/${username}`}>
         <Icon name="close" />
       </Link>
-      <img src={photoURLs[type]} alt="Profile" />
+      <img src={photoURLs[type]} alt="Profile" onClick={(e) => e.stopPropagation()}/>
     </div>,
     document.body
   ) : null;

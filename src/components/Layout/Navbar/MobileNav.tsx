@@ -48,7 +48,7 @@ const MobileNav: React.FC = () => {
             <Link to="/"
               className={location.pathname === "/" ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name={location.pathname === "/" ? 'homeActive' : 'home'} />
+                <Icon name="home" className={`${location.pathname === "/" ? 'fill' : ''}`}  />
               </div>
             </Link>
             <Link to="/search"
@@ -60,13 +60,13 @@ const MobileNav: React.FC = () => {
             <Link to="/notifications"
               className={location.pathname === "/notifications" ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name={location.pathname === "/notifications" ? 'notificationActive' : 'notification'} />
+                <Icon name='notification' className={`${location.pathname === "/notifications" ? 'fill' : ''}`} />
               </div>
             </Link>
             <Link to="/messages"
               className={location.pathname.startsWith('/messages') ? 'active' : ''}>
               <div className="nav-icon">
-                <Icon name={location.pathname.startsWith('/messages') ? 'messagesActive' : 'messages'} />
+                <Icon name='messages' className={`${location.pathname.startsWith('/messages') ? "thick" : ''}`}/>
               </div>
             </Link>
           </div>

@@ -15,7 +15,8 @@ import Profile from './components/PageSections/Profile/Profile';
 import UserPosts from './components/PageSections/Profile/UserPosts';
 import Logout from './components/FeatureModules/Logout/Logout';
 import ProfilePhoto from './components/PageSections/Profile/ProfilePhoto';
-import DeletePost from './components/FeatureModules/DeletePost/DeletePost';
+import UserLikes from './components/PageSections/Profile/UserLikes';
+import NotFound from './pages/Errors/NotFound';
 
 
 const AppRoutes: React.FC = () => {
@@ -52,6 +53,7 @@ const AppRoutes: React.FC = () => {
             <Route path="/profile/:username/" element={<Profile />} >
               <Route index element={<UserPosts/>} />
               <Route path="replies" element={(<div>Replies</div>)} />
+              <Route path="likes" element={<UserLikes/>} />
             </Route>
           </Route>
           <Route path="/logout" element={<Logout />} />
@@ -65,6 +67,8 @@ const AppRoutes: React.FC = () => {
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/account-recovery" element={<AccountRecovery />} />
         <Route path="reset-password" element={<ResetPassword />} />
+
+        <Route path="*" element={<NotFound/>} />
       </Routes>
 
       {isModalRoute && (
