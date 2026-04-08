@@ -2,10 +2,10 @@ import Icon from "../../UIElements/Icon/Icon";
 import './PopupCard.css';
 import ConfirmDialog, { ConfirmDialogProps } from "../ConfirmDialog/ConfirmDialog";
 import { useEffect, useState } from "react";
-import ReactDOM from 'react-dom';
 
 interface PopupCardProps {
-  setShowPopup: any,
+  setShowPopup?: any,
+  closePopup?: any,
   popupTitle?: string,
   onSubmit?: () => void,
   submitText?: string,
@@ -14,7 +14,7 @@ interface PopupCardProps {
   isLoading?: boolean
 }
 
-const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, popupTitle, children, onSubmit, submitText, confirmDialogProps, isLoading }) => {
+const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, closePopup, popupTitle, children, onSubmit, submitText, confirmDialogProps, isLoading }) => {
   const [showConfirmation, setShowConfirmation] = useState<true | false>(false);
   useEffect(() => {
     document.body.classList.add("no-scroll");
@@ -28,9 +28,11 @@ const PopupCard: React.FC<PopupCardProps> = ({ setShowPopup, popupTitle, childre
 
 
   const handleClose = () => {
-    if (!confirmDialogProps) {
+    if(!setShowPopup && closePopup){
+      closePopup();
+    }
+    else if (!confirmDialogProps) {
       setShowPopup(false)
-      return;
     }
     else if (confirmDialogProps.trigger()) {
       setShowConfirmation(true);

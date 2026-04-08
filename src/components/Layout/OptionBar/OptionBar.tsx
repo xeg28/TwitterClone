@@ -67,14 +67,13 @@ const OptionBar: React.FC<OptionBarProps> = ({
           ))) :
           (setNodeIndex && (
             optionTitles.map((option: string, index: number) => (
-              <a
-                href="#"
-                className="option-link"
+              <button 
+                className="option-link button-reset"
                 key={option + index}
                 onClick={() => { setNodeIndex(index) }}
               >
                 <span>{option}</span>
-              </a>
+              </button>
             ))
           ))
         }

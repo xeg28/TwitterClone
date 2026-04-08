@@ -141,6 +141,10 @@ img {
   padding-top: 1rem !important;
 }
 
+.pb-2 {
+  padding-bottom: 1rem !important;
+}
+
 .plr-1 {
   padding-left: .5rem !important;
   padding-right: .5rem !important;
@@ -285,10 +289,6 @@ a:visited {
 
 .m-auto {
   margin: 0 auto !important;
-}
-
-.flex {
-  display: flex !important;
 }
 
 .flex-col {

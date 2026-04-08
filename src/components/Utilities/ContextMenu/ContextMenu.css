@@ -15,7 +15,7 @@
   height: 100vh;
   background: rgba(0, 0, 0, 0);
   z-index: 5;
-  cursor: default,
+  cursor: default;
 }
 
 .menu-content {
@@ -74,9 +74,7 @@
 
 @media (max-width: 500px) {
   .context-menu {
-    position: fixed;
     width: 100vw;
-    bottom: 0 !important;
     border-radius: 0;
     border: none;
   }

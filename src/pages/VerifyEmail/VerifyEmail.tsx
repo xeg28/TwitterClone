@@ -1,4 +1,4 @@
-import {useEffect, useState, useRef} from "react";
+import {useEffect, useState, useRef, useCallback} from "react";
 import { useLocation, useNavigate, Location} from "react-router-dom";
 import { useAlertActions } from "../../components/Utilities/AlertList/AlertContext";
 import "./VerifyEmail.css";
@@ -18,6 +18,21 @@ const VerifyEmail: React.FC = () => {
   
   const email = location.state?.email ?? "";
 
+
+  const resendCode = useCallback( async () => {
+    const request = {email:email, code:""};
+    const response = await fetch(`${apiURL}/api/auth/resend-code`, {
+      method: "POST", 
+      headers: {
+        "Content-Type": "application/json"
+      }, 
+      body: JSON.stringify(request) 
+    });
+    const result = await response.json();
+    return result;
+  }, [apiURL, email]);
+
+
   useEffect(() => {
     if (!email) {
       navigate("/", { replace: true });
@@ -28,7 +43,7 @@ const VerifyEmail: React.FC = () => {
       didResend.current = true;
       resendCode();
     }
-  }, [email, navigate]);
+  }, [email, navigate, resendCode]);
 
 
   const handleVerification = async () => {
@@ -60,21 +75,6 @@ const VerifyEmail: React.FC = () => {
       addAlert(result.message, 'error');
     }
   }
-
-
-  const resendCode = async () => {
-    const request = {email:email, code:""};
-    const response = await fetch(`${apiURL}/api/auth/resend-code`, {
-      method: "POST", 
-      headers: {
-        "Content-Type": "application/json"
-      }, 
-      body: JSON.stringify(request) 
-    });
-    const result = await response.json();
-    return result;
-  }
-
 
   const handleCodeResend = async () => {
     const result = await resendCode();

@@ -23,12 +23,12 @@ const UserLikes:React.FC = () => {
       }
     }
     fetchData();
-  }, [])
+  }, [addAlert, username])
 
   if (!posts) return <div className="mtb-2"><div className="spinner-lt"></div></div>
   if(posts.length === 0) return <h3 className="text-center">User has no likes</h3>
   return (
-    <div>
+    <div className="posts-wrapper">
       {posts?.map((post, index) => (
         <div key={`user-liked-post-${index}`}>
           <Post 

@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState, useEffect, } from 'react';
 import { motion } from "framer-motion";
 import ReactDOM from "react-dom";
-import './ContextMenu.css';
+import "./ContextMenu.css";
 import { Link } from 'react-router-dom'
 import Icon from '../../UIElements/Icon/Icon';
 import { Icons } from '../../UIElements/Icon/Icons';
@@ -41,18 +41,29 @@ const ContextMenu: React.FC<ContextMenuProps> = (
 
   const handleTriggerClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!isWide) {
-      document.body.classList.toggle('no-scroll');
-    }
     setVisible((prev) => !prev);
   };
 
   useEffect(() => {
     const handleResize = () => setIsWide(window.innerWidth > 500);
     window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [setIsWide]);
 
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  useEffect(() => {
+    if (!visible) {
+      document.body.classList.remove('no-scroll');
+      return;
+    }
+    if (isWide) {
+      document.body.classList.remove('no-scroll');
+    }
+    else {
+      document.body.classList.add('no-scroll');
+    }
+  }, [visible, isWide])
 
   useEffect(() => {
     if (!visible || showActionComponent) return;
@@ -87,25 +98,25 @@ const ContextMenu: React.FC<ContextMenuProps> = (
     const positionMenu: () => void = () => {
       const rect = target.getBoundingClientRect();
       const menu = el;
-
+      console.log(isWide);
       if (!isWide) {
-        el.style.bottom = '0px';
-        el.style.left = '0px';
+        menu.style.top = 'initial';
+        menu.style.right = 'initial';
+        menu.style.bottom = '0px';
+        menu.style.left = '0px';
         return;
       }
 
       if (!menu) return;
 
-
-
       if (!dynamic) {
-        el.style.bottom = `${window.innerHeight - rect.top + 10}px`;
-        el.style.left = `${rect.left}px`;
+        menu.style.bottom = `${window.innerHeight - rect.top + 10}px`;
+        menu.style.left = `${rect.left}px`;
       } else {
         const offset = 15;
         let top = rect.top + window.scrollY;
         let right = window.innerWidth - rect.right - offset;
-   
+
         const menuHeight = menu.offsetHeight;
         const viewportBottom = window.innerHeight + window.scrollY;
         if (top + menuHeight > viewportBottom) {
@@ -113,6 +124,8 @@ const ContextMenu: React.FC<ContextMenuProps> = (
         }
         menu.style.top = `${top}px`;
         menu.style.right = `${right}px`;
+        menu.style.bottom = "initial";
+        menu.style.left = "initial";
       }
     };
 
@@ -139,7 +152,7 @@ const ContextMenu: React.FC<ContextMenuProps> = (
         clearTimeout(timeoutId);
       }
     };
-  }, [targetRef, visible]);
+  }, [targetRef, visible, isWide]);
 
   if (typeof document == "undefined") return null;
 

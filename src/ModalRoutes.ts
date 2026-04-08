@@ -1,3 +1,5 @@
+import { getCurrent, getHistory} from "./utils/NavigationHistory";
+
 
 export const MODAL_ROUTES = [
   {
@@ -10,4 +12,11 @@ export const MODAL_ROUTES = [
     getBackground: (pathname: any) =>
       pathname.replace(/\/header_photo$/, ""),
   },
+  {
+    match:/^\/compose\/post$/,
+    getBackground: (pathname:any) => {
+      return pathname.replace(/\/compose\/post$/, getCurrent() ?? '/')
+    }
+  },
+ 
 ]

@@ -29,6 +29,10 @@ main {
   width: 350px;
 }
 
+.posts-wrapper > div {
+  border-bottom: 1px solid var(--border-color);
+}
+
 @media (max-width: 1080px) {
   .alt-content {
     display:none

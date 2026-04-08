@@ -46,9 +46,10 @@ export async function getUserLikedPost(username: string) {
   });
 }
 
-export async function isLikedPost(id: number | string) {
-  return fetchWithAuth(`${API_URL}/posts/isLiked/${id}`, {
-    method: "GET",
+
+export async function getUserPostWithReplies(username: string) {
+  return fetchWithAuth(`${API_URL}/posts/user/with_replies/${username}`, {
+    method: "GET", 
     headers: { "Content-Type": "application/json" }
   })
 }

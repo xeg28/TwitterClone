@@ -61,7 +61,7 @@ const Topbar: React.FC<TopbarProps> = ({ navMenu, topElement, handleBack, childr
         ? "plr-1 flex flex-row align-center w-100"
         : "flex flex-col flex-1 w-100"}>
         {handleBack && (
-          <button className='mr-1' onClick={handleBack}>
+          <button className='back-btn mr-1' onClick={handleBack}>
             <Icon name="back" />
           </button>
         )}

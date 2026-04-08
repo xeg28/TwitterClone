@@ -222,6 +222,22 @@ header > div {
     border-radius: 50% !important;
     height: 40px;
     width: 40px;
+    background-color: transparent;
+    border-radius: 50%;
+    border: none;
+    padding: 7px;
+    cursor: pointer;
+    height: 36px;
+    width: 36px;
+    box-sizing: border-box;
+  }
+
+  .nav-menu-btn:hover {
+    background-color: color-mix(in srgb, var(--background-color) 90%, var(--text-color) 10%);
+  }
+
+  .nav-menu-btn:active {
+    background-color: color-mix(in srgb, var(--background-color) 80%, var(--text-color) 20%);
   }
 
   .nav-menu-btn > img{
@@ -249,5 +265,54 @@ header > div {
 
   .mobile-nav-menu a:active {
     background-color: color-mix(in srgb, var(--background-color) 90%, var(--text-color) 10%);
+  }
+}
+
+
+.post-btn-lg {
+  font-size: var(--fs-large);
+  line-height: var(--fs-large);
+  padding: 12px;
+  background-color: var(--text-color);
+  color: var(--background-color);
+  text-align: center;
+  border: none;
+  border-radius: 9999px;
+  width: 100%;
+  cursor: pointer;
+  height: 50px;
+  place-content: center;
+}
+
+.post-btn-lg:visited {
+  text-decoration: none;
+  color: var(--background-color);
+}
+
+.post-btn-lg:hover {
+  background-color: color-mix(in srgb, var(--text-color) 90%, black 10%);
+}
+
+.post-btn-lg:focus-visible {
+  outline: 2px solid white;
+}
+
+.post-btn-lg svg {
+  filter: invert(0);
+  width: 100%;
+  object-fit: contain;
+  display:none;
+}
+
+@media (max-width: 1260px) {
+  .post-btn-lg {
+    width: 52px;
+  }
+  .post-btn-lg span {
+    display:none;
+  }
+
+  .post-btn-lg svg {
+    display:block;
   }
 }

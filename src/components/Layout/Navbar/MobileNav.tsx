@@ -4,7 +4,6 @@ import { useScrollSpeed } from "../../../helpers/scrollHelper";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Icon from "../../UIElements/Icon/Icon";
-import CreatePost from "../../FeatureModules/CreatePost/CreatePost";
 
 const MobileNav: React.FC = () => {
   const location = useLocation();
@@ -40,7 +39,9 @@ const MobileNav: React.FC = () => {
         animate={{ opacity: isTransparent ? .3 : 1 }}
       >
         <div className="mr-2 mb-2">
-          <CreatePost isMobile/>
+          <Link to="/compose/post" className="post-btn-sm" >
+            <Icon name="post" className="icon-svg" />
+          </Link>
         </div>
         <div
           className='navbar-sm'>

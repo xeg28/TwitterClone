@@ -17,6 +17,9 @@ import Logout from './components/FeatureModules/Logout/Logout';
 import ProfilePhoto from './components/PageSections/Profile/ProfilePhoto';
 import UserLikes from './components/PageSections/Profile/UserLikes';
 import NotFound from './pages/Errors/NotFound';
+import CreatePost from './components/FeatureModules/CreatePost/CreatePost';
+import UserReplies from './components/PageSections/Profile/UserReplies';
+import { PostsRefreshProvider } from './components/PageSections/Profile/PostsRefreshContext';
 
 
 const AppRoutes: React.FC = () => {
@@ -38,54 +41,62 @@ const AppRoutes: React.FC = () => {
 
   const isModalRoute = Boolean(modalMatch);
   return (
-    <AlertProvider>
-      <Routes location={baseLocation}>
-        <Route element={<ProtectedRoutes redirect="/login" />}>
-          <Route path="/" element={<Home />}>
-            <Route index element={(
-              <div><HomeComponent /></div>
-            )} />
-            <Route path="/search" element={(<div>Search</div>)} />
-            <Route path="/notifications" element={(<div>Notifications</div>)} />
-            <Route path="/messages" element={(<div>Messages</div>)} />
-            <Route path="/bookmarks" element={<div>Bookmarks</div>} />
-            <Route path="/settings" element={<div>Settings</div>} />
-            <Route path="/profile/:username/" element={<Profile />} >
-              <Route index element={<UserPosts/>} />
-              <Route path="replies" element={(<div>Replies</div>)} />
-              <Route path="likes" element={<UserLikes/>} />
+    <PostsRefreshProvider>
+      <AlertProvider>
+        <Routes location={baseLocation}>
+          <Route element={<ProtectedRoutes redirect="/login" />}>
+            <Route path="/" element={<Home />}>
+              <Route index element={(
+                <div><HomeComponent /></div>
+              )} />
+              <Route path="/search" element={(<div>Search</div>)} />
+              <Route path="/notifications" element={(<div>Notifications</div>)} />
+              <Route path="/messages" element={(<div>Messages</div>)} />
+              <Route path="/bookmarks" element={<div>Bookmarks</div>} />
+              <Route path="/settings" element={<div>Settings</div>} />
+              <Route path="/profile/:username/" element={<Profile />} >
+                <Route index element={<UserPosts />} />
+                <Route path="replies" element={<UserReplies />} />
+                <Route path="likes" element={<UserLikes />} />
+              </Route>
             </Route>
+            <Route path="/logout" element={<Logout />} />
           </Route>
-          <Route path="/logout" element={<Logout />} />
-        </Route>
 
-        <Route element={<PublicRouteProps redirect="/" />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Route>
+          <Route element={<PublicRouteProps redirect="/" />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
 
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/account-recovery" element={<AccountRecovery />} />
-        <Route path="reset-password" element={<ResetPassword />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/account-recovery" element={<AccountRecovery />} />
+          <Route path="reset-password" element={<ResetPassword />} />
 
-        <Route path="*" element={<NotFound/>} />
-      </Routes>
-
-      {isModalRoute && (
-        <Routes>
-          <Route
-            path="/profile/:username/photo"
-            element={<ProfilePhoto type='photo' />}
-          />
-          <Route
-            path="/profile/:username/header_photo"
-            element={<ProfilePhoto type='header' />}
-          />
+          <Route path="*" element={<NotFound />} />
         </Routes>
-      )}
 
-      <AlertList />
-    </AlertProvider>
+        {isModalRoute && (
+          <Routes>
+            <Route
+              path="/profile/:username/photo"
+              element={<ProfilePhoto type='photo' />}
+            />
+            <Route
+              path="/profile/:username/header_photo"
+              element={<ProfilePhoto type='header' />}
+            />
+
+            <Route
+              path="/compose/post"
+              element={<CreatePost />}
+            />
+
+          </Routes>
+        )}
+
+        <AlertList />
+      </AlertProvider>
+    </PostsRefreshProvider>
   )
 }
 

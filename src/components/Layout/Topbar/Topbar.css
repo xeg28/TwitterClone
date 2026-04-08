@@ -18,7 +18,7 @@
   gap: 0;
 }
 
-.topbar button {
+.topbar .back-btn {
   background-color: transparent;
   border-radius: 50%;
   border: none;
@@ -29,15 +29,15 @@
   box-sizing: border-box;
 }
 
-.topbar button:hover {
+.topbar .back-btn:hover {
   background-color: color-mix(in srgb, var(--background-color) 90%, var(--text-color) 10%);
 }
 
-.topbar button:active {
+.topbar .back-btn:active {
   background-color: color-mix(in srgb, var(--background-color) 80%, var(--text-color) 20%);
 }
 
-.topbar button svg {
+.topbar .back-btn svg {
   height: 100%;
   object-fit: contain;
 }

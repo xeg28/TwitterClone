@@ -6,7 +6,6 @@ import { useRef } from 'react';
 import { getCurrentUser } from '../../../types/User';
 import { useState, useEffect } from 'react';
 import MobileNav from './MobileNav';
-import CreatePost from '../../FeatureModules/CreatePost/CreatePost';
 
 const Navbar: React.FC = () => {
   const location = useLocation();
@@ -77,7 +76,10 @@ const Navbar: React.FC = () => {
           </div>
           <div className="post">
             <div className="w-100 flex align-center justify-content-center">
-              <CreatePost isMobile={false}/>
+              <Link to="/compose/post" className="post-btn-lg">
+                <Icon name="post" />
+                <span>Post</span>
+              </Link>
             </div>
           </div>
         </div>

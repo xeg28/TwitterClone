@@ -31,6 +31,12 @@ export const getPrevious = (): string | null => {
   return history[history.length - 2];
 };
 
+export const getCurrent = (): string | null => {
+  const history = read();
+  if(history.length < 1) return null;
+  return history[history.length - 1];
+}
+
 export const popPrevious = (): string | null => {
   const history = read();
   if (history.length < 2) return null;
