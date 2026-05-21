@@ -1,3 +1,6 @@
+using TwitterClone.Models;
+using TwitterClone.Models.PostModels;
+
 public record UserDto
 {
     public int Id { get; init; }
@@ -12,14 +15,23 @@ public record UserDto
     public DateTime? DateJoined { get; init; }
 }
 
-public record Dtos
+public record PostDto
 {
     public int Id { get; init; }
+    public int? RootId { get; init; }
+    public int? ParentId { get; init; }
     public int Likes { get; init; }
+    public int Views { get; init; }
     public int Reposts { get; init; }
+    public int Replies { get; init; }
     public int? RepostId { get; init; }
     public string? MediaPath { get; init; }
     public string? Text { get; init; }
     public DateTime? DatePosted { get; init; }
     public UserDto? Owner { get; init; }
+    public DateTime? LikedAt { get; init; }
+    public bool IsLiked { get; init; }            
+    public PostDto? parent { get; set; }
+    public PostDto? grandparent { get; set; }
 }
+

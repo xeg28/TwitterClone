@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TwitterClone.Data;
@@ -11,9 +12,11 @@ using TwitterClone.Data;
 namespace TwitterClone.Migrations
 {
     [DbContext(typeof(TwitterCloneContext))]
-    partial class TwitterCloneContextModelSnapshot : ModelSnapshot
+    [Migration("20260327214651_Posts-Update")]
+    partial class PostsUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,10 +83,7 @@ namespace TwitterClone.Migrations
                     b.Property<int>("OwnerId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Replies")
+                    b.Property<int>("ParentId")
                         .HasColumnType("integer");
 
                     b.Property<int?>("RepostId")
@@ -92,14 +92,11 @@ namespace TwitterClone.Migrations
                     b.Property<int>("Reposts")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("RootId")
+                    b.Property<int>("RootId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Text")
                         .HasColumnType("text");
-
-                    b.Property<int>("Views")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

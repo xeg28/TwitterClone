@@ -1,11 +1,8 @@
-﻿using System.Numerics;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using TwitterClone.Data;
+using TwitterClone.Mappings;
 using TwitterClone.Models;
 
 namespace TwitterClone.Controllers
@@ -25,19 +22,8 @@ namespace TwitterClone.Controllers
         [HttpGet("{username}")]
         public async Task<ActionResult<UserDto>> GetUserById(string username)
         {
-            var user = await _context.Users.Select(user => new UserDto
-            {
-                Id=user.Id,
-                LegalName=user.LegalName,
-                Username=user.Username,
-                Biography=user.Biography,
-                Followers=user.Followers,
-                DateJoined=user.DateJoined,
-                Following=user.Following, 
-                ProfilePicUrl=user.ProfilePicUrl, 
-                BannerPicUrl=user.BannerPicUrl,
-                Posts=0
-            }).FirstOrDefaultAsync(u  => u.Username == username);
+            var user = await _context.Users.Select(UserMapper.ToDtoExpr)
+                .FirstOrDefaultAsync(u  => u.Username == username);
 
 
             if (user == null) return NotFound();
@@ -90,7 +76,5 @@ namespace TwitterClone.Controllers
 
             return Ok(new { status = 200, message = "Email is available" });
         }
-
-
     }
 }

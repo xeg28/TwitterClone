@@ -38,6 +38,10 @@ builder.Services.AddHostedService<EmailVerificationCleanupService>();
 builder.Services.AddHostedService<PasswordResetCleanupService>();
 builder.Services.AddSingleton<CloudinaryService>();
 
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<IViewService, ViewService>();
+builder.Services.AddHostedService<ViewFlushService>();
+
 builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
