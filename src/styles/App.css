@@ -12,7 +12,7 @@
   --transparent-100: rgba(20, 20, 20, .95);
   --transparent-300: rgba(20, 20, 20, .70);
   --transparent-400: rgba(0, 0, 0, .95);
-  --top-bar-color: rgba(0, 0, 0, .65);
+  --top-bar-color: rgba(0, 0, 0, .35);
   --top-bar-backdrop: blur(12px);
 
   --fs-small: 12px;
@@ -195,6 +195,10 @@ a:visited {
 
 .d-none {
   display: none !important;
+}
+
+.v-hidden {
+  visibility: hidden;
 }
 
 .link {

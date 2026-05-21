@@ -8,6 +8,7 @@ import PublicRouteProps from './utils/PublicRouteProps';
 import ResetPassword from './pages/ChangePassword';
 import { AlertProvider } from './components/Utilities/AlertList/AlertContext';
 import { Route, Routes, useLocation } from 'react-router-dom';
+import { useRef, useEffect } from 'react';
 import { MODAL_ROUTES } from './ModalRoutes';
 import AlertList from './components/Utilities/AlertList/AlertList';
 import HomeComponent from './components/PageSections/Home/Home';
@@ -20,19 +21,22 @@ import NotFound from './pages/Errors/NotFound';
 import CreatePost from './components/FeatureModules/CreatePost/CreatePost';
 import UserReplies from './components/PageSections/Profile/UserReplies';
 import { PostsRefreshProvider } from './components/PageSections/Profile/PostsRefreshContext';
+import { useNavigationHistory } from './hooks/useNavigationHistory';
+import PostExpanded from './components/PageSections/PostExpanded/PostExpanded';
+
 
 
 const AppRoutes: React.FC = () => {
-
   const location = useLocation();
-  const state = location.state;
-
+  const prevPathRef = useRef(location.pathname);
+  useNavigationHistory();
   const modalMatch = MODAL_ROUTES.find(route =>
     route.match.test(location.pathname)
   );
 
-  const backgroundLocation = state?.backgroundLocation;
 
+  const state = location.state;
+  const backgroundLocation = state?.backgroundLocation;
   const baseLocation =
     backgroundLocation ||
     (modalMatch
@@ -59,6 +63,10 @@ const AppRoutes: React.FC = () => {
                 <Route path="replies" element={<UserReplies />} />
                 <Route path="likes" element={<UserLikes />} />
               </Route>
+              <Route
+              path="/post/:username/:id"
+              element={<PostExpanded />}
+            />
             </Route>
             <Route path="/logout" element={<Logout />} />
           </Route>
@@ -73,6 +81,7 @@ const AppRoutes: React.FC = () => {
           <Route path="reset-password" element={<ResetPassword />} />
 
           <Route path="*" element={<NotFound />} />
+          
         </Routes>
 
         {isModalRoute && (

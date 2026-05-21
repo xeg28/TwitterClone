@@ -5,6 +5,7 @@ import "./ContextMenu.css";
 import { Link } from 'react-router-dom'
 import Icon from '../../UIElements/Icon/Icon';
 import { Icons } from '../../UIElements/Icon/Icons';
+import { stopPropagation } from '../../../helpers/eventHelpers';
 
 export type MenuOption = {
   id: string;
@@ -40,7 +41,7 @@ const ContextMenu: React.FC<ContextMenuProps> = (
   const [isWide, setIsWide] = useState(window.innerWidth > 500);
 
   const handleTriggerClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+    e.preventDefault();
     setVisible((prev) => !prev);
   };
 
@@ -67,6 +68,17 @@ const ContextMenu: React.FC<ContextMenuProps> = (
 
   useEffect(() => {
     if (!visible || showActionComponent) return;
+    
+    // Use a small timeout to ensure the portal has rendered
+    const timeoutId = setTimeout(() => {
+      if(menuRef.current) {
+        const firstButton = menuRef.current.querySelector('button, a') as HTMLButtonElement | HTMLAnchorElement;
+        if (firstButton) {
+          firstButton.focus();
+        }
+      }
+    }, 0);
+
     const handleClick = (e: MouseEvent) => {
       const target = e.target as Node | null;
 
@@ -82,7 +94,10 @@ const ContextMenu: React.FC<ContextMenuProps> = (
       setVisible(false);
     };
     document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener('mousedown', handleClick);
+    };
   }, [visible, targetRef, showActionComponent]);
 
 
@@ -98,7 +113,7 @@ const ContextMenu: React.FC<ContextMenuProps> = (
     const positionMenu: () => void = () => {
       const rect = target.getBoundingClientRect();
       const menu = el;
-      console.log(isWide);
+      
       if (!isWide) {
         menu.style.top = 'initial';
         menu.style.right = 'initial';
@@ -108,6 +123,7 @@ const ContextMenu: React.FC<ContextMenuProps> = (
       }
 
       if (!menu) return;
+
 
       if (!dynamic) {
         menu.style.bottom = `${window.innerHeight - rect.top + 10}px`;
@@ -182,7 +198,7 @@ const ContextMenu: React.FC<ContextMenuProps> = (
                 {options.map((option, idx) => (
                   <div className={`menu-option ${option.className ?? ''}`} key={option.id + idx}>
                     {option.path && (
-                      <Link to={option.path} onClick={() => setVisible(false)}>
+                      <Link to={option.path} onClick={stopPropagation((e) => setVisible(false))}>
                         {option.icon && (
                           <div className="option-icon">
                             <Icon name={option.icon} />
@@ -192,7 +208,7 @@ const ContextMenu: React.FC<ContextMenuProps> = (
                       </Link>
                     )}
                     {option.ActionElement && (
-                      <button className="button-reset" onClick={() => setShowActionComponent(true)}>
+                      <button className="button-reset" onClick={stopPropagation((e) => setShowActionComponent(true))}>
                         {option.icon && (
                           <div className="option-icon">
                             <Icon name={option.icon} />
@@ -220,7 +236,7 @@ const ContextMenu: React.FC<ContextMenuProps> = (
               </div>
               {closeBtn && (
                 <div className="cancel-cm-btn">
-                  <button className='main-btn' onClick={handleTriggerClick}>Cancel</button>
+                  <button className='main-btn' onClick={stopPropagation(handleTriggerClick)}>Cancel</button>
                 </div>
               )}
             </div>

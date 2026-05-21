@@ -1,11 +1,11 @@
 import './Profile.css';
-import { Outlet, useParams, Link, useLocation } from 'react-router-dom';
-import { useEffect, useState, useRef } from 'react';
+import { useParams, Link, useLocation } from 'react-router-dom';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import { getCurrentUser, User } from '../../../types/User';
 import { useAlertActions } from '../../Utilities/AlertList/AlertContext';
-import { popPrevious } from '../../../utils/NavigationHistory';
+import { goBack } from '../../../utils/NavigationHistory';
 import { fetchUser, updateBannerImage, updateProfileImage, updateUser } from '../../../api/user';
 import Topbar from '../../Layout/Topbar/Topbar';
 import Icon from '../../UIElements/Icon/Icon';
@@ -15,6 +15,12 @@ import EditProfile from './EditProfile';
 import OptionBar from '../../Layout/OptionBar/OptionBar';
 import Follow from '../../FeatureModules/Follow/Follow';
 import ProfilePicture from '../../UIElements/ProfilePicture/ProfilePicture';
+import UserPosts from './UserPosts';
+import UserReplies from './UserReplies';
+import UserLikes from './UserLikes';
+import { useCachedFetch } from '../../../hooks/useCachedFetch';
+import UserNotFound from './UserNotFound';
+import { setCache } from '../../../utils/Cache';
 
 type UserProfile = {
   legalName?: string,
@@ -24,20 +30,44 @@ type UserProfile = {
 }
 
 const Profile: React.FC = () => {
-  const { username } = useParams<{ username: string }>();
+  const { username } = useParams<{ username?: string }>();
+  const cacheKey = `user-${username}`;
+  const location = useLocation();
+  
+  const fetcher = useCallback(
+    () => username ? fetchUser(username).then(res => res.json()) : Promise.reject('No username'),
+    [username]
+  );
+  
+  const { data, loading } = useCachedFetch(
+    username ? cacheKey : undefined,
+    username ? fetcher : undefined
+  );
   const [user, setUser] = useState<User | undefined>();
   const currentUser = getCurrentUser();
   const userData = useRef<UserProfile>({});
   const [showEditUser, setShowEditUser] = useState<true | false>(false);
   const { addAlert } = useAlertActions();
-  const [isLoading, setIsLoading] = useState<true | false>(true);
   const [editIsLoading, setEditIsLoading] = useState<true | false>(false);
+
   const navigate = useNavigate();
-  const location = useLocation();
+
+  useEffect(() => {
+    setUser(undefined);
+    setShowEditUser(false);
+    userData.current = {};
+  }, [username]);
+
+  useEffect(() => {
+    if (data) {
+      let userData = data as User;
+      setUser(userData);
+    }
+  }, [data])
 
 
   const handleBack = () => {
-    const prev = popPrevious();
+    const prev = goBack();
     navigate(prev ?? "/");
   }
 
@@ -56,6 +86,7 @@ const Profile: React.FC = () => {
         }
         else {
           const result = await response.json();
+          setCache(cacheKey, {...user, profilePicUrl: result.url});
           setUser((prev) => { return { ...prev, profilePicUrl: result.url } });
         }
       }
@@ -109,20 +140,6 @@ const Profile: React.FC = () => {
     return true;
   }
 
-  useEffect(() => {
-    if (!username) return;
-    const fetchData = async (username: string) => {
-      setIsLoading(true);
-      const response = await fetchUser(username);
-      if (response.ok) {
-        setUser(await response.json());
-      }
-      setIsLoading(false);
-    }
-
-    fetchData(username);
-  }, [username, addAlert]);
-
   const handleEditUser = () => {
     if (!user) return;
     setShowEditUser((prev) => { return !prev })
@@ -130,32 +147,20 @@ const Profile: React.FC = () => {
     userData.current.biography = user.biography;
   }
 
-  if (isLoading) return (
+  if (!user) return (
     <div className='profile relative h-100'>
       <div className="center"><div className="spinner-lt"></div></div>
     </div>
   )
 
 
-  if (!user) return <div>
-    <Topbar handleBack={handleBack} >
-      <div className="fs-lg bolder">Profile</div>
-    </Topbar>
-    <div className='flex m-2 p-2 justify-content-center'>
-      <div>
-        <div className='fs-xl bolder'>This account doesn't exist.</div>
-        <div className="dimm-text">
-          Try searching another
-        </div>
-      </div>
-    </div>
-  </div>
+  if (!user.legalName && !loading) return <UserNotFound handleBack={handleBack} />;
 
   return (
     <div className="profile relative h-100" >
       <div className="flex flex-col">
         <Topbar handleBack={handleBack}>
-          {!isLoading && (
+          {!loading && (
             <div className='ml-2 flex flex-col'>
               <span className='fs-lg bolder'>{user.legalName}</span>
               <span className='fs-sm dimm-text'>{user.posts} posts</span>
@@ -238,9 +243,9 @@ const Profile: React.FC = () => {
           <OptionBar
             optionTitles={['Posts', 'Replies', 'Likes']}
             baseURI={`/profile/${username}`}
-            optionParamater={['', '/replies', '/likes']} >
-            <Outlet />
-          </OptionBar>
+            optionParamater={['', '/replies', '/likes']}
+            components={[(<UserPosts />), (<UserReplies />), (<UserLikes />)]}
+          />
         </div>
       </div>
     </div>

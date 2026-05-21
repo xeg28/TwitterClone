@@ -26,6 +26,7 @@ import { Repeat } from 'lucide-react';
 import { Heart } from 'lucide-react';
 import { Share } from 'lucide-react';
 import { Ellipsis } from 'lucide-react';
+import { ChartNoAxesColumn } from 'lucide-react';
 
 
 export const Icons = {
@@ -56,5 +57,7 @@ export const Icons = {
   comment: MessageCircle,
   repost: Repeat,
   heart: Heart,
-  share: Share
+  share: Share,
+  views: ChartNoAxesColumn,
+  
 };

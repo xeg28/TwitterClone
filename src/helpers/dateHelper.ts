@@ -39,3 +39,21 @@ export const getPostTime = (d: Date | String | undefined): string => {
     }
   }
 }
+
+export const getPostDateTime = (d: Date | String | undefined) => {
+  const date = typeof d === "string" ? new Date(d) : d;
+  if (!(date instanceof Date) || isNaN(date.getTime())) return "";
+
+  const time = date.toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+
+  const dateString = date.toLocaleDateString("en-US", {
+    month: "short",  // "May"
+    day: "numeric",  // "6"
+    year: "numeric", // "2026"
+  });
+
+  return `${time} · ${dateString}`;
+}

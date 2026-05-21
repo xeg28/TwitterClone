@@ -3,12 +3,38 @@
   flex-direction: row;
   padding: 1rem;
   gap: .5rem;
+  cursor: pointer;
+}
+
+.post-container:hover {
+  background-color: color-mix(in srgb, var(--background-color), white 2.5%);
+}
+
+.post-container.expanded {
+  cursor: auto;
+  flex-direction: column;
+}
+
+
+.post-container.expanded:hover {
+  background-color: initial;
+}
+
+.post-info {
+  font-size: calc(var(--fs-medium) - 1px);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .post-text {
   overflow-wrap: break-word;
   word-wrap: break-word;
   word-break: break-word;
+}
+
+.post-text.expanded {
+  font-size: calc(var(--fs-medium) + 2px);
 }
 
 .post-text a:visited { 
@@ -130,8 +156,11 @@
 
 .thread-line {
   background-color: rgb(51, 54, 57);
-  width: 2px;
+  width: 2.5px;
   flex-grow: 1;
   margin-bottom: -30px;
   margin-top: 2px;
 }
+
+/* Maximized post styles */
+

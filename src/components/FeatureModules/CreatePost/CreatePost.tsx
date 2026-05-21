@@ -7,7 +7,7 @@ import { addPost } from "../../../api/posts";
 import PopupCard from "../../Popups/PopupCard/PopupCard";
 import ProfilePicture from "../../UIElements/ProfilePicture/ProfilePicture";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { getCurrent } from "../../../utils/NavigationHistory";
+import { getPrevious, goBack } from "../../../utils/NavigationHistory";
 import { Post } from "../../../types/Post";
 import PostText from "../Post/PostText";
 import { usePostsRefresh } from "../../PageSections/Profile/PostsRefreshContext";
@@ -35,7 +35,7 @@ const CreatePost: React.FC = () => {
 
   const refreshUserPosts = () => {
     const pattern = /^\/profile\/(?<username>[\w-]+)(?:\/.*)?/;
-    const match = getCurrent()?.match(pattern);
+    const match = getPrevious()?.match(pattern);
     if (match && match.groups) {
       const username = match.groups.username;
       if (username === user?.username) triggerRefresh();
@@ -60,7 +60,7 @@ const CreatePost: React.FC = () => {
 
         addAlert("Post created", "success");
 
-        navigate(getCurrent() ?? '/');
+        navigate(getPrevious() ?? '/');
       }
       else {
         addAlert("An error occurred while creating post, try again.", "error");
@@ -92,7 +92,7 @@ const CreatePost: React.FC = () => {
     <>
       {typeof document !== "undefined" && ReactDOM.createPortal(
 
-        <PopupCard closePopup={() => { navigate(getCurrent() ?? '/') }}
+        <PopupCard closePopup={() => { navigate(goBack() ?? '/') }}
         >
           <form className="post-form" onSubmit={handleSubmit}>
             {postComment && postComment.owner && (
@@ -129,7 +129,7 @@ const CreatePost: React.FC = () => {
               <div className="icon-img-wrapper">
                 <ProfilePicture url={user?.profilePicUrl} />
               </div>
-              <textarea id="post-text"
+              <textarea className="create-post-text"
                 placeholder={postComment ? "Post your reply" : "What's happening?"}
                 ref={textareaRef}
                 required

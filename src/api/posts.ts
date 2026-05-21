@@ -1,5 +1,14 @@
 import { fetchWithAuth } from "./client";
 import { API_URL } from "../config";
+
+
+export async function getPost(id:number | string) {
+  return fetchWithAuth(`${API_URL}/posts/${id}`, {
+    method: "GET", 
+   headers: { "Content-Type": "application/json" }
+  });
+}
+
 export async function addPost(newPost = {}) {
   return fetchWithAuth(`${API_URL}/posts`, {
     method: "POST",
@@ -50,6 +59,19 @@ export async function getUserLikedPost(username: string) {
 export async function getUserPostWithReplies(username: string) {
   return fetchWithAuth(`${API_URL}/posts/user/with_replies/${username}`, {
     method: "GET", 
+    headers: { "Content-Type": "application/json" }
+  })
+}
+
+export async function viewPost(postId: number) {
+  return fetchWithAuth(`${API_URL}/posts/view/${postId}`, {
+    method: "POST", 
+  });
+} 
+
+export async function getPostReplies(postId: number) {
+  return fetchWithAuth(`${API_URL}/posts/replies/${postId}`, {
+    method: "GET",
     headers: { "Content-Type": "application/json" }
   })
 }

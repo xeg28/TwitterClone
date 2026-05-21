@@ -1,29 +1,30 @@
-import { SetStateAction, useEffect, useRef } from 'react';
+import React, { SetStateAction, useEffect, useRef, useState } from 'react';
 import './OptionBar.css';
 import { useLocation, Link } from 'react-router-dom';
+import OptionBarElement from './OptionBarElement';
 interface OptionBarProps {
   optionTitles: string[];
   baseURI?: string;
   optionParamater?: string[];
-  children?: React.ReactNode;
-  nodeIndex?: number;
-  setNodeIndex?: React.Dispatch<SetStateAction<number>>;
+  components: React.ReactNode[];
 }
 
 const OptionBar: React.FC<OptionBarProps> = ({
   optionTitles,
   baseURI,
   optionParamater,
-  children,
-  nodeIndex,
-  setNodeIndex
+  components
 }) => {
   const location = useLocation();
   const barRef = useRef<HTMLDivElement>(null);
+  const [nodeIndex, setNodeIndex] = useState<number | undefined>();
 
 
   useEffect(() => {
-    if (!baseURI) return;
+    if (!baseURI) {
+      setNodeIndex(0);
+      return;
+    }
     const containerEl = barRef.current;
     if (!containerEl) return;
 
@@ -39,6 +40,9 @@ const OptionBar: React.FC<OptionBarProps> = ({
       const re = new RegExp(`^${escaped}/?$`);
       if (re.test(location.pathname)) child.classList.add("active");
     });
+
+    const relPath = location.pathname.replace(baseURI, "");
+    setNodeIndex((prev) => optionParamater?.indexOf(relPath) ?? prev);
 
   }, [location.pathname, baseURI]);
 
@@ -67,7 +71,7 @@ const OptionBar: React.FC<OptionBarProps> = ({
           ))) :
           (setNodeIndex && (
             optionTitles.map((option: string, index: number) => (
-              <button 
+              <button
                 className="option-link button-reset"
                 key={option + index}
                 onClick={() => { setNodeIndex(index) }}
@@ -79,7 +83,15 @@ const OptionBar: React.FC<OptionBarProps> = ({
         }
       </div>
       <div>
-        {children && <>{children}</>}
+        {nodeIndex != undefined && components.map((component: React.ReactNode, index) => (
+          <div key={`option-element-${index}`}>
+            <OptionBarElement
+            render={nodeIndex === index}
+            className={nodeIndex === index ? '' : 'd-none'}>
+            {component}
+          </OptionBarElement>
+          </div>
+        ))}
       </div>
     </div>
   )

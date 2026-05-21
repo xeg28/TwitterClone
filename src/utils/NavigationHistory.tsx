@@ -48,4 +48,12 @@ export const popPrevious = (): string | null => {
   return prev;
 };
 
+export const goBack = () => {
+  var history = read();
+  const prev = getPrevious();
+  history = history.slice(0, -2);
+  write(history);
+  return prev;
+}
+
 export const clearHistory = () => write([]);

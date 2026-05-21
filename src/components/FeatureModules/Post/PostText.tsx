@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 interface PostTextProps {
   text: string | undefined;
   linkMentions?: true;
+  isExpanded? : true;
 }
 
-const PostText: React.FC<PostTextProps> = ({ text, linkMentions }) => {
-  const [showFull, setShowFull] = useState<true | false>(false);
+const PostText: React.FC<PostTextProps> = ({ text, linkMentions, isExpanded}) => {
+  const [showFull, setShowFull] = useState<true | false>(isExpanded===true);
 
   if (!text) return null;
   const allLines = text.split('\n');
@@ -75,7 +76,10 @@ const PostText: React.FC<PostTextProps> = ({ text, linkMentions }) => {
       {isTooLong && (
         <>
           <br />
-          <button onClick={() => setShowFull(true)} className="show-more">
+          <button onClick={(e) => {
+            e.stopPropagation();
+            setShowFull(true);
+          }} className="show-more">
             Show more
           </button>
         </>

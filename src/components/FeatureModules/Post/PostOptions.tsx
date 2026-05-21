@@ -6,14 +6,13 @@ import DeletePost from "../DeletePost/DeletePost";
 interface PostOptionsProps {
   post: Post;
   isOwner: boolean;
-  setPosts?: React.Dispatch<React.SetStateAction<Post[] | undefined>>;
   postBtnRef: React.RefObject<HTMLButtonElement | null>;
 }
-const PostOptions: React.FC<PostOptionsProps> = ({ post, isOwner, setPosts, postBtnRef }) => {
+const PostOptions: React.FC<PostOptionsProps> = ({ post, isOwner, postBtnRef }) => {
   const options: MenuOption[] = (() => {
     if (!post.id) return [];
     let menuOptions: MenuOption[] = [];
-    if (isOwner && setPosts) {
+    if (isOwner) {
       menuOptions.push({
         id: "DeletePost",
         text: "Delete",
@@ -21,7 +20,6 @@ const PostOptions: React.FC<PostOptionsProps> = ({ post, isOwner, setPosts, post
           postId={post.id}
           setShow={() => { }}
           onCloseContextMenu={() => { }}
-          setPosts={setPosts}
         />,
         className: "red-text",
         icon: "delete"

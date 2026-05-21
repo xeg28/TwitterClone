@@ -3,6 +3,7 @@ import { User } from "./User";
 export type Post = {
   id?:number;
   likes?:number;
+  views?:number;
   reposts?:number;
   replies?: number;
   repost?: Post;

@@ -1,6 +1,6 @@
 
 
-#post-text{
+.create-post-text{
   background-color: var(--background-color);
   color: var(--text-color);
   outline: none;

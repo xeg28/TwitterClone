@@ -6,8 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 interface PostInteractionsProps {
   post: Post;
+  isExpanded?: true;
 }
-const PostInteractions: React.FC<PostInteractionsProps> = ({ post }) => {
+
+const PostInteractions: React.FC<PostInteractionsProps> = ({ post, isExpanded }) => {
   const [likes, setLikes] = useState<number>(0);
   const [isLiked, setIsLiked] = useState<boolean | undefined>(false);
   const navigate = useNavigate();
@@ -20,7 +22,8 @@ const PostInteractions: React.FC<PostInteractionsProps> = ({ post }) => {
   }, [setLikes, post]);
 
   // Button Handlers
-  const handleLikePost = async () => {
+  const handleLikePost = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (!post.id) return;
     if (isLiked) {
       setLikes((prev) => prev - 1)
@@ -39,9 +42,10 @@ const PostInteractions: React.FC<PostInteractionsProps> = ({ post }) => {
     }
   }
 
-  const handleComment = () => {
+  const handleComment = (e: React.MouseEvent) => {
+    e.stopPropagation();
     const postComment = post;
-    navigate('/compose/post', {state: {postComment}});
+    navigate('/compose/post', { state: { postComment } });
   }
 
   return (
@@ -71,7 +75,19 @@ const PostInteractions: React.FC<PostInteractionsProps> = ({ post }) => {
         <span>{likes}</span>
       </div>
 
-      <div className="flex flex-row gap-1">
+      {!isExpanded && (
+        <div className="post-btn-group">
+          <button
+            className={`button post-i-btn button-reset`}
+          >
+            <Icon name="views" />
+            <div></div>
+          </button>
+          <span>{post.views}</span>
+        </div>
+      )}
+
+      {isExpanded && (
         <div className="post-btn-group">
           <button
             className={`button post-i-btn button-reset `}
@@ -79,7 +95,11 @@ const PostInteractions: React.FC<PostInteractionsProps> = ({ post }) => {
             <Icon name="bookmark" />
             <div></div>
           </button>
+          <span>0</span>
         </div>
+      )}
+
+      {isExpanded && (
         <div className="post-btn-group">
           <button
             className={`button post-i-btn button-reset `}
@@ -88,7 +108,28 @@ const PostInteractions: React.FC<PostInteractionsProps> = ({ post }) => {
             <div></div>
           </button>
         </div>
-      </div>
+      )}
+
+      {!isExpanded && (
+        <div className="flex flex-row gap-1">
+          <div className="post-btn-group">
+            <button
+              className={`button post-i-btn button-reset `}
+            >
+              <Icon name="bookmark" />
+              <div></div>
+            </button>
+          </div>
+          <div className="post-btn-group">
+            <button
+              className={`button post-i-btn button-reset `}
+            >
+              <Icon name="share" />
+              <div></div>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
